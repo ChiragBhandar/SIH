@@ -1,0 +1,2 @@
+// receiving feature module
+export {};

@@ -1,0 +1,2 @@
+// laboratory feature module
+export {};

@@ -1,1 +1,139 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --radius-xs: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Clean B2B Neutral Canvas & Deep Charcoal Navy Text */
+  --background: 210 20% 98%;
+  --foreground: 222 47% 11%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+
+  /* Honey Chain Brand Accent: Warm Honey / Golden Amber */
+  --primary: 38 92% 44%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 214 20% 94%;
+  --secondary-foreground: 222 47% 15%;
+
+  --muted: 214 20% 95%;
+  --muted-foreground: 215 16% 45%;
+
+  --accent: 38 90% 95%;
+  --accent-foreground: 38 92% 28%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Operational Status Semantics */
+  --success: 142 72% 36%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 36 90% 48%;
+  --warning-foreground: 0 0% 100%;
+
+  --info: 212 85% 45%;
+  --info-foreground: 0 0% 100%;
+
+  --border: 214 22% 89%;
+  --input: 214 22% 89%;
+  --ring: 38 92% 44%;
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 224 35% 8%;
+  --foreground: 210 20% 96%;
+
+  --card: 224 32% 11%;
+  --card-foreground: 210 20% 96%;
+
+  --popover: 224 32% 11%;
+  --popover-foreground: 210 20% 96%;
+
+  --primary: 38 92% 50%;
+  --primary-foreground: 224 35% 8%;
+
+  --secondary: 220 25% 18%;
+  --secondary-foreground: 210 20% 96%;
+
+  --muted: 220 25% 18%;
+  --muted-foreground: 215 18% 60%;
+
+  --accent: 38 45% 18%;
+  --accent-foreground: 38 92% 65%;
+
+  --destructive: 0 65% 55%;
+  --destructive-foreground: 0 0% 100%;
+
+  --success: 142 65% 42%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 36 85% 52%;
+  --warning-foreground: 0 0% 100%;
+
+  --info: 212 80% 55%;
+  --info-foreground: 0 0% 100%;
+
+  --border: 220 22% 20%;
+  --input: 220 22% 20%;
+  --ring: 38 92% 50%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
