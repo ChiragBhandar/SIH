@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   Hexagon,
   ChevronLeft,
@@ -26,7 +27,9 @@ export interface SidebarProps {
   activeNavId: string;
   onSelectNav: (id: string) => void;
   currentRole: UserRole;
+  currentRoleName?: string;
   currentOrg: string;
+  currentOrgType?: string;
 }
 
 export function Sidebar({
@@ -35,7 +38,9 @@ export function Sidebar({
   activeNavId,
   onSelectNav,
   currentRole,
+  currentRoleName,
   currentOrg,
+  currentOrgType,
 }: SidebarProps) {
   // Filter navigation items by active user role context
   const filteredGroups = React.useMemo(() => {
@@ -96,13 +101,16 @@ export function Sidebar({
           <div className="border-b border-border/60 bg-muted/20 px-4 py-2.5">
             <div className="flex items-center gap-2 text-xs">
               <Building className="h-3.5 w-3.5 text-primary shrink-0" />
-              <div className="flex flex-col overflow-hidden">
+              <div className="flex flex-col overflow-hidden w-full">
                 <span className="truncate font-medium text-foreground">
                   {currentOrg}
                 </span>
-                <span className="flex items-center gap-1 text-[10px] text-muted-foreground capitalize">
-                  <Shield className="h-3 w-3 text-primary/80" />
-                  {currentRole.replace("_", " ")} mode
+                <span className="text-[10px] text-muted-foreground truncate">
+                  {currentOrgType || "Enterprise Organization"}
+                </span>
+                <span className="flex items-center gap-1 text-[10px] text-primary font-semibold mt-0.5 capitalize">
+                  <Shield className="h-3 w-3 text-primary/80 shrink-0" />
+                  {currentRoleName || currentRole.replace("_", " ")}
                 </span>
               </div>
             </div>
@@ -122,20 +130,10 @@ export function Sidebar({
                 {group.items.map((item: NavItem) => {
                   const Icon = item.icon;
                   const isActive = activeNavId === item.id;
+                  const isRoute = item.href && item.href.startsWith("/");
 
-                  const navButton = (
-                    <button
-                      type="button"
-                      onClick={() => onSelectNav(item.id)}
-                      className={cn(
-                        "group relative flex w-full items-center rounded-md px-2.5 py-2 text-xs font-medium transition-colors cursor-pointer",
-                        isActive
-                          ? "bg-accent text-accent-foreground font-semibold"
-                          : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
-                        isCollapsed && "justify-center px-0"
-                      )}
-                      aria-current={isActive ? "page" : undefined}
-                    >
+                  const content = (
+                    <>
                       {isActive && (
                         <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-primary" />
                       )}
@@ -163,6 +161,34 @@ export function Sidebar({
                           )}
                         </>
                       )}
+                    </>
+                  );
+
+                  const commonClasses = cn(
+                    "group relative flex w-full items-center rounded-md px-2.5 py-2 text-xs font-medium transition-colors cursor-pointer",
+                    isActive
+                      ? "bg-accent text-accent-foreground font-semibold"
+                      : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
+                    isCollapsed && "justify-center px-0"
+                  );
+
+                  const navButton = isRoute ? (
+                    <Link
+                      href={item.href}
+                      onClick={() => onSelectNav(item.id)}
+                      className={commonClasses}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      {content}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => onSelectNav(item.id)}
+                      className={commonClasses}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      {content}
                     </button>
                   );
 

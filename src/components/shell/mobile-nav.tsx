@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Hexagon, X, Building, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +15,9 @@ export interface MobileNavProps {
   activeNavId: string;
   onSelectNav: (id: string) => void;
   currentRole: UserRole;
+  currentRoleName?: string;
   currentOrg: string;
+  currentOrgType?: string;
 }
 
 export function MobileNav({
@@ -23,7 +26,9 @@ export function MobileNav({
   activeNavId,
   onSelectNav,
   currentRole,
+  currentRoleName,
   currentOrg,
+  currentOrgType,
 }: MobileNavProps) {
   React.useEffect(() => {
     if (isOpen) {
@@ -90,13 +95,16 @@ export function MobileNav({
         <div className="border-b border-border/60 bg-muted/20 px-4 py-2.5">
           <div className="flex items-center gap-2 text-xs">
             <Building className="h-3.5 w-3.5 text-primary shrink-0" />
-            <div className="flex flex-col overflow-hidden">
+            <div className="flex flex-col overflow-hidden w-full">
               <span className="truncate font-medium text-foreground">
                 {currentOrg}
               </span>
-              <span className="flex items-center gap-1 text-[10px] text-muted-foreground capitalize">
-                <Shield className="h-3 w-3 text-primary/80" />
-                {currentRole.replace("_", " ")} mode
+              <span className="text-[10px] text-muted-foreground truncate">
+                {currentOrgType || "Enterprise Organization"}
+              </span>
+              <span className="flex items-center gap-1 text-[10px] text-primary font-semibold mt-0.5 capitalize">
+                <Shield className="h-3 w-3 text-primary/80 shrink-0" />
+                {currentRoleName || currentRole.replace("_", " ")}
               </span>
             </div>
           </div>
@@ -113,21 +121,10 @@ export function MobileNav({
                 {group.items.map((item: NavItem) => {
                   const Icon = item.icon;
                   const isActive = activeNavId === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        onSelectNav(item.id);
-                        onClose();
-                      }}
-                      className={cn(
-                        "flex w-full items-center rounded-md px-2.5 py-2 text-xs font-medium transition-colors cursor-pointer",
-                        isActive
-                          ? "bg-accent text-accent-foreground font-semibold"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                      )}
-                    >
+                  const isRoute = item.href && item.href.startsWith("/");
+
+                  const content = (
+                    <>
                       <Icon
                         className={cn(
                           "mr-3 h-4 w-4 shrink-0",
@@ -145,6 +142,43 @@ export function MobileNav({
                           {item.badge}
                         </Badge>
                       )}
+                    </>
+                  );
+
+                  const commonClasses = cn(
+                    "flex w-full items-center rounded-md px-2.5 py-2 text-xs font-medium transition-colors cursor-pointer",
+                    isActive
+                      ? "bg-accent text-accent-foreground font-semibold"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  );
+
+                  if (isRoute) {
+                    return (
+                      <Link
+                        key={item.id}
+                        href={item.href}
+                        onClick={() => {
+                          onSelectNav(item.id);
+                          onClose();
+                        }}
+                        className={commonClasses}
+                      >
+                        {content}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        onSelectNav(item.id);
+                        onClose();
+                      }}
+                      className={commonClasses}
+                    >
+                      {content}
                     </button>
                   );
                 })}

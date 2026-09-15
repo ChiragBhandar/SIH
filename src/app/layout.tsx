@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     "Enterprise honey-material traceability platform providing immutable supply chain verification, lab test certifications, and consumer trust validation.",
 };
 
+import { AuthSessionProvider } from "@/context/auth-session-context";
+import { TraceabilityProvider } from "@/context/traceability-context";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-background font-sans antialiased">
-        {children}
+        <AuthSessionProvider>
+          <TraceabilityProvider>{children}</TraceabilityProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );
