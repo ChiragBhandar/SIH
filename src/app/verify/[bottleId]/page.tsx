@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
 import {
   ShieldCheck,
@@ -20,6 +21,9 @@ import {
   Info,
   MapPin,
   Calendar,
+  Hexagon,
+  ArrowRight,
+  ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,12 +53,12 @@ export default function PublicVerifyPage() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center animate-pulse text-amber-400 font-bold font-mono">
+          <div className="h-10 w-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center animate-pulse text-primary font-bold font-mono">
             HC
           </div>
-          <p className="text-xs text-slate-400 font-medium animate-pulse">
+          <p className="text-xs text-muted-foreground font-medium animate-pulse">
             Querying Honey Chain Digital Registry...
           </p>
         </div>
@@ -65,47 +69,60 @@ export default function PublicVerifyPage() {
   const { verificationStatus } = verification;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30">
+    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
       {/* ========================================================================= */}
       {/* PUBLIC CONSUMER HEADER */}
       {/* ========================================================================= */}
-      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+      <header className="border-b border-border bg-card/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Crest Logo */}
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-bold font-mono shadow-md shadow-amber-500/20">
-              HC
+          <Link href="/" className="flex items-center gap-3 group transition-opacity hover:opacity-90">
+            {/* Hexagon Mark Logo */}
+            <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-xs">
+              <Hexagon className="h-5 w-5 fill-current stroke-[2.5]" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-sm sm:text-base tracking-tight text-slate-100">
+                <span className="font-bold text-sm sm:text-base tracking-tight text-foreground leading-tight">
                   Honey Chain
                 </span>
-                <span className="text-[10px] font-semibold uppercase px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                <span className="text-[10px] font-semibold uppercase px-1.5 py-0.2 rounded bg-primary/10 text-primary border border-primary/20 font-mono">
                   Consumer Portal
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-muted-foreground font-medium">
                 Official Digital Traceability Registry
               </p>
             </div>
-          </div>
+          </Link>
 
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="h-8 text-xs gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer rounded-lg border border-border/60 hover:bg-muted/80"
+            >
+              <Link href="/">
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span className="hidden xs:inline sm:inline">Back to Home</span>
+                <span className="xs:hidden sm:hidden">Home</span>
+              </Link>
+            </Button>
+
             <Button
               variant="outline"
               size="sm"
               onClick={handleShare}
-              className="h-8 text-xs gap-1.5 border-slate-700 bg-slate-900/60 text-slate-300 hover:text-slate-100 hover:bg-slate-800"
+              className="h-8 text-xs gap-1.5 border-border bg-card text-foreground hover:bg-muted cursor-pointer rounded-lg"
             >
               {copied ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-emerald-400" />
-                  <span className="text-emerald-400">Copied!</span>
+                  <Check className="h-3.5 w-3.5 text-emerald-600" />
+                  <span className="text-emerald-600 font-semibold">Copied!</span>
                 </>
               ) : (
                 <>
-                  <Share2 className="h-3.5 w-3.5" />
+                  <Share2 className="h-3.5 w-3.5 text-muted-foreground" />
                   <span>Share</span>
                 </>
               )}
@@ -124,97 +141,100 @@ export default function PublicVerifyPage() {
         {verificationStatus === "VALID" && (
           <div className="space-y-6 animate-in fade-in-50 duration-500">
             {/* Status Hero Card */}
-            <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900/90 p-6 sm:p-8 shadow-xl shadow-emerald-950/20 text-center space-y-4">
-              <div className="inline-flex p-3.5 rounded-full bg-emerald-500/20 border-2 border-emerald-500/40 text-emerald-400 shadow-lg shadow-emerald-500/10">
+            <div className="relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-card p-6 sm:p-8 shadow-md text-center space-y-4">
+              {/* Subtle Warm Amber / Emerald Glow in Card */}
+              <div className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-64 h-32 bg-emerald-500/10 blur-3xl rounded-full" />
+
+              <div className="relative inline-flex p-3.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 shadow-sm">
                 <CheckCircle2 className="h-8 w-8 sm:h-10 sm:w-10" />
               </div>
 
-              <div className="space-y-1">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
-                  <Sparkles className="h-3 w-3" />
+              <div className="relative space-y-1.5">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-700 text-xs font-semibold uppercase tracking-wider">
+                  <Sparkles className="h-3 w-3 text-emerald-600" />
                   <span>Product Identity Verified</span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   {verification.productName}
                 </h1>
-                <p className="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto">
+                <p className="text-xs sm:text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
                   Official digital traceability record confirmed. This product originates from regulated mountain apiaries with certified laboratory testing.
                 </p>
               </div>
 
-              {/* Bottle Key Identifiers Pill */}
-              <div className="pt-2 flex flex-wrap items-center justify-center gap-2 text-xs">
-                <span className="font-mono font-bold bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700 text-slate-200">
+              {/* Bottle Key Identifiers Chips */}
+              <div className="relative pt-2 flex flex-wrap items-center justify-center gap-2 text-xs">
+                <span className="font-mono font-bold bg-muted/60 px-3 py-1 rounded-lg border border-border text-foreground">
                   Bottle: {verification.bottleId}
                 </span>
-                <span className="font-mono font-medium bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700 text-amber-400">
+                <span className="font-mono font-medium bg-primary/10 px-3 py-1 rounded-lg border border-primary/20 text-primary">
                   Size: {verification.bottleSize}
                 </span>
-                <span className="font-mono text-slate-300 bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700">
+                <span className="font-mono text-foreground bg-muted/60 px-3 py-1 rounded-lg border border-border">
                   Certificate: {verification.certificationReference}
                 </span>
               </div>
             </div>
 
             {/* Public Trust Summary Badges */}
-            <div className="space-y-2">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 px-1">
-                <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            <div className="space-y-2.5">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 px-1">
+                <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 <span>Verification Trust Badges</span>
               </h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {/* 1. Origin Recorded */}
-                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 flex flex-col items-center text-center space-y-1.5">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                <div className="p-3.5 rounded-xl border border-border bg-card flex flex-col items-center text-center space-y-1.5 shadow-2xs hover:border-primary/30 transition-colors">
+                  <div className="p-2 rounded-lg bg-amber-500/10 text-primary">
                     <Wheat className="h-4 w-4" />
                   </div>
-                  <span className="text-xs font-bold text-slate-200">
+                  <span className="text-xs font-bold text-foreground">
                     Origin Recorded
                   </span>
-                  <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+                  <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <Check className="h-3 w-3" />
                     <span>Himalayan Region</span>
                   </span>
                 </div>
 
                 {/* 2. Traceability Complete */}
-                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 flex flex-col items-center text-center space-y-1.5">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                <div className="p-3.5 rounded-xl border border-border bg-card flex flex-col items-center text-center space-y-1.5 shadow-2xs hover:border-primary/30 transition-colors">
+                  <div className="p-2 rounded-lg bg-amber-500/10 text-primary">
                     <Layers className="h-4 w-4" />
                   </div>
-                  <span className="text-xs font-bold text-slate-200">
+                  <span className="text-xs font-bold text-foreground">
                     Traceability Complete
                   </span>
-                  <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+                  <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <Check className="h-3 w-3" />
                     <span>Unbroken Chain</span>
                   </span>
                 </div>
 
                 {/* 3. Quality Tested */}
-                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 flex flex-col items-center text-center space-y-1.5">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                <div className="p-3.5 rounded-xl border border-border bg-card flex flex-col items-center text-center space-y-1.5 shadow-2xs hover:border-emerald-500/30 transition-colors">
+                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600">
                     <FlaskConical className="h-4 w-4" />
                   </div>
-                  <span className="text-xs font-bold text-slate-200">
+                  <span className="text-xs font-bold text-foreground">
                     Quality Tested
                   </span>
-                  <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+                  <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <Check className="h-3 w-3" />
                     <span>Passed Purity Panel</span>
                   </span>
                 </div>
 
                 {/* 4. Certification Verified */}
-                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 flex flex-col items-center text-center space-y-1.5">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                <div className="p-3.5 rounded-xl border border-border bg-card flex flex-col items-center text-center space-y-1.5 shadow-2xs hover:border-emerald-500/30 transition-colors">
+                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600">
                     <Award className="h-4 w-4" />
                   </div>
-                  <span className="text-xs font-bold text-slate-200">
+                  <span className="text-xs font-bold text-foreground">
                     Certification Verified
                   </span>
-                  <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+                  <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <Check className="h-3 w-3" />
                     <span>Grade A Standard</span>
                   </span>
@@ -223,77 +243,77 @@ export default function PublicVerifyPage() {
             </div>
 
             {/* Public Source Information Card */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+            <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between border-b border-border pb-3">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-amber-400" />
-                  <h2 className="text-sm font-bold text-slate-200">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  <h2 className="text-sm font-bold text-foreground">
                     Approved Product Information
                   </h2>
                 </div>
-                <span className="text-[10px] text-slate-400 uppercase font-mono">
+                <span className="text-[10px] text-muted-foreground uppercase font-mono font-medium">
                   Verified Data
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div className="flex items-start gap-2.5">
-                  <MapPin className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                  <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <span className="text-[10px] uppercase text-slate-400 block font-medium">
+                    <span className="text-[10px] uppercase text-muted-foreground block font-medium">
                       Botanical Origin & Region
                     </span>
-                    <p className="font-semibold text-slate-200 text-sm mt-0.5">
+                    <p className="font-semibold text-foreground text-sm mt-0.5">
                       {verification.originRegion}
                     </p>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-muted-foreground">
                       High altitude Himalayan wild flora
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <Wheat className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                  <Wheat className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <span className="text-[10px] uppercase text-slate-400 block font-medium">
+                    <span className="text-[10px] uppercase text-muted-foreground block font-medium">
                       Honey Variety & Type
                     </span>
-                    <p className="font-semibold text-slate-200 text-sm mt-0.5">
+                    <p className="font-semibold text-foreground text-sm mt-0.5">
                       {verification.honeyVariety}
                     </p>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-muted-foreground">
                       100% natural raw multifloral honey
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <Calendar className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                  <Calendar className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <span className="text-[10px] uppercase text-slate-400 block font-medium">
+                    <span className="text-[10px] uppercase text-muted-foreground block font-medium">
                       Harvest Season
                     </span>
-                    <p className="font-semibold text-slate-200 mt-0.5">
+                    <p className="font-semibold text-foreground mt-0.5">
                       {verification.harvestPeriod}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <Award className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                  <Award className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <span className="text-[10px] uppercase text-slate-400 block font-medium">
+                    <span className="text-[10px] uppercase text-muted-foreground block font-medium">
                       Accredited Quality Certificate
                     </span>
-                    <p className="font-mono font-bold text-emerald-400 mt-0.5">
+                    <p className="font-mono font-bold text-emerald-600 mt-0.5">
                       {verification.certificationReference}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400 flex items-start gap-2">
-                <Info className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+              <div className="p-3 rounded-xl bg-muted/40 border border-border text-[11px] text-muted-foreground flex items-start gap-2">
+                <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                 <span>
                   {verification.disclaimer} Traceability records are generated at point of harvest, certified by accredited laboratories, and registered digitally.
                 </span>
@@ -301,24 +321,24 @@ export default function PublicVerifyPage() {
             </div>
 
             {/* Public Traceability Timeline */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+            <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between border-b border-border pb-3">
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-emerald-400" />
-                  <h2 className="text-sm font-bold text-slate-200">
+                  <Clock className="h-4 w-4 text-emerald-600" />
+                  <h2 className="text-sm font-bold text-foreground">
                     Public Traceability Milestones
                   </h2>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-semibold uppercase">
+                <span className="text-[10px] text-emerald-600 font-semibold uppercase font-mono">
                   5 Verified Steps
                 </span>
               </div>
 
-              <div className="relative border-l-2 border-emerald-500/40 ml-4 pl-6 space-y-6 py-2 text-xs">
+              <div className="relative border-l-2 border-emerald-500/30 ml-4 pl-6 space-y-6 py-2 text-xs">
                 {verification.milestones.map((milestone, idx) => (
                   <div key={idx} className="relative">
                     {/* Circle icon marker */}
-                    <div className="absolute -left-[31px] top-0 p-1.5 rounded-full bg-slate-950 border-2 border-emerald-400 text-emerald-400 shadow-md">
+                    <div className="absolute -left-[31px] top-0 p-1.5 rounded-full bg-card border-2 border-emerald-500 text-emerald-600 shadow-xs">
                       {idx === 0 && <Wheat className="h-3.5 w-3.5" />}
                       {idx === 1 && <Layers className="h-3.5 w-3.5" />}
                       {idx === 2 && <FlaskConical className="h-3.5 w-3.5" />}
@@ -328,14 +348,14 @@ export default function PublicVerifyPage() {
 
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center justify-between gap-1">
-                        <span className="font-bold text-slate-100 text-sm">
+                        <span className="font-bold text-foreground text-sm">
                           {milestone.title}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-mono">
+                        <span className="text-[10px] text-muted-foreground font-mono">
                           {milestone.dateOrPeriod}
                         </span>
                       </div>
-                      <p className="text-slate-300 text-[11px] leading-relaxed">
+                      <p className="text-muted-foreground text-[11px] leading-relaxed">
                         {milestone.description}
                       </p>
                     </div>
@@ -350,26 +370,26 @@ export default function PublicVerifyPage() {
         {/* STATE 2: UNKNOWN / PRODUCT NOT FOUND */}
         {/* ===================================================================== */}
         {verificationStatus === "UNKNOWN" && (
-          <div className="rounded-2xl border border-red-500/30 bg-gradient-to-br from-red-950/30 via-slate-900 to-slate-900 p-6 sm:p-8 text-center space-y-4 shadow-xl">
-            <div className="inline-flex p-3.5 rounded-full bg-red-500/20 border-2 border-red-500/40 text-red-400">
+          <div className="rounded-2xl border border-destructive/30 bg-card p-6 sm:p-8 text-center space-y-4 shadow-sm">
+            <div className="inline-flex p-3.5 rounded-full bg-destructive/10 border border-destructive/30 text-destructive">
               <AlertTriangle className="h-8 w-8" />
             </div>
 
             <div className="space-y-1">
-              <Badge variant="outline" className="bg-red-500/10 text-red-400 border-red-500/30 text-xs">
+              <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30 text-xs">
                 Product Not Found
               </Badge>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-100">
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground">
                 Unregistered Bottle Identifier
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-                The identifier <code className="font-mono text-slate-200 bg-slate-800 px-1.5 py-0.5 rounded">{bottleId}</code> does not match any registered product in the Honey Chain digital verification ledger.
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+                The identifier <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code> does not match any registered product in the Honey Chain digital verification ledger.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 max-w-md mx-auto text-left text-xs space-y-2">
-              <span className="font-semibold text-slate-300 block">Recommended Consumer Actions:</span>
-              <ul className="list-disc list-inside text-slate-400 space-y-1 text-[11px]">
+            <div className="p-4 rounded-xl bg-muted/40 border border-border max-w-md mx-auto text-left text-xs space-y-2">
+              <span className="font-semibold text-foreground block">Recommended Consumer Actions:</span>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1 text-[11px]">
                 <li>Double check the printed bottle code on your label or security foil.</li>
                 <li>Make sure there are no typos in the identifier format (e.g. HC-BTL-2026-XXXXX).</li>
                 <li>If you purchased this product from an authorized vendor, please report this code to customer support.</li>
@@ -382,24 +402,24 @@ export default function PublicVerifyPage() {
         {/* STATE 3: UNPUBLISHED / VERIFICATION PENDING */}
         {/* ===================================================================== */}
         {verificationStatus === "UNPUBLISHED" && (
-          <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/30 via-slate-900 to-slate-900 p-6 sm:p-8 text-center space-y-4 shadow-xl">
-            <div className="inline-flex p-3.5 rounded-full bg-amber-500/20 border-2 border-amber-500/40 text-amber-400">
+          <div className="rounded-2xl border border-warning/40 bg-card p-6 sm:p-8 text-center space-y-4 shadow-sm">
+            <div className="inline-flex p-3.5 rounded-full bg-warning/10 border border-warning/30 text-warning">
               <Clock className="h-8 w-8" />
             </div>
 
             <div className="space-y-1">
-              <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-amber-500/30 text-xs">
+              <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30 text-xs">
                 Verification Not Currently Available
               </Badge>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-100">
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground">
                 Verification Pending Publication
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-                This bottle identity <code className="font-mono text-slate-200 bg-slate-800 px-1.5 py-0.5 rounded">{bottleId}</code> has been registered during production but has not yet been released for public consumer lookup by the manufacturer.
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+                This bottle identity <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code> has been registered during production but has not yet been released for public consumer lookup by the manufacturer.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 max-w-md mx-auto text-xs text-slate-400">
+            <div className="p-4 rounded-xl bg-muted/40 border border-border max-w-md mx-auto text-xs text-muted-foreground">
               Please check back shortly or scan again once retail distribution commences.
             </div>
           </div>
@@ -409,25 +429,25 @@ export default function PublicVerifyPage() {
         {/* STATE 4: SUSPENDED / VERIFICATION SUSPENDED */}
         {/* ===================================================================== */}
         {verificationStatus === "SUSPENDED" && (
-          <div className="rounded-2xl border border-red-500/40 bg-gradient-to-br from-red-950/40 via-slate-900 to-slate-900 p-6 sm:p-8 text-center space-y-4 shadow-xl">
-            <div className="inline-flex p-3.5 rounded-full bg-red-500/20 border-2 border-red-500/40 text-red-400">
+          <div className="rounded-2xl border border-destructive/40 bg-card p-6 sm:p-8 text-center space-y-4 shadow-sm">
+            <div className="inline-flex p-3.5 rounded-full bg-destructive/10 border border-destructive/30 text-destructive">
               <AlertTriangle className="h-8 w-8" />
             </div>
 
             <div className="space-y-1">
-              <Badge variant="outline" className="bg-red-500/10 text-red-400 border-red-500/30 text-xs">
+              <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30 text-xs">
                 Verification Suspended
               </Badge>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-100">
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground">
                 Verification Notice
               </h1>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-                Verification for bottle <code className="font-mono text-slate-100 bg-slate-800 px-1.5 py-0.5 rounded">{bottleId}</code> has been temporarily suspended by the issuing manufacturer or certifying authority for review.
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+                Verification for bottle <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code> has been temporarily suspended by the issuing manufacturer or certifying authority for review.
               </p>
             </div>
 
             {verification.suspendedReason && (
-              <div className="p-3 rounded-xl bg-red-950/30 border border-red-800/40 max-w-md mx-auto text-xs text-red-300">
+              <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 max-w-md mx-auto text-xs text-destructive">
                 <strong>Reason:</strong> {verification.suspendedReason}
               </div>
             )}
@@ -437,10 +457,10 @@ export default function PublicVerifyPage() {
         {/* ========================================================================= */}
         {/* LOOKUP ANOTHER BOTTLE SEARCH BOX */}
         {/* ========================================================================= */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4 sm:p-5 space-y-3">
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 space-y-3 shadow-xs">
           <div className="flex items-center gap-2">
-            <Search className="h-4 w-4 text-amber-400" />
-            <span className="text-xs font-bold text-slate-300">
+            <Search className="h-4 w-4 text-primary" />
+            <span className="text-xs font-bold text-foreground">
               Verify Another Honey Chain Bottle
             </span>
           </div>
@@ -458,12 +478,12 @@ export default function PublicVerifyPage() {
               value={lookupId}
               onChange={(e) => setLookupId(e.target.value)}
               placeholder="e.g. HC-BTL-2026-00001"
-              className="bg-slate-950 border-slate-800 text-slate-200 text-xs h-9 font-mono"
+              className="bg-background border-border text-foreground text-xs h-9 font-mono"
             />
             <Button
               type="submit"
               size="sm"
-              className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs h-9 px-4 shrink-0"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs h-9 px-4 shrink-0 rounded-md cursor-pointer"
             >
               Verify
             </Button>
@@ -474,15 +494,21 @@ export default function PublicVerifyPage() {
       {/* ========================================================================= */}
       {/* PUBLIC CONSUMER FOOTER */}
       {/* ========================================================================= */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-400 space-y-2">
-        <div className="flex items-center justify-center gap-1.5 font-semibold text-slate-300">
-          <ShieldCheck className="h-4 w-4 text-emerald-400" />
+      <footer className="border-t border-border bg-card py-6 text-center text-xs text-muted-foreground space-y-2 mt-auto">
+        <div className="flex items-center justify-center gap-1.5 font-semibold text-foreground">
+          <ShieldCheck className="h-4 w-4 text-emerald-600" />
           <span>Honey Chain Public Verification System</span>
         </div>
-        <p className="text-[11px] max-w-md mx-auto px-4 text-slate-400">
+        <p className="text-[11px] max-w-md mx-auto px-4 text-muted-foreground">
           Independent Field-to-Bottle Traceability & Purity Assurance Protocol.
         </p>
-        <div className="pt-2 text-[10px] text-slate-400">
+        <div className="pt-2 flex items-center justify-center gap-4 text-xs font-medium">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 transition-colors">
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Return to Landing Page</span>
+          </Link>
+        </div>
+        <div className="pt-2 text-[10px] text-muted-foreground">
           © 2026 Honey Chain. All digital product identities cryptographically hashed and indexed.
         </div>
       </footer>

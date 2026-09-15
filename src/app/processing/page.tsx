@@ -106,7 +106,7 @@ export function ProcessingContent() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild className="gap-2 shadow-xs font-semibold cursor-pointer text-xs h-9">
+          <Button asChild size="sm">
             <Link href="/processing/new">
               <Plus className="h-4 w-4" />
               <span>Start Processing</span>
@@ -460,9 +460,9 @@ export function ProcessingContent() {
                   <TableCell className="text-right">
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="xs"
                       asChild
-                      className="h-7 text-xs px-2.5 text-primary hover:text-primary hover:bg-primary/10"
+                      className="text-primary hover:text-primary hover:bg-primary/10 font-medium"
                     >
                       <Link href={`/processing/${job.id}`}>
                         View Details →

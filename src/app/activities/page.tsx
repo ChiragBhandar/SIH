@@ -94,7 +94,7 @@ function ActivitiesContent() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild className="gap-2 shadow-xs cursor-pointer text-xs h-9">
+          <Button asChild size="sm">
             <Link href="/activities/new">
               <Plus className="h-4 w-4" />
               <span>Capture Activity</span>

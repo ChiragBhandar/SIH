@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
 import { AdminRoleGuard, ConfirmationModal } from "@/components/admin";
 import { PlausibilityAlert } from "@/types/admin";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Scale,
   TrendingUp,
@@ -13,6 +16,7 @@ import {
   Layers,
   ExternalLink,
   Info,
+  ChevronRight,
 } from "lucide-react";
 
 export default function FieldVsSalesPlausibilityPage() {
@@ -42,55 +46,55 @@ export default function FieldVsSalesPlausibilityPage() {
 
   return (
     <AdminRoleGuard>
-      <div className="space-y-8 pb-12">
+      <div className="space-y-6 pb-12">
         {/* Breadcrumb & Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800/80 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-6">
           <div>
-            <div className="flex items-center gap-2 text-xs text-stone-400 mb-1.5 font-medium">
-              <Link href="/admin" className="hover:text-amber-400 transition-colors">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
+              <Link href="/admin" className="hover:text-primary transition-colors">
                 Administration
               </Link>
-              <span>/</span>
-              <span className="text-stone-300">Plausibility</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
+              <span className="text-foreground font-semibold">Plausibility</span>
             </div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold text-stone-100 tracking-tight">
+            <div className="flex items-center gap-2.5 mt-1">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
                 Field vs Sales Plausibility
               </h1>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <Badge variant="outline" className="gap-1.5 text-xs bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800">
                 <Scale className="w-3.5 h-3.5" />
                 Yield & Mass Balance Sentinel
-              </span>
+              </Badge>
             </div>
-            <p className="text-stone-400 text-sm mt-1 max-w-2xl">
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 max-w-2xl">
               Review relationships between operational production records and commercial activity.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="px-3.5 py-1.5 rounded-xl bg-stone-900 border border-stone-800 text-xs text-stone-300 font-mono">
+            <Badge variant="outline" className="px-3 py-1 font-mono text-xs font-normal">
               Envelopes Tracked: {plausibilityAlerts.length}
-            </span>
+            </Badge>
           </div>
         </div>
 
         {/* Mandatory Human Review Guard Notice */}
-        <div className="bg-stone-900/90 border border-amber-500/40 rounded-2xl p-6 shadow-xl relative overflow-hidden bg-gradient-to-r from-amber-950/30 via-stone-900 to-amber-950/10">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-              <Info className="w-6 h-6" />
+        <div className="bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4 shadow-xs">
+          <div className="flex items-start gap-3.5">
+            <div className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/50 border border-amber-300 dark:border-amber-700 flex items-center justify-center text-amber-800 dark:text-amber-200 shrink-0">
+              <Info className="w-4 h-4" />
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-200/80 dark:bg-amber-900 text-amber-900 dark:text-amber-100 border border-amber-300 dark:border-amber-700">
                   Plausibility alert — requires human review.
                 </span>
               </div>
-              <p className="text-stone-200 text-sm font-semibold leading-relaxed pt-1">
+              <p className="text-xs sm:text-sm text-foreground font-semibold leading-relaxed pt-0.5">
                 Plausibility indicators flag statistical or volume variances across physical apiary yields, extraction logs, and marketplace transactions.
               </p>
-              <p className="text-xs text-stone-400 leading-relaxed">
-                An alert is <strong className="text-stone-300">NOT proof of fraud or tampering</strong>. Factors such as weather variations, seasonal blooming shifts, or delayed receiving scans can trigger temporary volume variances. Human review and documentation are mandatory before taking enforcement action.
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                An alert is <strong className="text-foreground">NOT proof of fraud or tampering</strong>. Factors such as weather variations, seasonal blooming shifts, or delayed receiving scans can trigger temporary volume variances. Human review and documentation are mandatory before taking enforcement action.
               </p>
             </div>
           </div>
@@ -98,237 +102,259 @@ export default function FieldVsSalesPlausibilityPage() {
 
         {/* Mass Balance Aggregate Cards */}
         <div>
-          <h2 className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 flex items-center gap-2">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
             <span>Ecosystem Mass-Balance Overview (Live Aggregates)</span>
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Harvest Volume */}
-            <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-stone-400 uppercase tracking-wider">
-                  Raw Harvest Total
-                </span>
-                <Boxes className="w-4 h-4 text-amber-400" />
-              </div>
-              <div className="text-2xl font-extrabold text-stone-100 font-mono">
-                {totalHarvestVolume.toFixed(1)} kg
-              </div>
-              <p className="text-xs text-stone-400 mt-1">Recorded from registered apiaries</p>
-            </div>
+            <Card className="border-border/80 bg-card shadow-xs">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Raw Harvest Total
+                  </span>
+                  <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-200 dark:bg-amber-950/40 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                    <Boxes className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-foreground font-mono tracking-tight">
+                  {totalHarvestVolume.toFixed(1)} kg
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-0.5">Recorded from registered apiaries</p>
+              </CardContent>
+            </Card>
 
             {/* Processed Volume */}
-            <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-stone-400 uppercase tracking-wider">
-                  Purified & Blended
-                </span>
-                <Layers className="w-4 h-4 text-blue-400" />
-              </div>
-              <div className="text-2xl font-extrabold text-stone-100 font-mono">
-                {totalProcessedVolume.toFixed(1)} kg
-              </div>
-              <p className="text-xs text-stone-400 mt-1">
-                Yield Ratio: {((totalProcessedVolume / totalHarvestVolume) * 100).toFixed(1)}%
-              </p>
-            </div>
+            <Card className="border-border/80 bg-card shadow-xs">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Purified & Blended
+                  </span>
+                  <div className="w-7 h-7 rounded-md bg-blue-50 border border-blue-200 dark:bg-blue-950/40 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                    <Layers className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-foreground font-mono tracking-tight">
+                  {totalProcessedVolume.toFixed(1)} kg
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  Yield Ratio: {((totalProcessedVolume / totalHarvestVolume) * 100).toFixed(1)}%
+                </p>
+              </CardContent>
+            </Card>
 
             {/* Listed Volume */}
-            <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-stone-400 uppercase tracking-wider">
-                  Wholesale Listed
-                </span>
-                <ShoppingBag className="w-4 h-4 text-purple-400" />
-              </div>
-              <div className="text-2xl font-extrabold text-stone-100 font-mono">
-                {totalListedVolume.toFixed(1)} kg
-              </div>
-              <p className="text-xs text-stone-400 mt-1">Active lot offers on marketplace</p>
-            </div>
+            <Card className="border-border/80 bg-card shadow-xs">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Wholesale Listed
+                  </span>
+                  <div className="w-7 h-7 rounded-md bg-purple-50 border border-purple-200 dark:bg-purple-950/40 dark:border-purple-800 flex items-center justify-center text-purple-600 dark:text-purple-400">
+                    <ShoppingBag className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-foreground font-mono tracking-tight">
+                  {totalListedVolume.toFixed(1)} kg
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-0.5">Active lot offers on marketplace</p>
+              </CardContent>
+            </Card>
 
             {/* Sold Volume */}
-            <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-stone-400 uppercase tracking-wider">
-                  Executed Sales
-                </span>
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
-              </div>
-              <div className="text-2xl font-extrabold text-stone-100 font-mono">
-                {totalSoldVolume.toFixed(1)} kg
-              </div>
-              <p className="text-xs text-stone-400 mt-1">Escrow contracted purchase volume</p>
-            </div>
+            <Card className="border-border/80 bg-card shadow-xs">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Executed Sales
+                  </span>
+                  <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                    <TrendingUp className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-foreground font-mono tracking-tight">
+                  {totalSoldVolume.toFixed(1)} kg
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-0.5">Escrow contracted purchase volume</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
         {/* Plausibility Cases & Envelopes */}
-        <div className="space-y-6">
-          <h2 className="text-base font-bold text-stone-100 tracking-tight flex items-center justify-between">
-            <span>Plausibility Verification Envelopes</span>
-            <span className="text-xs font-mono text-stone-400">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-foreground tracking-tight">
+              Plausibility Verification Envelopes
+            </h2>
+            <span className="text-xs font-mono text-muted-foreground">
               {plausibilityAlerts.length} Monitored Production Batches
             </span>
-          </h2>
+          </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             {plausibilityAlerts.map((alert) => {
               const isBalanced = alert.severity === "normal";
               const isAlert = alert.severity === "alert";
 
               return (
-                <div
+                <Card
                   key={alert.id}
-                  className={`rounded-2xl border p-6 transition-all ${
+                  className={`border transition-all shadow-xs ${
                     isBalanced
-                      ? "bg-stone-900/80 border-stone-800 hover:border-emerald-500/40"
+                      ? "border-border/80 bg-card hover:border-emerald-500/40"
                       : isAlert
-                      ? "bg-rose-950/15 border-rose-900/40 hover:border-rose-500/50"
-                      : "bg-amber-950/15 border-amber-900/40 hover:border-amber-500/50"
+                      ? "border-rose-200 dark:border-rose-900/60 bg-rose-50/20 dark:bg-rose-950/10 hover:border-rose-400"
+                      : "border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/10 hover:border-amber-400"
                   }`}
                 >
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-stone-800/80">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                        <span className="font-mono text-xs font-bold text-amber-400">
-                          {alert.id}
-                        </span>
-                        <span className="text-stone-500">•</span>
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${
-                            isBalanced
-                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                              : isAlert
-                              ? "bg-rose-500/15 text-rose-400 border-rose-500/30"
-                              : "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                          }`}
-                        >
-                          {alert.alertMessage}
-                        </span>
-                        {alert.requiresHumanReview && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-stone-800 text-stone-300 border border-stone-700">
-                            Plausibility alert — requires human review
+                  <CardContent className="p-5">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3.5 border-b border-border/60">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <span className="font-mono text-xs font-bold text-primary">
+                            {alert.id}
                           </span>
+                          <span className="text-muted-foreground/40">•</span>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${
+                              isBalanced
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
+                                : isAlert
+                                ? "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800"
+                                : "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
+                            }`}
+                          >
+                            {alert.alertMessage}
+                          </span>
+                          {alert.requiresHumanReview && (
+                            <Badge variant="outline" className="text-[10px] font-normal bg-background">
+                              Plausibility alert — requires human review
+                            </Badge>
+                          )}
+                        </div>
+                        <h3 className="text-base font-semibold text-foreground">{alert.title}</h3>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 shrink-0">
+                        <span className="text-xs font-mono text-muted-foreground">
+                          Status: <strong className="text-foreground capitalize">{alert.status.replace("_", " ")}</strong>
+                        </span>
+
+                        {alert.status !== "verified_balanced" && (
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => handleOpenReview(alert.id, "verified_balanced")}
+                            className="h-7 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
+                          >
+                            Mark Balanced
+                          </Button>
+                        )}
+
+                        {alert.status !== "investigation_opened" && alert.requiresHumanReview && (
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => handleOpenReview(alert.id, "investigation_opened")}
+                            className="h-7 text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-amber-950"
+                          >
+                            Open Review Case
+                          </Button>
                         )}
                       </div>
-                      <h3 className="text-lg font-bold text-stone-100">{alert.title}</h3>
                     </div>
 
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className="text-xs font-mono text-stone-400">
-                        Status: <strong className="text-stone-200 capitalize">{alert.status.replace("_", " ")}</strong>
-                      </span>
-
-                      {alert.status !== "verified_balanced" && (
-                        <button
-                          type="button"
-                          onClick={() => handleOpenReview(alert.id, "verified_balanced")}
-                          className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm shadow-emerald-950"
-                        >
-                          Mark Balanced
-                        </button>
-                      )}
-
-                      {alert.status !== "investigation_opened" && alert.requiresHumanReview && (
-                        <button
-                          type="button"
-                          onClick={() => handleOpenReview(alert.id, "investigation_opened")}
-                          className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold transition-all shadow-sm shadow-amber-950"
-                        >
-                          Open Review Case
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Volume Ratio Breakdown */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-b border-stone-800/60 text-xs">
-                    <div className="space-y-1">
-                      <span className="text-stone-400 block font-medium">Recorded Harvest</span>
-                      <span className="text-lg font-bold font-mono text-stone-100">
-                        {alert.harvestVolumeKg.toFixed(1)} kg
-                      </span>
-                    </div>
-
-                    <div className="space-y-1">
-                      <span className="text-stone-400 block font-medium">Output Processed</span>
-                      <span className="text-lg font-bold font-mono text-stone-100">
-                        {alert.processedVolumeKg.toFixed(1)} kg
-                      </span>
-                    </div>
-
-                    <div className="space-y-1">
-                      <span className="text-stone-400 block font-medium">Marketplace Listed</span>
-                      <span className="text-lg font-bold font-mono text-stone-100">
-                        {alert.listedVolumeKg.toFixed(1)} kg
-                      </span>
-                    </div>
-
-                    <div className="space-y-1">
-                      <span className="text-stone-400 block font-medium">Contracted Sales</span>
-                      <span
-                        className={`text-lg font-bold font-mono ${
-                          alert.soldVolumeKg > alert.processedVolumeKg
-                            ? "text-rose-400"
-                            : "text-emerald-400"
-                        }`}
-                      >
-                        {alert.soldVolumeKg.toFixed(1)} kg
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Explanation & Context */}
-                  <div className="pt-4 space-y-3">
-                    <div className="bg-stone-950 p-4 rounded-xl border border-stone-800 text-xs text-stone-300 leading-relaxed">
-                      <strong className="text-stone-200 block mb-1">
-                        Plausibility Analysis & Mass Balance Findings:
-                      </strong>
-                      {alert.explanation}
-                    </div>
-
-                    {alert.reviewNotes && (
-                      <div className="bg-amber-950/20 border border-amber-500/20 p-3 rounded-xl text-xs text-stone-300">
-                        <strong className="text-amber-300 block mb-0.5">Auditor Review Notes:</strong>
-                        {alert.reviewNotes}
-                      </div>
-                    )}
-
-                    {/* Linked Entities */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-stone-400 font-semibold">Associated Batches:</span>
-                        {alert.relatedBatches.map((b) => (
-                          <Link
-                            key={b.id}
-                            href={`/batches/${b.id}`}
-                            className="px-2.5 py-1 rounded-md bg-stone-800 hover:bg-stone-700 text-amber-400 font-mono text-[11px] inline-flex items-center gap-1 transition-colors"
-                          >
-                            <span>{b.id}</span>
-                            <ExternalLink className="w-3 h-3" />
-                          </Link>
-                        ))}
+                    {/* Volume Ratio Breakdown */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-3.5 border-b border-border/60 text-xs">
+                      <div className="space-y-0.5">
+                        <span className="text-muted-foreground block font-medium">Recorded Harvest</span>
+                        <span className="text-base font-bold font-mono text-foreground">
+                          {alert.harvestVolumeKg.toFixed(1)} kg
+                        </span>
                       </div>
 
-                      {alert.relatedOrders.length > 0 && (
+                      <div className="space-y-0.5">
+                        <span className="text-muted-foreground block font-medium">Output Processed</span>
+                        <span className="text-base font-bold font-mono text-foreground">
+                          {alert.processedVolumeKg.toFixed(1)} kg
+                        </span>
+                      </div>
+
+                      <div className="space-y-0.5">
+                        <span className="text-muted-foreground block font-medium">Marketplace Listed</span>
+                        <span className="text-base font-bold font-mono text-foreground">
+                          {alert.listedVolumeKg.toFixed(1)} kg
+                        </span>
+                      </div>
+
+                      <div className="space-y-0.5">
+                        <span className="text-muted-foreground block font-medium">Contracted Sales</span>
+                        <span
+                          className={`text-base font-bold font-mono ${
+                            alert.soldVolumeKg > alert.processedVolumeKg
+                              ? "text-rose-600 dark:text-rose-400"
+                              : "text-emerald-600 dark:text-emerald-400"
+                          }`}
+                        >
+                          {alert.soldVolumeKg.toFixed(1)} kg
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Explanation & Context */}
+                    <div className="pt-3.5 space-y-2.5">
+                      <div className="bg-muted/30 p-3.5 rounded-lg border border-border/60 text-xs text-foreground leading-relaxed">
+                        <strong className="text-foreground block mb-1">
+                          Plausibility Analysis & Mass Balance Findings:
+                        </strong>
+                        {alert.explanation}
+                      </div>
+
+                      {alert.reviewNotes && (
+                        <div className="bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 p-3 rounded-lg text-xs text-muted-foreground">
+                          <strong className="text-amber-800 dark:text-amber-300 block mb-0.5">Auditor Review Notes:</strong>
+                          {alert.reviewNotes}
+                        </div>
+                      )}
+
+                      {/* Linked Entities */}
+                      <div className="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-stone-400 font-semibold">Orders:</span>
-                          {alert.relatedOrders.map((o) => (
+                          <span className="text-muted-foreground font-medium">Associated Batches:</span>
+                          {alert.relatedBatches.map((b) => (
                             <Link
-                              key={o.id}
-                              href={`/marketplace/orders/${o.id}`}
-                              className="px-2.5 py-1 rounded-md bg-stone-800 hover:bg-stone-700 text-stone-300 font-mono text-[11px] inline-flex items-center gap-1 transition-colors"
+                              key={b.id}
+                              href={`/batches/${b.id}`}
+                              className="px-2 py-0.5 rounded-md bg-muted hover:bg-muted/80 text-primary font-mono text-[11px] inline-flex items-center gap-1 transition-colors border border-border/60"
                             >
-                              <span>{o.id} ({o.quantityKg}kg)</span>
+                              <span>{b.id}</span>
                               <ExternalLink className="w-3 h-3" />
                             </Link>
                           ))}
                         </div>
-                      )}
+
+                        {alert.relatedOrders.length > 0 && (
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-muted-foreground font-medium">Orders:</span>
+                            {alert.relatedOrders.map((o) => (
+                              <Link
+                                key={o.id}
+                                href={`/marketplace/orders/${o.id}`}
+                                className="px-2 py-0.5 rounded-md bg-muted hover:bg-muted/80 text-foreground font-mono text-[11px] inline-flex items-center gap-1 transition-colors border border-border/60"
+                              >
+                                <span>{o.id} ({o.quantityKg}kg)</span>
+                                <ExternalLink className="w-3 h-3" />
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>

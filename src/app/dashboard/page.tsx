@@ -249,19 +249,11 @@ function DashboardContent() {
       </div>
 
       {/* Security & Traceability Trust Info */}
-      <div className="rounded-lg border border-border/70 bg-muted/20 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-muted-foreground">
-        <div className="flex items-center gap-2.5">
-          <Info className="h-4 w-4 text-primary shrink-0" />
-          <span>
-            Operating in <strong className="font-medium text-foreground">{selectedOrg?.name}</strong> as <strong className="font-medium text-foreground">{selectedRole?.name}</strong>. Data writes simulate cryptographic consensus.
-          </span>
-        </div>
-        <Link
-          href="/design-system"
-          className="text-primary text-xs hover:underline shrink-0"
-        >
-          View Design System Components →
-        </Link>
+      <div className="rounded-lg border border-border/70 bg-muted/20 p-4 flex items-center gap-2.5 text-xs text-muted-foreground">
+        <Info className="h-4 w-4 text-primary shrink-0" />
+        <span>
+          Operating in <strong className="font-medium text-foreground">{selectedOrg?.name}</strong> as <strong className="font-medium text-foreground">{selectedRole?.name}</strong>. Data writes simulate cryptographic consensus.
+        </span>
       </div>
 
       {/* Modal Dialog for Placeholder Workflow notice */}

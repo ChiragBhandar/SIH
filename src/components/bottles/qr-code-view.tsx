@@ -86,7 +86,7 @@ export function QRCodeView({
   const [downloadNotice, setDownloadNotice] = React.useState(false);
 
   const verifyPath = `/verify/${bottleId}`;
-  const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
   const fullUrl = `${origin}${verifyPath}`;
 
   const matrix = React.useMemo(() => generateDeterministicMatrix(bottleId), [bottleId]);

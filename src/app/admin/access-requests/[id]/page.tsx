@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useTraceability } from "@/context/traceability-context";
 import { AdminRoleGuard, StatusBadge, ConfirmationModal } from "@/components/admin";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   KeyRound,
   ArrowLeft,
@@ -15,6 +18,7 @@ import {
   Lock,
   Check,
   ShieldAlert,
+  ChevronRight,
 } from "lucide-react";
 
 export default function AccessRequestDetailPage() {
@@ -36,19 +40,18 @@ export default function AccessRequestDetailPage() {
   if (!req) {
     return (
       <AdminRoleGuard>
-        <div className="min-h-[50vh] flex flex-col items-center justify-center text-center p-6">
-          <KeyRound className="w-12 h-12 text-stone-600 mb-3" />
-          <h2 className="text-xl font-bold text-stone-200">Request Not Found</h2>
-          <p className="text-stone-400 text-sm mt-1 mb-4">
+        <Card className="border-border/80 bg-card shadow-xs min-h-[40vh] flex flex-col items-center justify-center text-center p-8">
+          <KeyRound className="w-10 h-10 text-muted-foreground mb-3" />
+          <h2 className="text-lg font-bold text-foreground">Request Not Found</h2>
+          <p className="text-muted-foreground text-xs mt-1 mb-4">
             The requested access clearance identifier ({requestId}) was not found.
           </p>
-          <Link
-            href="/admin/access-requests"
-            className="px-4 py-2 rounded-xl bg-stone-800 text-stone-200 hover:bg-stone-700 text-xs font-semibold"
-          >
-            &larr; Back to Access Requests
-          </Link>
-        </div>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/admin/access-requests">
+              <ArrowLeft className="w-3.5 h-3.5 mr-1.5" /> Back to Access Requests
+            </Link>
+          </Button>
+        </Card>
       </AdminRoleGuard>
     );
   }
@@ -75,60 +78,67 @@ export default function AccessRequestDetailPage() {
 
   return (
     <AdminRoleGuard>
-      <div className="space-y-8 pb-12">
+      <div className="space-y-6 pb-12">
         {/* Breadcrumb & Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800/80 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-6">
           <div>
-            <div className="flex items-center gap-2 text-xs text-stone-400 mb-1.5 font-medium">
-              <Link href="/admin" className="hover:text-amber-400 transition-colors">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
+              <Link href="/admin" className="hover:text-primary transition-colors">
                 Administration
               </Link>
-              <span>/</span>
-              <Link href="/admin/access-requests" className="hover:text-amber-400 transition-colors">
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
+              <Link href="/admin/access-requests" className="hover:text-primary transition-colors">
                 Access Requests
               </Link>
-              <span>/</span>
-              <span className="text-stone-300 font-mono">{req.id}</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
+              <span className="text-foreground font-mono font-semibold">{req.id}</span>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-bold text-stone-100 tracking-tight font-mono">
+            <div className="flex flex-wrap items-center gap-2.5 mt-1">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight font-mono">
                 {req.id}
               </h1>
-              <StatusBadge status={req.status} variant="accessStatus" size="lg" />
+              <StatusBadge status={req.status} variant="accessStatus" size="sm" />
             </div>
-            <p className="text-stone-400 text-sm mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Restricted data disclosure clearance review for{" "}
-              <strong className="text-stone-200">{req.requester.name}</strong>
+              <strong className="text-foreground">{req.requester.name}</strong>
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/admin/access-requests"
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold border border-stone-800 transition-colors"
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="text-xs gap-1.5"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              All Requests
-            </Link>
+              <Link href="/admin/access-requests">
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>All Requests</span>
+              </Link>
+            </Button>
 
             {req.status === "pending" && (
               <>
-                <button
+                <Button
                   type="button"
                   onClick={() => setApproveOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-950 transition-all"
+                  size="sm"
+                  className="text-xs font-semibold gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs"
                 >
-                  <CheckCircle2 className="w-4 h-4" />
+                  <CheckCircle2 className="w-3.5 h-3.5" />
                   Grant Clearance
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={() => setDenyOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-950 transition-all"
+                  size="sm"
+                  variant="outline"
+                  className="text-xs font-medium gap-1.5 border-rose-200 text-rose-700 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-300 dark:hover:bg-rose-950/40"
                 >
-                  <XCircle className="w-4 h-4" />
+                  <XCircle className="w-3.5 h-3.5" />
                   Deny Request
-                </button>
+                </Button>
               </>
             )}
           </div>
@@ -137,48 +147,48 @@ export default function AccessRequestDetailPage() {
         {/* Access Decision Notice Banner */}
         {req.decision && (
           <div
-            className={`rounded-2xl p-6 border ${
+            className={`rounded-xl p-4 border ${
               req.decision.decision === "approved"
-                ? "bg-emerald-950/20 border-emerald-500/30"
-                : "bg-rose-950/20 border-rose-500/30"
+                ? "bg-emerald-50/70 border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800"
+                : "bg-rose-50/70 border-rose-200 dark:bg-rose-950/30 dark:border-rose-800"
             }`}
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3.5">
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
                   req.decision.decision === "approved"
-                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                    : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
+                    : "bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-300 border border-rose-300 dark:border-rose-700"
                 }`}
               >
                 {req.decision.decision === "approved" ? (
-                  <ShieldCheck className="w-5 h-5" />
+                  <ShieldCheck className="w-4 h-4" />
                 ) : (
-                  <ShieldAlert className="w-5 h-5" />
+                  <ShieldAlert className="w-4 h-4" />
                 )}
               </div>
-              <div className="space-y-1.5 text-xs">
+              <div className="space-y-1 text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-stone-100 text-sm">
+                  <span className="font-bold text-foreground text-sm">
                     Access Decision: {req.decision.decision.toUpperCase()}
                   </span>
-                  <span className="text-stone-400 font-mono">
+                  <span className="text-muted-foreground font-mono text-[11px]">
                     Decided by {req.decision.decidedBy}
                   </span>
                 </div>
-                <p className="text-stone-300">
-                  <strong className="text-stone-200">Justification:</strong> {req.decision.reason}
+                <p className="text-muted-foreground">
+                  <strong className="text-foreground">Justification:</strong> {req.decision.reason}
                 </p>
                 {req.decision.grantedScope && req.decision.grantedScope.length > 0 && (
                   <div>
-                    <span className="text-stone-400 font-semibold block mt-2 mb-1">
+                    <span className="text-muted-foreground font-semibold block mt-2 mb-1">
                       Scopes Granted to Requester:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {req.decision.grantedScope.map((scope, idx) => (
                         <span
                           key={idx}
-                          className="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-300 font-mono text-[11px] border border-emerald-500/20"
+                          className="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200 font-mono text-[11px] border border-emerald-200 dark:border-emerald-800"
                         >
                           {scope}
                         </span>
@@ -190,7 +200,7 @@ export default function AccessRequestDetailPage() {
                   <div className="pt-1">
                     <Link
                       href={`/admin/audit/${req.decision.auditEventId}`}
-                      className="text-amber-400 hover:underline font-mono text-[11px] inline-flex items-center gap-1"
+                      className="text-primary hover:underline font-mono text-[11px] inline-flex items-center gap-1"
                     >
                       Audit Record Reference: {req.decision.auditEventId} &rarr;
                     </Link>
@@ -204,106 +214,112 @@ export default function AccessRequestDetailPage() {
         {/* Request Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Requester Profile */}
-          <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-6 space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-400 flex items-center gap-2">
-              <User className="w-4 h-4 text-amber-400" />
-              Requester Identity
-            </h3>
+          <Card className="border-border/80 bg-card shadow-xs">
+            <CardContent className="p-5 space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                <User className="w-4 h-4 text-primary" />
+                Requester Identity
+              </h3>
 
-            <div className="space-y-3 text-xs">
-              <div className="flex justify-between py-2 border-b border-stone-800/60">
-                <span className="text-stone-400">Full Name:</span>
-                <span className="font-semibold text-stone-200">{req.requester.name}</span>
+              <div className="space-y-2.5 text-xs divide-y divide-border/60">
+                <div className="flex justify-between py-1.5">
+                  <span className="text-muted-foreground">Full Name:</span>
+                  <span className="font-semibold text-foreground">{req.requester.name}</span>
+                </div>
+                <div className="flex justify-between pt-2 pb-1">
+                  <span className="text-muted-foreground">Role in Ecosystem:</span>
+                  <span className="font-semibold text-foreground">{req.requester.role}</span>
+                </div>
+                <div className="flex justify-between pt-2 pb-1">
+                  <span className="text-muted-foreground">Official Email:</span>
+                  <span className="font-mono text-foreground">{req.requester.email}</span>
+                </div>
+                <div className="flex justify-between pt-2 pb-1">
+                  <span className="text-muted-foreground">Affiliated Organisation:</span>
+                  <span className="font-medium text-foreground">{req.organisation}</span>
+                </div>
+                <div className="flex justify-between pt-2 pb-1">
+                  <span className="text-muted-foreground">Request Date:</span>
+                  <span className="font-mono text-foreground">
+                    {new Date(req.requestedAt).toLocaleString("en-GB", {
+                      dateStyle: "full",
+                      timeStyle: "short",
+                    })}
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between py-2 border-b border-stone-800/60">
-                <span className="text-stone-400">Role in Ecosystem:</span>
-                <span className="font-semibold text-stone-200">{req.requester.role}</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-stone-800/60">
-                <span className="text-stone-400">Official Email:</span>
-                <span className="font-mono text-stone-300">{req.requester.email}</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-stone-800/60">
-                <span className="text-stone-400">Affiliated Organisation:</span>
-                <span className="font-medium text-stone-200">{req.organisation}</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-stone-800/60">
-                <span className="text-stone-400">Request Date:</span>
-                <span className="font-mono text-stone-300">
-                  {new Date(req.requestedAt).toLocaleString("en-GB", {
-                    dateStyle: "full",
-                    timeStyle: "short",
-                  })}
-                </span>
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Requested Resource & Rationale */}
-          <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-6 space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-400 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-purple-400" />
-              Requested Protected Resource
-            </h3>
+          <Card className="border-border/80 bg-card shadow-xs">
+            <CardContent className="p-5 space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                <Lock className="w-4 h-4 text-primary" />
+                Requested Protected Resource
+              </h3>
 
-            <div className="bg-stone-950 p-4 rounded-xl border border-stone-800 space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">
-                Resource Name:
-              </span>
-              <p className="text-sm font-semibold text-stone-200 leading-relaxed">
-                {req.requestedResource}
-              </p>
-            </div>
+              <div className="bg-muted/30 p-3.5 rounded-lg border border-border/60 space-y-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  Resource Name:
+                </span>
+                <p className="text-xs sm:text-sm font-semibold text-foreground leading-relaxed">
+                  {req.requestedResource}
+                </p>
+              </div>
 
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-stone-400 block mb-1.5">
-                Stated Purpose / Operational Reason:
-              </span>
-              <p className="text-xs text-stone-300 leading-relaxed bg-stone-950 p-3.5 rounded-xl border border-stone-800">
-                {req.reason}
-              </p>
-            </div>
-          </div>
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1.5">
+                  Stated Purpose / Operational Reason:
+                </span>
+                <p className="text-xs text-foreground leading-relaxed bg-muted/40 p-3 rounded-lg border border-border/60">
+                  {req.reason}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Scopes Breakdown */}
-        <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-400 flex items-center gap-2">
-              <KeyRound className="w-4 h-4 text-emerald-400" />
-              Requested Permission Scopes ({req.requestedScope.length})
-            </h3>
-            <span className="text-xs font-mono text-stone-500">RBAC Telemetry Matrix</span>
-          </div>
+        <Card className="border-border/80 bg-card shadow-xs">
+          <CardContent className="p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                <KeyRound className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                Requested Permission Scopes ({req.requestedScope.length})
+              </h3>
+              <span className="text-xs font-mono text-muted-foreground">RBAC Telemetry Matrix</span>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {req.requestedScope.map((scope, idx) => (
-              <div
-                key={idx}
-                className="bg-stone-950 p-3.5 rounded-xl border border-stone-800 flex items-center justify-between text-xs"
-              >
-                <div className="font-mono text-amber-300">{scope}</div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-stone-800 text-stone-400">
-                  Protected Scope
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {req.requestedScope.map((scope, idx) => (
+                <div
+                  key={idx}
+                  className="bg-muted/30 p-3 rounded-lg border border-border/60 flex items-center justify-between text-xs"
+                >
+                  <div className="font-mono text-primary font-medium">{scope}</div>
+                  <Badge variant="secondary" className="text-[10px] font-normal">
+                    Protected Scope
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Grant Approval Dialog */}
         {approveOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="relative w-full max-w-lg bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-2xl">
-              <div className="flex items-start gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
-                  <ShieldCheck className="w-6 h-6" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="relative w-full max-w-lg bg-card border border-border rounded-xl p-6 shadow-xl text-foreground">
+              <div className="flex items-start gap-3.5 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+                  <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-stone-100">
+                  <h3 className="text-base font-semibold text-foreground">
                     Grant Access Clearance ({req.id})
                   </h3>
-                  <p className="text-xs text-stone-400 mt-0.5">
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     Select exactly what information is being granted to {req.requester.name}.
                   </p>
                 </div>
@@ -311,7 +327,7 @@ export default function AccessRequestDetailPage() {
 
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-semibold text-foreground mb-2">
                     Authorized Scope Grants:
                   </label>
                   <div className="space-y-2">
@@ -322,21 +338,21 @@ export default function AccessRequestDetailPage() {
                           key={idx}
                           type="button"
                           onClick={() => handleToggleScope(scope)}
-                          className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+                          className={`w-full p-2.5 rounded-lg border text-left flex items-center justify-between transition-all ${
                             isChecked
-                              ? "bg-emerald-950/40 border-emerald-500/50 text-emerald-300"
-                              : "bg-stone-950 border-stone-800 text-stone-400 hover:border-stone-700"
+                              ? "bg-emerald-50/80 border-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200"
+                              : "bg-background border-border/80 text-muted-foreground hover:border-border"
                           }`}
                         >
                           <span className="font-mono text-xs">{scope}</span>
                           <div
-                            className={`w-5 h-5 rounded-md border flex items-center justify-center ${
+                            className={`w-4 h-4 rounded border flex items-center justify-center ${
                               isChecked
-                                ? "bg-emerald-500 border-emerald-400 text-stone-950 font-bold"
-                                : "border-stone-700 bg-stone-900"
+                                ? "bg-emerald-600 border-emerald-600 text-white"
+                                : "border-input bg-background"
                             }`}
                           >
-                            {isChecked && <Check className="w-3.5 h-3.5" />}
+                            {isChecked && <Check className="w-3 h-3" />}
                           </div>
                         </button>
                       );
@@ -344,28 +360,31 @@ export default function AccessRequestDetailPage() {
                   </div>
                 </div>
 
-                <div className="p-3 bg-stone-950 rounded-xl border border-stone-800 text-xs text-stone-400">
+                <div className="p-3 bg-muted/40 rounded-lg border border-border/60 text-xs text-muted-foreground">
                   <p>
                     Clearance will be active for 72 hours. This authorization decision will be logged to the immutable Honey Chain audit trail.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3">
-                <button
+              <div className="flex items-center justify-end gap-2.5">
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setApproveOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium transition-colors"
+                  className="text-xs"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  size="sm"
                   onClick={handleConfirmApprove}
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-950"
+                  className="text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
                   Confirm & Grant Access
-                </button>
+                </Button>
               </div>
             </div>
           </div>

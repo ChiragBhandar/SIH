@@ -4,27 +4,32 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer",
+  "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer shrink-0 leading-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:opacity-90 active:scale-[0.99]",
-        destructive:
-          "bg-destructive text-destructive-foreground shadow-xs hover:opacity-90 active:scale-[0.99]",
-        outline:
-          "border border-border bg-background shadow-2xs hover:bg-secondary hover:text-secondary-foreground",
+          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 active:scale-[0.98]",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-2xs hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground shadow-2xs hover:bg-secondary/80 active:scale-[0.98]",
+        outline:
+          "border border-border bg-background shadow-2xs hover:bg-muted hover:text-foreground active:scale-[0.98]",
+        ghost:
+          "text-muted-foreground hover:bg-muted/70 hover:text-foreground active:scale-[0.98]",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 active:scale-[0.98]",
+        success:
+          "bg-emerald-600 text-white shadow-xs hover:bg-emerald-700 active:scale-[0.98]",
+        link: "text-primary underline-offset-4 hover:underline p-0 h-auto font-normal",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        xs: "h-7 rounded px-2.5 text-xs",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-6 text-base",
-        icon: "h-9 w-9",
+        default: "h-9 px-4 py-2 text-xs sm:text-sm gap-2 [&_svg]:size-4",
+        sm: "h-8 px-3 text-xs gap-1.5 [&_svg]:size-3.5",
+        xs: "h-7 px-2.5 text-xs gap-1.5 [&_svg]:size-3.5",
+        lg: "h-10 px-6 text-sm sm:text-base gap-2 [&_svg]:size-4",
+        icon: "h-9 w-9 p-0 [&_svg]:size-4",
+        "icon-sm": "h-8 w-8 p-0 [&_svg]:size-3.5",
+        "icon-xs": "h-7 w-7 p-0 [&_svg]:size-3.5",
       },
     },
     defaultVariants: {
@@ -55,3 +60,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button";
 
 export { Button, buttonVariants };
+

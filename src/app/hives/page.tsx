@@ -238,7 +238,7 @@ function HivesAndApiariesContent() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild className="gap-2 shadow-xs cursor-pointer text-xs h-9">
+          <Button asChild size="sm">
             <Link href="/hives/new">
               <Plus className="h-4 w-4" />
               <span>Register Apiary</span>
@@ -545,9 +545,8 @@ function HivesAndApiariesContent() {
                     </div>
                     <Button
                       variant="outline"
-                      size="sm"
+                      size="xs"
                       onClick={handleOpenRegisterHive}
-                      className="text-xs h-7 gap-1 cursor-pointer"
                     >
                       <Plus className="h-3 w-3" />
                       <span>Add Hive</span>
@@ -639,9 +638,9 @@ function HivesAndApiariesContent() {
                               <TableCell className="text-right">
                                 <Button
                                   variant="ghost"
-                                  size="sm"
+                                  size="xs"
                                   asChild
-                                  className="h-7 text-xs px-2 text-primary hover:text-primary hover:bg-primary/10"
+                                  className="text-primary hover:text-primary hover:bg-primary/10 font-medium"
                                 >
                                   <Link href={`/hives/${hive.id}`}>
                                     View →

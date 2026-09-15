@@ -339,8 +339,7 @@ function ReceivingContent() {
                         {isPending ? (
                           <Button
                             asChild
-                            size="sm"
-                            className="h-7 text-xs gap-1 font-semibold shadow-xs"
+                            size="xs"
                           >
                             <Link href={`/receiving/${transfer.id}`}>
                               <span>Review & Receive</span>
@@ -350,9 +349,9 @@ function ReceivingContent() {
                         ) : (
                           <Button
                             variant="ghost"
-                            size="sm"
+                            size="xs"
                             asChild
-                            className="h-7 text-xs text-primary hover:text-primary gap-1"
+                            className="text-primary hover:text-primary font-medium"
                           >
                             <Link href={`/receiving/${transfer.id}`}>
                               <span>View Intake</span>

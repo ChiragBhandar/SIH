@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Hexagon, X, Building, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { NAVIGATION_CONFIG, NavItem } from "./nav-config";
 import { UserRole } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,7 @@ export interface MobileNavProps {
   isOpen: boolean;
   onClose: () => void;
   activeNavId: string;
-  onSelectNav: (id: string) => void;
+  onSelectNav?: (id: string) => void;
   currentRole: UserRole;
   currentRoleName?: string;
   currentOrg: string;
@@ -111,7 +112,7 @@ export function MobileNav({
         </div>
 
         {/* Nav Links */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+        <div className="flex-1 overflow-y-auto min-h-0 px-3 py-4 space-y-6">
           {filteredGroups.map((group) => (
             <div key={group.id} className="space-y-1">
               <h4 className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
@@ -158,7 +159,7 @@ export function MobileNav({
                         key={item.id}
                         href={item.href}
                         onClick={() => {
-                          onSelectNav(item.id);
+                          onSelectNav?.(item.id);
                           onClose();
                         }}
                         className={commonClasses}
@@ -173,7 +174,7 @@ export function MobileNav({
                       key={item.id}
                       type="button"
                       onClick={() => {
-                        onSelectNav(item.id);
+                        onSelectNav?.(item.id);
                         onClose();
                       }}
                       className={commonClasses}
@@ -190,9 +191,7 @@ export function MobileNav({
         {/* User profile footer */}
         <div className="border-t border-border p-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary">
-              HC
-            </div>
+            <UserAvatar name="Chirag Operator" size="md" />
             <div className="flex flex-col overflow-hidden text-xs">
               <span className="truncate font-medium text-foreground">
                 Chirag Operator

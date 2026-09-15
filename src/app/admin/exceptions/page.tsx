@@ -4,6 +4,17 @@ import * as React from "react";
 import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
 import { AdminRoleGuard, StatusBadge } from "@/components/admin";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   AlertTriangle,
   Search,
@@ -12,6 +23,7 @@ import {
   CheckCircle2,
   AlertOctagon,
   Eye,
+  ChevronRight,
 } from "lucide-react";
 
 export default function ExceptionsListPage() {
@@ -52,265 +64,277 @@ export default function ExceptionsListPage() {
 
   return (
     <AdminRoleGuard>
-      <div className="space-y-8 pb-12">
+      <div className="space-y-6 pb-12">
         {/* Breadcrumb & Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800/80 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-6">
           <div>
-            <div className="flex items-center gap-2 text-xs text-stone-400 mb-1.5 font-medium">
-              <Link href="/admin" className="hover:text-amber-400 transition-colors">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
+              <Link href="/admin" className="hover:text-primary transition-colors">
                 Administration
               </Link>
-              <span>/</span>
-              <span className="text-stone-300">Exceptions</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
+              <span className="text-foreground font-semibold">Exceptions</span>
             </div>
-            <h1 className="text-3xl font-bold text-stone-100 tracking-tight">Exceptions</h1>
-            <p className="text-stone-400 text-sm mt-1 max-w-2xl">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Exceptions</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
               Investigate operational anomalies, rejected records, and traceability issues.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="px-3.5 py-1.5 rounded-xl bg-stone-900 border border-stone-800 text-xs text-stone-300 font-mono">
+            <Badge variant="outline" className="px-3 py-1 font-mono text-xs font-normal">
               Total Logged: {exceptions.length} Cases
-            </span>
+            </Badge>
           </div>
         </div>
 
         {/* KPI Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Open */}
-          <div className="bg-stone-900/90 border border-stone-800 rounded-2xl p-5 relative overflow-hidden">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-stone-400 uppercase tracking-wider">
-                Open Cases
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
-                <AlertTriangle className="w-4 h-4" />
+          <Card className="border-border/80 bg-card shadow-xs">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Open Cases
+                </span>
+                <div className="w-7 h-7 rounded-md bg-rose-50 border border-rose-200 dark:bg-rose-950/40 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                </div>
               </div>
-            </div>
-            <div className="text-3xl font-extrabold text-stone-100 mb-1 tracking-tight">
-              {openCount}
-            </div>
-            <p className="text-xs text-stone-400">Awaiting triage & response</p>
-          </div>
+              <div className="text-2xl font-bold text-foreground tracking-tight">
+                {openCount}
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Awaiting triage & response</p>
+            </CardContent>
+          </Card>
 
           {/* Investigating */}
-          <div className="bg-stone-900/90 border border-stone-800 rounded-2xl p-5 relative overflow-hidden">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-stone-400 uppercase tracking-wider">
-                Investigating
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-                <Activity className="w-4 h-4" />
+          <Card className="border-border/80 bg-card shadow-xs">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Investigating
+                </span>
+                <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-200 dark:bg-amber-950/40 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                  <Activity className="w-3.5 h-3.5" />
+                </div>
               </div>
-            </div>
-            <div className="text-3xl font-extrabold text-stone-100 mb-1 tracking-tight">
-              {investigatingCount}
-            </div>
-            <p className="text-xs text-stone-400">Active root-cause trace in progress</p>
-          </div>
+              <div className="text-2xl font-bold text-foreground tracking-tight">
+                {investigatingCount}
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Active root-cause trace in progress</p>
+            </CardContent>
+          </Card>
 
           {/* Resolved */}
-          <div className="bg-stone-900/90 border border-stone-800 rounded-2xl p-5 relative overflow-hidden">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-stone-400 uppercase tracking-wider">
-                Resolved
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                <CheckCircle2 className="w-4 h-4" />
+          <Card className="border-border/80 bg-card shadow-xs">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Resolved
+                </span>
+                <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
               </div>
-            </div>
-            <div className="text-3xl font-extrabold text-stone-100 mb-1 tracking-tight">
-              {resolvedCount}
-            </div>
-            <p className="text-xs text-stone-400">Corrective actions completed</p>
-          </div>
+              <div className="text-2xl font-bold text-foreground tracking-tight">
+                {resolvedCount}
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Corrective actions completed</p>
+            </CardContent>
+          </Card>
 
           {/* Critical */}
-          <div className="bg-stone-900/90 border border-rose-900/40 rounded-2xl p-5 relative overflow-hidden bg-gradient-to-br from-rose-950/20 to-stone-900">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">
-                Critical Severity
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400">
-                <AlertOctagon className="w-4 h-4 animate-pulse" />
+          <Card className="border-rose-200 dark:border-rose-900/60 bg-rose-50/30 dark:bg-rose-950/10 shadow-xs">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-rose-700 dark:text-rose-400 uppercase tracking-wider">
+                  Critical Severity
+                </span>
+                <div className="w-7 h-7 rounded-md bg-rose-100 border border-rose-300 dark:bg-rose-900/50 dark:border-rose-700 flex items-center justify-center text-rose-700 dark:text-rose-300">
+                  <AlertOctagon className="w-3.5 h-3.5 animate-pulse" />
+                </div>
               </div>
-            </div>
-            <div className="text-3xl font-extrabold text-rose-300 mb-1 tracking-tight">
-              {criticalCount}
-            </div>
-            <p className="text-xs text-rose-400/80">Immediate quarantine priority</p>
-          </div>
+              <div className="text-2xl font-bold text-rose-700 dark:text-rose-300 tracking-tight">
+                {criticalCount}
+              </div>
+              <p className="text-[11px] text-rose-600/90 dark:text-rose-400/90 mt-0.5">Immediate quarantine priority</p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
-            <input
-              type="text"
-              placeholder="Search exception ID, type, batch, actor..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-stone-950 border border-stone-800 text-sm text-stone-200 placeholder-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            {/* Type */}
-            <div className="flex items-center gap-2 text-xs text-stone-400">
-              <Filter className="w-3.5 h-3.5" />
-              <span>Type:</span>
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:ring-1 focus:ring-amber-500"
-              >
-                <option value="all">All Types</option>
-                <option value="Receiving Rejection">Receiving Rejection</option>
-                <option value="Quality Rejection">Quality Rejection</option>
-                <option value="Quantity Mismatch">Quantity Mismatch</option>
-                <option value="Missing Traceability Link">Missing Traceability Link</option>
-                <option value="Suspicious Yield">Suspicious Yield</option>
-                <option value="Access Issue">Access Issue</option>
-                <option value="Other">Other</option>
-              </select>
+        <Card className="border-border/80 bg-card shadow-xs">
+          <CardContent className="p-3.5 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search exception ID, type, batch, actor..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-background border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
             </div>
 
-            {/* Severity */}
-            <div className="flex items-center gap-2 text-xs text-stone-400">
-              <span>Severity:</span>
-              <select
-                value={selectedSeverity}
-                onChange={(e) => setSelectedSeverity(e.target.value)}
-                className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:ring-1 focus:ring-amber-500"
-              >
-                <option value="all">All Severities</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="critical">Critical</option>
-              </select>
-            </div>
+            <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+              {/* Type */}
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Filter className="w-3.5 h-3.5" />
+                <span>Type:</span>
+                <select
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+                >
+                  <option value="all">All Types</option>
+                  <option value="Receiving Rejection">Receiving Rejection</option>
+                  <option value="Quality Rejection">Quality Rejection</option>
+                  <option value="Quantity Mismatch">Quantity Mismatch</option>
+                  <option value="Missing Traceability Link">Missing Traceability Link</option>
+                  <option value="Suspicious Yield">Suspicious Yield</option>
+                  <option value="Access Issue">Access Issue</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
 
-            {/* Status */}
-            <div className="flex items-center gap-2 text-xs text-stone-400">
-              <span>Status:</span>
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:ring-1 focus:ring-amber-500"
-              >
-                <option value="all">All Statuses</option>
-                <option value="open">Open</option>
-                <option value="investigating">Investigating</option>
-                <option value="resolved">Resolved</option>
-                <option value="dismissed">Dismissed</option>
-              </select>
+              {/* Severity */}
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <span>Severity:</span>
+                <select
+                  value={selectedSeverity}
+                  onChange={(e) => setSelectedSeverity(e.target.value)}
+                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+                >
+                  <option value="all">All Severities</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="critical">Critical</option>
+                </select>
+              </div>
+
+              {/* Status */}
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <span>Status:</span>
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+                >
+                  <option value="all">All Statuses</option>
+                  <option value="open">Open</option>
+                  <option value="investigating">Investigating</option>
+                  <option value="resolved">Resolved</option>
+                  <option value="dismissed">Dismissed</option>
+                </select>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Exceptions Table */}
-        <div className="bg-stone-900/80 border border-stone-800 rounded-2xl overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-stone-800 bg-stone-950/60 text-[11px] font-bold text-stone-400 uppercase tracking-wider">
-                  <th className="py-3.5 px-4">Exception ID</th>
-                  <th className="py-3.5 px-4">Type</th>
-                  <th className="py-3.5 px-4">Related Entity</th>
-                  <th className="py-3.5 px-4">Reported By</th>
-                  <th className="py-3.5 px-4">Created Date</th>
-                  <th className="py-3.5 px-4">Severity</th>
-                  <th className="py-3.5 px-4">Status</th>
-                  <th className="py-3.5 px-4 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-800/60 text-xs">
-                {filteredExceptions.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="py-12 text-center text-stone-500">
-                      No compliance exceptions match your filter criteria.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredExceptions.map((exc) => (
-                    <tr key={exc.id} className="hover:bg-stone-800/40 transition-colors">
-                      {/* Exception ID */}
-                      <td className="py-4 px-4 font-mono font-bold text-rose-400">
-                        <Link href={`/admin/exceptions/${exc.id}`} className="hover:underline">
-                          {exc.id}
-                        </Link>
-                      </td>
+        <Card className="border-border/80 bg-card shadow-xs overflow-hidden">
+          <Table>
+            <TableHeader className="bg-muted/50">
+              <TableRow>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Exception ID</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Type</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Related Entity</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Reported By</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Created Date</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Severity</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Status</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="text-xs">
+              {filteredExceptions.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="py-12 text-center text-muted-foreground">
+                    No compliance exceptions match your filter criteria.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredExceptions.map((exc) => (
+                  <TableRow key={exc.id} className="hover:bg-muted/40 transition-colors">
+                    {/* Exception ID */}
+                    <TableCell className="font-mono font-semibold text-rose-600 dark:text-rose-400">
+                      <Link href={`/admin/exceptions/${exc.id}`} className="hover:underline">
+                        {exc.id}
+                      </Link>
+                    </TableCell>
 
-                      {/* Type */}
-                      <td className="py-4 px-4 font-semibold text-stone-200">
-                        {exc.type}
-                      </td>
+                    {/* Type */}
+                    <TableCell className="font-medium text-foreground">
+                      {exc.type}
+                    </TableCell>
 
-                      {/* Related Entity */}
-                      <td className="py-4 px-4">
-                        <div className="flex flex-col max-w-[200px]">
-                          <span className="font-medium text-stone-300 truncate">
-                            {exc.relatedEntity.title}
-                          </span>
-                          <span className="font-mono text-[10px] text-amber-400">
-                            {exc.relatedEntity.id}
-                          </span>
-                        </div>
-                      </td>
+                    {/* Related Entity */}
+                    <TableCell>
+                      <div className="flex flex-col max-w-[200px]">
+                        <span className="font-medium text-foreground truncate">
+                          {exc.relatedEntity.title}
+                        </span>
+                        <span className="font-mono text-[10px] text-amber-600 dark:text-amber-400">
+                          {exc.relatedEntity.id}
+                        </span>
+                      </div>
+                    </TableCell>
 
-                      {/* Reported By */}
-                      <td className="py-4 px-4">
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-stone-200">
-                            {exc.reportedBy.name}
-                          </span>
-                          <span className="text-[11px] text-stone-400">
-                            {exc.reportedBy.organisation}
-                          </span>
-                        </div>
-                      </td>
+                    {/* Reported By */}
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-foreground">
+                          {exc.reportedBy.name}
+                        </span>
+                        <span className="text-[11px] text-muted-foreground">
+                          {exc.reportedBy.organisation}
+                        </span>
+                      </div>
+                    </TableCell>
 
-                      {/* Created Date */}
-                      <td className="py-4 px-4 text-stone-400 font-mono text-[11px]">
-                        {new Date(exc.createdDate).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
+                    {/* Created Date */}
+                    <TableCell className="text-muted-foreground font-mono text-[11px]">
+                      {new Date(exc.createdDate).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </TableCell>
 
-                      {/* Severity */}
-                      <td className="py-4 px-4">
-                        <StatusBadge status={exc.severity} variant="severity" />
-                      </td>
+                    {/* Severity */}
+                    <TableCell>
+                      <StatusBadge status={exc.severity} variant="severity" />
+                    </TableCell>
 
-                      {/* Status */}
-                      <td className="py-4 px-4">
-                        <StatusBadge status={exc.status} variant="exceptionStatus" />
-                      </td>
+                    {/* Status */}
+                    <TableCell>
+                      <StatusBadge status={exc.status} variant="exceptionStatus" />
+                    </TableCell>
 
-                      {/* Action */}
-                      <td className="py-4 px-4 text-right">
-                        <Link
-                          href={`/admin/exceptions/${exc.id}`}
-                          className="px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold inline-flex items-center gap-1.5 transition-colors text-xs"
-                        >
-                          <Eye className="w-3.5 h-3.5 text-amber-400" />
+                    {/* Action */}
+                    <TableCell className="text-right">
+                      <Button
+                        asChild
+                        variant="secondary"
+                        size="sm"
+                        className="h-7 text-xs gap-1.5 font-medium"
+                      >
+                        <Link href={`/admin/exceptions/${exc.id}`}>
+                          <Eye className="w-3.5 h-3.5 text-primary" />
                           <span>Investigate</span>
                         </Link>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </Card>
       </div>
     </AdminRoleGuard>
   );

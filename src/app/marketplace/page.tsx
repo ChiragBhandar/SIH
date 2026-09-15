@@ -111,13 +111,13 @@ function MarketplaceContent() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <Button asChild variant="outline" size="sm" className="h-9 text-xs gap-1.5 shadow-xs">
+          <Button asChild variant="outline" size="sm">
             <Link href="/marketplace/orders">
               <ShoppingBag className="h-4 w-4 text-primary" />
               <span>View Orders ({marketplaceOrders.length})</span>
             </Link>
           </Button>
-          <Button asChild variant="secondary" size="sm" className="h-9 text-xs gap-1.5 shadow-xs">
+          <Button asChild variant="secondary" size="sm">
             <Link href="/batches">
               <Boxes className="h-4 w-4" />
               <span>Honey Batches</span>
@@ -375,10 +375,10 @@ function MarketplaceContent() {
                 </div>
 
                 <div className="p-3 bg-muted/10 border-t border-border/60 flex items-center justify-between gap-2">
-                  <Button asChild variant="outline" size="sm" className="h-8 text-xs flex-1">
+                  <Button asChild variant="outline" size="sm" className="flex-1">
                     <Link href={`/marketplace/${listing.id}`}>
                       <span>View Listing</span>
-                      <ChevronRight className="h-3.5 w-3.5 ml-1" />
+                      <ChevronRight className="h-3.5 w-3.5" />
                     </Link>
                   </Button>
 
@@ -386,9 +386,8 @@ function MarketplaceContent() {
                     <Button
                       size="sm"
                       onClick={() => setActiveListingForOrder(listing)}
-                      className="h-8 text-xs font-semibold gap-1"
                     >
-                      <ShoppingBag className="h-3 w-3" />
+                      <ShoppingBag className="h-3.5 w-3.5" />
                       <span>Place Order</span>
                     </Button>
                   )}

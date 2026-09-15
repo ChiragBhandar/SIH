@@ -193,10 +193,10 @@ function MarketplaceOrdersContent() {
                     <OrderStatusBadge status={order.status} />
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button asChild size="sm" variant="outline" className="h-7 text-xs">
+                    <Button asChild size="xs" variant="outline">
                       <Link href={`/marketplace/orders/${order.id}`}>
                         <span>View Order</span>
-                        <ArrowRight className="h-3 w-3 ml-1" />
+                        <ArrowRight className="h-3 w-3" />
                       </Link>
                     </Button>
                   </TableCell>

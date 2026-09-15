@@ -201,10 +201,10 @@ export function CertificationsListContent() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button asChild size="sm" className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
+                        <Button asChild size="xs" variant="success">
                           <Link href={`/certifications/${cert.id}`}>
                             <span>View Certificate</span>
-                            <ArrowRight className="h-3 w-3 ml-1" />
+                            <ArrowRight className="h-3 w-3" />
                           </Link>
                         </Button>
                       </TableCell>

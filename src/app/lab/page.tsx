@@ -120,7 +120,7 @@ export function LaboratoryDashboardContent() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild className="gap-2 shadow-xs font-semibold cursor-pointer text-xs h-9">
+          <Button asChild size="sm">
             <Link href="/lab/new">
               <Plus className="h-4 w-4" />
               <span>Submit Sample</span>
@@ -440,17 +440,17 @@ export function LaboratoryDashboardContent() {
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1.5">
                           {test.certificateId && (
-                            <Button asChild size="sm" variant="outline" className="h-7 text-xs border-emerald-500/40 text-emerald-700 dark:text-emerald-300">
+                            <Button asChild size="xs" variant="outline" className="border-emerald-500/40 text-emerald-700 dark:text-emerald-300">
                               <Link href={`/certifications/${test.certificateId}`}>
-                                <Award className="h-3 w-3 mr-1" />
+                                <Award className="h-3 w-3" />
                                 <span>Cert</span>
                               </Link>
                             </Button>
                           )}
-                          <Button asChild size="sm" className="h-7 text-xs">
+                          <Button asChild size="xs" variant={test.status === "Approved" ? "outline" : "default"}>
                             <Link href={`/lab/${test.id}`}>
                               <span>{test.status === "Approved" ? "View Audit" : "Review Test"}</span>
-                              <ArrowRight className="h-3 w-3 ml-1" />
+                              <ArrowRight className="h-3 w-3" />
                             </Link>
                           </Button>
                         </div>

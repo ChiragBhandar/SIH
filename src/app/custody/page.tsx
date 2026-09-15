@@ -343,9 +343,9 @@ function CustodyTransfersContent() {
                       <TableCell className="text-right">
                         <Button
                           variant="ghost"
-                          size="sm"
+                          size="xs"
                           asChild
-                          className="h-7 text-xs text-primary hover:text-primary gap-1"
+                          className="text-primary hover:text-primary font-medium"
                         >
                           <Link href={`/custody/${transfer.id}`}>
                             <span>View</span>

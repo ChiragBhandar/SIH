@@ -21,3 +21,4 @@ export * from "./search-field";
 export * from "./pagination";
 export * from "./breadcrumb";
 export * from "./filter-controls";
+export * from "./user-avatar";

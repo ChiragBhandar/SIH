@@ -98,14 +98,14 @@ function BatchesContent() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Button asChild variant="outline" className="gap-1.5 shadow-xs cursor-pointer text-xs h-9">
+          <Button asChild variant="outline" size="sm">
             <Link href="/processing/new">
               <Layers className="h-4 w-4 text-primary" />
               <span>Process Material</span>
             </Link>
           </Button>
 
-          <Button asChild className="gap-2 shadow-xs cursor-pointer text-xs h-9">
+          <Button asChild size="sm">
             <Link href="/batches/new">
               <Plus className="h-4 w-4" />
               <span>Create Harvest Batch</span>
@@ -357,9 +357,9 @@ function BatchesContent() {
                     <TableCell className="text-right">
                       <Button
                         variant="ghost"
-                        size="sm"
+                        size="xs"
                         asChild
-                        className="h-7 text-xs px-2.5 text-primary hover:text-primary hover:bg-primary/10"
+                        className="text-primary hover:text-primary hover:bg-primary/10 font-medium"
                       >
                         <Link href={`/batches/${batch.id}`}>
                           View Details →

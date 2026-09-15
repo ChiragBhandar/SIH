@@ -3,17 +3,15 @@
 import * as React from "react";
 import {
   Menu,
-  Bell,
-  HelpCircle,
   Building,
   Check,
   ChevronsUpDown,
-  Search,
   Shield,
   LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Breadcrumb, BreadcrumbItem } from "@/components/ui/breadcrumb";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -103,18 +101,6 @@ export function Header({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Quick Search Shortcut */}
-        <button
-          type="button"
-          className="hidden items-center gap-2 rounded-md border border-input bg-muted/40 px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted md:flex"
-        >
-          <Search className="h-3.5 w-3.5" />
-          <span>Quick search...</span>
-          <kbd className="pointer-events-none ml-2 inline-flex h-4 select-none items-center rounded border border-border bg-background px-1 font-mono text-[10px] font-medium text-muted-foreground">
-            ⌘K
-          </kbd>
-        </button>
-
         {/* Organisation Switcher */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -165,52 +151,7 @@ export function Header({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Notification bell */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative h-8 w-8 text-muted-foreground hover:text-foreground"
-              aria-label="Notifications"
-            >
-              <Bell className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel className="flex items-center justify-between text-xs">
-              <span>Notifications</span>
-              <span className="text-[10px] text-muted-foreground">3 unread</span>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <div className="space-y-1 p-2">
-              <div className="rounded-md p-2 text-xs hover:bg-muted/60 transition-colors">
-                <p className="font-semibold text-foreground">Batch #HC-9820 Verified</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Lab test results certified with purity score 99.4%</p>
-                <p className="text-[10px] text-muted-foreground mt-1">12 minutes ago</p>
-              </div>
-              <div className="rounded-md p-2 text-xs hover:bg-muted/60 transition-colors">
-                <p className="font-semibold text-foreground">Custody Transfer Accepted</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Apex Processors acknowledged 420 kg raw honey.</p>
-                <p className="text-[10px] text-muted-foreground mt-1">1 hour ago</p>
-              </div>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
 
-        {/* Support Entry */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-foreground hidden sm:flex"
-          aria-label="Help and Documentation"
-        >
-          <HelpCircle className="h-4 w-4" />
-        </Button>
 
         {/* User profile dropdown with Role context */}
         <DropdownMenu>
@@ -218,10 +159,13 @@ export function Header({
             <button
               type="button"
               className="flex items-center gap-2 rounded-full ring-offset-background transition-opacity hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
+              aria-label="User account menu"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary">
-                HC
-              </div>
+              <UserAvatar
+                src={session.user?.avatarUrl}
+                name={activeUserName}
+                size="md"
+              />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-60">

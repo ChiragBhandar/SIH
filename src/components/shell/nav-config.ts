@@ -217,3 +217,84 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
     ],
   },
 ];
+
+/**
+ * Derives the active navigation item ID from current pathname.
+ * Handles exact matches, subpaths, and nested detail routes.
+ */
+export function getActiveNavId(pathname: string): string {
+  if (!pathname || pathname === "/" || pathname === "/dashboard") {
+    return "dashboard";
+  }
+
+  const cleanPath = pathname.length > 1 && pathname.endsWith("/")
+    ? pathname.slice(0, -1)
+    : pathname;
+
+  // Flatten all items across all groups
+  const allItems = NAVIGATION_CONFIG.flatMap((group) => group.items);
+
+  // Sort by href length descending so longer/more specific paths match first
+  // (e.g. /marketplace/orders matches before /marketplace, /admin/organisations before /admin)
+  const sortedItems = [...allItems].sort((a, b) => b.href.length - a.href.length);
+
+  for (const item of sortedItems) {
+    if (cleanPath === item.href || cleanPath.startsWith(`${item.href}/`)) {
+      return item.id;
+    }
+  }
+
+  // Handle aliases or special routes
+  if (cleanPath.startsWith("/verify") || cleanPath.startsWith("/qr-verification")) {
+    return "bottles";
+  }
+  if (cleanPath.startsWith("/laboratory-testing")) {
+    return "laboratory";
+  }
+
+  return "dashboard";
+}
+
+export interface NavBreadcrumbItem {
+  label: string;
+  href?: string;
+  active?: boolean;
+}
+
+/**
+ * Builds default breadcrumbs based on current pathname and nav config.
+ */
+export function getDefaultBreadcrumbs(pathname: string): NavBreadcrumbItem[] {
+  if (!pathname || pathname === "/" || pathname === "/dashboard") {
+    return [
+      { label: "Honey Chain", href: "/dashboard" },
+      { label: "Dashboard", active: true },
+    ];
+  }
+
+  const activeId = getActiveNavId(pathname);
+
+  // Find the group and item for the activeId
+  for (const group of NAVIGATION_CONFIG) {
+    const item = group.items.find((i) => i.id === activeId);
+    if (item) {
+      if (group.id === "overview") {
+        return [
+          { label: "Honey Chain", href: "/dashboard" },
+          { label: item.label, active: true },
+        ];
+      }
+      return [
+        { label: "Honey Chain", href: "/dashboard" },
+        { label: group.label, href: item.href },
+        { label: item.label, active: true },
+      ];
+    }
+  }
+
+  return [
+    { label: "Honey Chain", href: "/dashboard" },
+    { label: "Dashboard", active: true },
+  ];
+}
+

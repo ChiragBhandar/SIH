@@ -10,7 +10,28 @@ import {
   Ban,
   RotateCcw,
   Key,
+  ChevronRight,
+  UserCheck,
+  X,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { UserAvatar } from "@/components/ui/user-avatar";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function AdminUsersPage() {
   const {
@@ -89,221 +110,238 @@ export default function AdminUsersPage() {
 
   return (
     <AdminRoleGuard>
-      <div className="space-y-6 pb-12">
+      <div className="space-y-6 max-w-7xl mx-auto pb-12">
         {/* Breadcrumb & Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800/80 pb-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/80 pb-5">
           <div>
-            <div className="flex items-center gap-2 text-xs text-stone-400 mb-1.5 font-medium">
-              <Link href="/admin" className="hover:text-amber-400 transition-colors">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
+              <Link href="/admin" className="hover:text-foreground transition-colors">
                 Administration
               </Link>
-              <span>/</span>
-              <span className="text-stone-300">Users & Roles</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
+              <span className="text-foreground font-semibold">Users & Roles</span>
             </div>
-            <h1 className="text-3xl font-bold text-stone-100 tracking-tight">Users & Roles</h1>
-            <p className="text-stone-400 text-sm mt-1 max-w-2xl">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+              Users & Capabilities
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 max-w-2xl">
               Govern user permissions, provision multi-role credentials across organisations, and audit authorization history.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="px-3 py-1.5 rounded-xl bg-stone-900 border border-stone-800 text-xs text-stone-300 font-mono">
-              Total: {adminUsers.length} Provisioned Accounts
-            </span>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="font-mono text-xs py-1 px-2.5 bg-card">
+              Total: <strong className="ml-1 text-foreground">{adminUsers.length}</strong> Accounts
+            </Badge>
           </div>
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
-            <input
-              type="text"
-              placeholder="Search user name, email, or org..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-stone-950 border border-stone-800 text-sm text-stone-200 placeholder-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            <div className="flex items-center gap-2 text-xs text-stone-400">
-              <Filter className="w-3.5 h-3.5" />
-              <span>Organisation:</span>
-              <select
-                value={selectedOrg}
-                onChange={(e) => setSelectedOrg(e.target.value)}
-                className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:ring-1 focus:ring-amber-500"
-              >
-                <option value="all">All Organisations</option>
-                {adminOrganisations.map((org) => (
-                  <option key={org.id} value={org.id}>
-                    {org.name}
-                  </option>
-                ))}
-              </select>
+        <Card className="border-border/80 bg-card shadow-xs">
+          <CardContent className="p-3.5 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search user name, email, or org..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-background border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-stone-400">
-              <span>Role:</span>
-              <select
-                value={selectedRole}
-                onChange={(e) => setSelectedRole(e.target.value)}
-                className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:ring-1 focus:ring-amber-500"
-              >
-                <option value="all">All Roles</option>
-                <option value="Beekeeper">Beekeeper</option>
-                <option value="Processor">Processor</option>
-                <option value="Lab Technician">Lab Technician</option>
-                <option value="Buyer">Buyer</option>
-                <option value="Organisation Admin">Organisation Admin</option>
-                <option value="Super Admin">Super Admin</option>
-              </select>
+            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Filter className="w-3.5 h-3.5" />
+                <span>Organisation:</span>
+                <select
+                  value={selectedOrg}
+                  onChange={(e) => setSelectedOrg(e.target.value)}
+                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="all">All Organisations</option>
+                  {adminOrganisations.map((org) => (
+                    <option key={org.id} value={org.id}>
+                      {org.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Role:</span>
+                <select
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="all">All Roles</option>
+                  <option value="Beekeeper">Beekeeper</option>
+                  <option value="Processor">Processor</option>
+                  <option value="Lab Technician">Lab Technician</option>
+                  <option value="Buyer">Buyer</option>
+                  <option value="Organisation Admin">Organisation Admin</option>
+                  <option value="Super Admin">Super Admin</option>
+                </select>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Users Table */}
-        <div className="bg-stone-900/80 border border-stone-800 rounded-2xl overflow-hidden shadow-xl">
+        <Card className="border-border/80 bg-card shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-stone-800 bg-stone-950/60 text-[11px] font-bold text-stone-400 uppercase tracking-wider">
-                  <th className="py-3.5 px-4">User</th>
-                  <th className="py-3.5 px-4">Organisation</th>
-                  <th className="py-3.5 px-4">Roles & Capabilities</th>
-                  <th className="py-3.5 px-4">Status</th>
-                  <th className="py-3.5 px-4">Last Activity</th>
-                  <th className="py-3.5 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-800/60 text-xs">
+            <Table>
+              <TableHeader className="bg-muted/50">
+                <TableRow>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">User</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Organisation</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Roles & Capabilities</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Status</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Last Activity</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-xs">
                 {filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center text-stone-500">
+                  <TableRow>
+                    <TableCell colSpan={6} className="py-12 text-center text-muted-foreground">
                       No users match the search filters.
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-stone-800/40 transition-colors">
+                    <TableRow key={user.id} className="hover:bg-muted/40 transition-colors">
                       {/* User identity */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-stone-800 border border-stone-700 flex items-center justify-center font-bold text-amber-400 text-sm shrink-0">
-                            {user.fullName.charAt(0)}
-                          </div>
+                      <TableCell>
+                        <div className="flex items-center gap-2.5">
+                          <UserAvatar
+                            src={user.avatarUrl}
+                            name={user.fullName}
+                            size="md"
+                          />
                           <div>
-                            <span className="font-semibold text-stone-100 text-sm block">
+                            <span className="font-semibold text-foreground text-xs sm:text-sm block">
                               {user.fullName}
                             </span>
-                            <span className="text-stone-400 text-[11px] font-mono">
+                            <span className="text-muted-foreground text-[11px] font-mono">
                               {user.email}
                             </span>
                           </div>
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Organisation */}
-                      <td className="py-4 px-4">
+                      <TableCell>
                         <div className="flex flex-col">
                           <Link
                             href={`/admin/organisations/${user.organizationId}`}
-                            className="font-medium text-stone-200 hover:text-amber-400 transition-colors"
+                            className="font-medium text-foreground hover:text-primary transition-colors"
                           >
                             {user.organizationName}
                           </Link>
                           {user.directDepartment && (
-                            <span className="text-[10px] text-stone-400">
+                            <span className="text-[10px] text-muted-foreground">
                               {user.directDepartment}
                             </span>
                           )}
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Roles */}
-                      <td className="py-4 px-4">
-                        <div className="flex flex-wrap gap-1.5 max-w-xs">
+                      <TableCell>
+                        <div className="flex flex-wrap gap-1 max-w-xs">
                           {user.roles.map((r, i) => (
-                            <span
+                            <Badge
                               key={i}
-                              className={`px-2 py-0.5 rounded-md text-[11px] font-medium border ${
-                                r.includes("Admin")
-                                  ? "bg-amber-500/10 text-amber-300 border-amber-500/20 font-semibold"
-                                  : "bg-stone-800 text-stone-300 border-stone-700"
-                              }`}
+                              variant={r.includes("Admin") ? "warning" : "secondary"}
+                              className="text-[10px] font-medium py-0 px-1.5"
                             >
                               {r}
-                            </span>
+                            </Badge>
                           ))}
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Status */}
-                      <td className="py-4 px-4">
-                        <StatusBadge status={user.status} variant="userStatus" />
-                      </td>
+                      <TableCell>
+                        <StatusBadge status={user.status} variant="userStatus" size="sm" />
+                      </TableCell>
 
                       {/* Last Activity */}
-                      <td className="py-4 px-4 text-stone-400 font-mono text-[11px]">
+                      <TableCell className="text-muted-foreground font-mono text-[11px]">
                         {user.lastActivity}
-                      </td>
+                      </TableCell>
 
                       {/* Actions */}
-                      <td className="py-4 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => handleOpenRoleModal(user.id)}
-                            className="px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                            className="h-7 text-xs gap-1"
                             title="Assign or add role"
                           >
-                            <Key className="w-3.5 h-3.5 text-amber-400" />
-                            Assign Role
-                          </button>
+                            <Key className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                            <span>Assign Role</span>
+                          </Button>
 
                           {user.status === "Active" ? (
-                            <button
+                            <Button
                               type="button"
+                              variant="outline"
+                              size="sm"
                               onClick={() => handleOpenStatusModal(user.id, "Disabled")}
-                              className="p-1.5 rounded-lg bg-stone-800 hover:bg-rose-950/40 text-stone-400 hover:text-rose-400 border border-stone-700/60 transition-colors"
+                              className="h-7 px-2 border-destructive/30 text-destructive hover:bg-destructive/10"
                               title="Disable Account"
                             >
                               <Ban className="w-3.5 h-3.5" />
-                            </button>
+                            </Button>
                           ) : (
-                            <button
+                            <Button
                               type="button"
+                              variant="outline"
+                              size="sm"
                               onClick={() => handleOpenStatusModal(user.id, "Active")}
-                              className="p-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-colors"
+                              className="h-7 px-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-300"
                               title="Enable Account"
                             >
                               <RotateCcw className="w-3.5 h-3.5" />
-                            </button>
+                            </Button>
                           )}
                         </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
-        </div>
+        </Card>
 
         {/* Assign Role Custom Modal */}
         {roleModalOpen && activeTargetUser && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="relative w-full max-w-lg bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-2xl">
-              <div className="flex items-start gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
-                  <Key className="w-6 h-6" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="relative w-full max-w-lg bg-card border border-border rounded-2xl p-6 shadow-xl">
+              <button
+                type="button"
+                onClick={() => setRoleModalOpen(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-start gap-3.5 mb-5">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                  <Key className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-stone-100">
+                  <h3 className="text-base font-bold text-foreground">
                     Assign Role to {activeTargetUser.fullName}
                   </h3>
-                  <p className="text-xs text-stone-400 mt-0.5">
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     Organisation: {activeTargetUser.organizationName}
                   </p>
                 </div>
@@ -311,13 +349,13 @@ export default function AdminUsersPage() {
 
               <form onSubmit={handleSaveRole} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] font-semibold text-foreground uppercase tracking-wider mb-1.5">
                     Select Role to Provision:
                   </label>
                   <select
                     value={newRoleInput}
                     onChange={(e) => setNewRoleInput(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-stone-950 border border-stone-800 text-sm text-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                    className="w-full px-3 py-2 rounded-lg bg-background border border-input text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                   >
                     <option value="Beekeeper">Beekeeper (Field & Harvest Registration)</option>
                     <option value="Apiary Master">Apiary Master (Colony & Hive Management)</option>
@@ -332,24 +370,25 @@ export default function AdminUsersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] font-semibold text-foreground uppercase tracking-wider mb-1.5">
                     Current Active Roles:
                   </label>
-                  <div className="flex flex-wrap gap-1.5 p-2.5 bg-stone-950 rounded-xl border border-stone-800">
+                  <div className="flex flex-wrap gap-1 p-2.5 bg-muted/40 rounded-lg border border-border">
                     {activeTargetUser.roles.map((r, i) => (
-                      <span
+                      <Badge
                         key={i}
-                        className="px-2.5 py-1 rounded-md bg-stone-800 text-stone-300 text-xs font-medium"
+                        variant="secondary"
+                        className="text-[11px] font-medium py-0.5 px-2"
                       >
                         {r}
-                      </span>
+                      </Badge>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
-                    Mandatory Audit Justification <span className="text-rose-400">*</span>
+                  <label className="block text-[11px] font-semibold text-foreground uppercase tracking-wider mb-1.5">
+                    Mandatory Audit Justification <span className="text-destructive">*</span>
                   </label>
                   <textarea
                     value={roleReason}
@@ -359,27 +398,28 @@ export default function AdminUsersPage() {
                     }}
                     rows={3}
                     placeholder="Provide justification for provisioning this administrative capability..."
-                    className={`w-full px-3.5 py-2.5 rounded-xl bg-stone-950 border text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 ${
-                      roleError ? "border-rose-500" : "border-stone-800"
+                    className={`w-full px-3 py-2 rounded-lg bg-background border text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                      roleError ? "border-destructive" : "border-input"
                     }`}
                   />
-                  {roleError && <p className="text-xs text-rose-400 mt-1">{roleError}</p>}
+                  {roleError && <p className="text-xs text-destructive mt-1 font-medium">{roleError}</p>}
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-2">
-                  <button
+                <div className="flex items-center justify-end gap-2.5 pt-2">
+                  <Button
                     type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => setRoleModalOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium transition-colors"
                   >
                     Cancel
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs font-bold transition-all shadow-lg shadow-amber-500/20"
+                    size="sm"
                   >
                     Provision Role & Log Event
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>

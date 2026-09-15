@@ -170,7 +170,7 @@ export function BottlesListContent() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild className="gap-1.5 shadow-xs cursor-pointer">
+          <Button asChild size="sm">
             <Link href="/bottles/new">
               <Plus className="h-4 w-4" />
               <span>Create Bottles</span>
@@ -435,9 +435,9 @@ export function BottlesListContent() {
                       <div className="flex items-center justify-end gap-1.5">
                         <Button
                           variant="ghost"
-                          size="sm"
+                          size="xs"
                           asChild
-                          className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
+                          className="text-muted-foreground hover:text-foreground"
                         >
                           <Link href={`/bottles/${bottle.id}`}>
                             <Eye className="h-3.5 w-3.5" />
@@ -447,9 +447,9 @@ export function BottlesListContent() {
 
                         <Button
                           variant="ghost"
-                          size="sm"
+                          size="icon-xs"
                           onClick={(e) => handleCopyLink(bottle.id, e)}
-                          className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
+                          className="text-muted-foreground hover:text-foreground"
                           title="Copy public verification link"
                         >
                           {copiedId === bottle.id ? (
@@ -461,9 +461,9 @@ export function BottlesListContent() {
 
                         <Button
                           variant="outline"
-                          size="sm"
+                          size="xs"
                           asChild
-                          className="h-7 px-2 text-xs gap-1 border-primary/30 text-primary hover:bg-primary/5 cursor-pointer"
+                          className="border-primary/30 text-primary hover:bg-primary/5"
                           title="Open public consumer verification page"
                         >
                           <Link href={`/verify/${bottle.id}`} target="_blank">

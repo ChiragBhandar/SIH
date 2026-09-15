@@ -13,7 +13,26 @@ import {
   Eye,
   MapPin,
   Users,
+  ChevronRight,
+  Building2,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function AdminOrganisationsPage() {
   const { adminOrganisations, updateOrganisationStatus } = useTraceability();
@@ -58,205 +77,218 @@ export default function AdminOrganisationsPage() {
 
   return (
     <AdminRoleGuard>
-      <div className="space-y-6 pb-12">
+      <div className="space-y-6 max-w-7xl mx-auto pb-12">
         {/* Breadcrumb & Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800/80 pb-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/80 pb-5">
           <div>
-            <div className="flex items-center gap-2 text-xs text-stone-400 mb-1.5 font-medium">
-              <Link href="/admin" className="hover:text-amber-400 transition-colors">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
+              <Link href="/admin" className="hover:text-foreground transition-colors">
                 Administration
               </Link>
-              <span>/</span>
-              <span className="text-stone-300">Organisations</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
+              <span className="text-foreground font-semibold">Organisations</span>
             </div>
-            <h1 className="text-3xl font-bold text-stone-100 tracking-tight">Organisations</h1>
-            <p className="text-stone-400 text-sm mt-1 max-w-2xl">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+              Organisations Registry
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 max-w-2xl">
               Registry of verified beekeeper cooperatives, manufacturers, laboratories, distributors, and statutory governance authorities.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="px-3 py-1.5 rounded-xl bg-stone-900 border border-stone-800 text-xs text-stone-300 font-mono">
-              Total: {adminOrganisations.length} Registered
-            </span>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="font-mono text-xs py-1 px-2.5 bg-card">
+              Total: <strong className="ml-1 text-foreground">{adminOrganisations.length}</strong> Entities
+            </Badge>
           </div>
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-stone-900/80 border border-stone-800 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
-            <input
-              type="text"
-              placeholder="Search name, code, ID or reg number..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-stone-950 border border-stone-800 text-sm text-stone-200 placeholder-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            <div className="flex items-center gap-2 text-xs text-stone-400">
-              <Filter className="w-3.5 h-3.5" />
-              <span>Type:</span>
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:ring-1 focus:ring-amber-500"
-              >
-                <option value="all">All Types</option>
-                <option value="Beekeeper Cooperative">Beekeeper Cooperative</option>
-                <option value="Manufacturer">Manufacturer</option>
-                <option value="Laboratory">Laboratory</option>
-                <option value="Buyer">Buyer / Distributor</option>
-                <option value="Administrator">Administrator / Regulator</option>
-              </select>
+        <Card className="border-border/80 bg-card shadow-xs">
+          <CardContent className="p-3.5 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search name, code, ID or reg number..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-background border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-stone-400">
-              <span>Status:</span>
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="bg-stone-950 border border-stone-800 rounded-xl px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:ring-1 focus:ring-amber-500"
-              >
-                <option value="all">All Statuses</option>
-                <option value="Active">Active</option>
-                <option value="Pending">Pending</option>
-                <option value="Suspended">Suspended</option>
-              </select>
+            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Filter className="w-3.5 h-3.5" />
+                <span>Type:</span>
+                <select
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="all">All Types</option>
+                  <option value="Beekeeper Cooperative">Beekeeper Cooperative</option>
+                  <option value="Manufacturer">Manufacturer</option>
+                  <option value="Laboratory">Laboratory</option>
+                  <option value="Buyer">Buyer / Distributor</option>
+                  <option value="Administrator">Administrator / Regulator</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Status:</span>
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="all">All Statuses</option>
+                  <option value="Active">Active</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Suspended">Suspended</option>
+                </select>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Organisations Table */}
-        <div className="bg-stone-900/80 border border-stone-800 rounded-2xl overflow-hidden shadow-xl">
+        <Card className="border-border/80 bg-card shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-stone-800 bg-stone-950/60 text-[11px] font-bold text-stone-400 uppercase tracking-wider">
-                  <th className="py-3.5 px-4">Organisation ID</th>
-                  <th className="py-3.5 px-4">Organisation Name</th>
-                  <th className="py-3.5 px-4">Organisation Type</th>
-                  <th className="py-3.5 px-4">Status</th>
-                  <th className="py-3.5 px-4">Members</th>
-                  <th className="py-3.5 px-4">Created Date</th>
-                  <th className="py-3.5 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-800/60 text-xs">
+            <Table>
+              <TableHeader className="bg-muted/50">
+                <TableRow>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Organisation ID</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Organisation Name</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Type</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Status</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Members</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Created Date</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-xs">
                 {filteredOrgs.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="py-12 text-center text-stone-500">
+                  <TableRow>
+                    <TableCell colSpan={7} className="py-12 text-center text-muted-foreground">
                       No organisations match your search filters.
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   filteredOrgs.map((org) => (
-                    <tr
+                    <TableRow
                       key={org.id}
-                      className="hover:bg-stone-800/40 transition-colors group"
+                      className="hover:bg-muted/40 transition-colors"
                     >
                       {/* ID & Code */}
-                      <td className="py-4 px-4">
+                      <TableCell>
                         <div className="flex flex-col">
-                          <span className="font-mono font-bold text-amber-400">
+                          <span className="font-mono font-bold text-amber-800 dark:text-amber-300">
                             {org.id}
                           </span>
-                          <span className="text-[10px] text-stone-500 uppercase tracking-wider font-mono">
+                          <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
                             Code: {org.code}
                           </span>
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Name & Location */}
-                      <td className="py-4 px-4">
+                      <TableCell>
                         <div className="flex flex-col">
                           <Link
                             href={`/admin/organisations/${org.id}`}
-                            className="font-semibold text-stone-200 group-hover:text-amber-400 transition-colors text-sm"
+                            className="font-semibold text-foreground hover:text-primary transition-colors text-xs sm:text-sm"
                           >
                             {org.name}
                           </Link>
-                          <span className="text-[11px] text-stone-400 flex items-center gap-1 mt-0.5">
-                            <MapPin className="w-3 h-3 text-stone-400 shrink-0" />
+                          <span className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                            <MapPin className="w-3 h-3 text-muted-foreground shrink-0" />
                             {org.headquarters}
                           </span>
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Type */}
-                      <td className="py-4 px-4">
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-stone-800 text-stone-300 font-medium border border-stone-700/60">
+                      <TableCell>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-muted text-foreground text-[11px] font-medium border border-border">
                           {org.type}
                         </span>
-                      </td>
+                      </TableCell>
 
                       {/* Status */}
-                      <td className="py-4 px-4">
-                        <StatusBadge status={org.status} variant="org" />
-                      </td>
+                      <TableCell>
+                        <StatusBadge status={org.status} variant="org" size="sm" />
+                      </TableCell>
 
                       {/* Members */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-1.5 text-stone-300 font-medium">
-                          <Users className="w-3.5 h-3.5 text-stone-400" />
+                      <TableCell>
+                        <div className="flex items-center gap-1.5 text-foreground font-medium">
+                          <Users className="w-3.5 h-3.5 text-muted-foreground" />
                           <span>{org.membersCount}</span>
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Created Date */}
-                      <td className="py-4 px-4 text-stone-400 font-mono">
+                      <TableCell className="text-muted-foreground font-mono">
                         {new Date(org.createdAt).toLocaleDateString("en-GB", {
                           day: "2-digit",
                           month: "short",
                           year: "numeric",
                         })}
-                      </td>
+                      </TableCell>
 
                       {/* Actions */}
-                      <td className="py-4 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Link
-                            href={`/admin/organisations/${org.id}`}
-                            className="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-stone-100 transition-colors"
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Button
+                            asChild
+                            variant="outline"
+                            size="sm"
+                            className="h-7 px-2"
                             title="View Detail"
                           >
-                            <Eye className="w-4 h-4" />
-                          </Link>
+                            <Link href={`/admin/organisations/${org.id}`}>
+                              <Eye className="w-3.5 h-3.5 mr-1" />
+                              <span>View</span>
+                            </Link>
+                          </Button>
 
                           {org.status !== "Active" && (
-                            <button
+                            <Button
                               type="button"
+                              variant="outline"
+                              size="sm"
                               onClick={() => handleOpenAction(org.id, "Active")}
-                              className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                              className="h-7 px-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-300"
                               title="Approve / Restore Organisation"
                             >
-                              <CheckCircle2 className="w-3.5 h-3.5" />
-                              Approve
-                            </button>
+                              <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+                              <span>Approve</span>
+                            </Button>
                           )}
 
                           {org.status !== "Suspended" && (
-                            <button
+                            <Button
                               type="button"
+                              variant="outline"
+                              size="sm"
                               onClick={() => handleOpenAction(org.id, "Suspended")}
-                              className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                              className="h-7 px-2 border-destructive/30 text-destructive hover:bg-destructive/10"
                               title="Suspend Organisation"
                             >
-                              <Ban className="w-3.5 h-3.5" />
-                              Suspend
-                            </button>
+                              <Ban className="w-3.5 h-3.5 mr-1" />
+                              <span>Suspend</span>
+                            </Button>
                           )}
                         </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
-        </div>
+        </Card>
 
         {/* Confirmation Modal */}
         <ConfirmationModal

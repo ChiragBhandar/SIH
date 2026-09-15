@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { AlertTriangle, Info, CheckCircle2, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -58,27 +59,27 @@ export function ConfirmationModal({
     switch (variant) {
       case "danger":
         return {
-          icon: <AlertTriangle className="w-6 h-6 text-rose-400" />,
-          iconBg: "bg-rose-950/60 border-rose-800/60",
-          button: "bg-rose-600 hover:bg-rose-500 text-white shadow-rose-900/30",
+          icon: <AlertTriangle className="w-5 h-5 text-destructive" />,
+          iconBg: "bg-destructive/10 border-destructive/20",
+          buttonVariant: "destructive" as const,
         };
       case "warning":
         return {
-          icon: <AlertTriangle className="w-6 h-6 text-amber-400" />,
-          iconBg: "bg-amber-950/60 border-amber-800/60",
-          button: "bg-amber-500 hover:bg-amber-400 text-stone-950 shadow-amber-900/30 font-semibold",
+          icon: <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />,
+          iconBg: "bg-amber-500/10 border-amber-500/20",
+          buttonVariant: "default" as const,
         };
       case "success":
         return {
-          icon: <CheckCircle2 className="w-6 h-6 text-emerald-400" />,
-          iconBg: "bg-emerald-950/60 border-emerald-800/60",
-          button: "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/30 font-semibold",
+          icon: <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
+          iconBg: "bg-emerald-500/10 border-emerald-500/20",
+          buttonVariant: "default" as const,
         };
       default:
         return {
-          icon: <Info className="w-6 h-6 text-sky-400" />,
-          iconBg: "bg-sky-950/60 border-sky-800/60",
-          button: "bg-sky-600 hover:bg-sky-500 text-white shadow-sky-900/30",
+          icon: <Info className="w-5 h-5 text-sky-600 dark:text-sky-400" />,
+          iconBg: "bg-sky-500/10 border-sky-500/20",
+          buttonVariant: "default" as const,
         };
     }
   };
@@ -86,31 +87,31 @@ export function ConfirmationModal({
   const vStyles = getVariantStyles();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="relative w-full max-w-lg bg-card border border-border rounded-2xl p-6 shadow-xl overflow-hidden">
         <button
           type="button"
           onClick={handleClose}
-          className="absolute top-4 right-4 p-1.5 rounded-lg text-stone-400 hover:text-stone-100 hover:bg-stone-800 transition-colors"
+          className="absolute top-4 right-4 p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
-        <div className="flex items-start gap-4 mb-5">
-          <div className={`w-12 h-12 rounded-xl border flex items-center justify-center shrink-0 ${vStyles.iconBg}`}>
+        <div className="flex items-start gap-3.5 mb-5">
+          <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${vStyles.iconBg}`}>
             {vStyles.icon}
           </div>
           <div>
-            <h3 className="text-lg font-bold text-stone-100 tracking-tight">{title}</h3>
-            <p className="text-sm text-stone-400 mt-1 leading-relaxed">{description}</p>
+            <h3 className="text-base font-bold text-foreground tracking-tight">{title}</h3>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{description}</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {requireReason && (
             <div>
-              <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
-                {reasonLabel} <span className="text-rose-400">*</span>
+              <label className="block text-[11px] font-semibold text-foreground uppercase tracking-wider mb-1.5">
+                {reasonLabel} <span className="text-destructive">*</span>
               </label>
               <textarea
                 value={reason}
@@ -120,34 +121,36 @@ export function ConfirmationModal({
                 }}
                 rows={3}
                 placeholder={reasonPlaceholder}
-                className={`w-full px-3.5 py-2.5 rounded-xl bg-stone-950 border text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all ${
-                  error ? "border-rose-500/60 focus:ring-rose-500/50" : "border-stone-800"
+                className={`w-full px-3 py-2 rounded-xl bg-background border text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all ${
+                  error ? "border-destructive focus:ring-destructive/30" : "border-input"
                 }`}
               />
               {error ? (
-                <p className="text-xs text-rose-400 mt-1">{error}</p>
+                <p className="text-xs text-destructive mt-1 font-medium">{error}</p>
               ) : (
-                <p className="text-xs text-stone-500 mt-1">
+                <p className="text-[11px] text-muted-foreground mt-1">
                   This action creates an append-only verifiable audit event.
                 </p>
               )}
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-2">
-            <button
+          <div className="flex items-center justify-end gap-2.5 pt-2">
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               onClick={handleClose}
-              className="px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-sm font-medium transition-colors"
             >
               {cancelText}
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
-              className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg ${vStyles.button}`}
+              size="sm"
+              variant={vStyles.buttonVariant}
             >
               {confirmText}
-            </button>
+            </Button>
           </div>
         </form>
       </div>
