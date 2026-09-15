@@ -190,8 +190,8 @@ function CreateCustodyTransferForm() {
   if (step === "success" && createdTransfer) {
     return (
       <div className="max-w-2xl mx-auto py-6 space-y-6">
-        <div className="rounded-xl border border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20 p-6 text-center space-y-4">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400">
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50/80 p-6 text-center space-y-4 shadow-2xs">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
             <CheckCircle2 className="h-8 w-8" />
           </div>
 
@@ -201,7 +201,7 @@ function CreateCustodyTransferForm() {
             </h2>
             <p className="text-xs text-muted-foreground max-w-md mx-auto">
               The physical transfer has been committed to the batch traceability history with status{" "}
-              <strong className="text-amber-600 dark:text-amber-400">Pending Acceptance</strong>.
+              <strong className="text-amber-800">Pending Acceptance</strong>.
             </p>
           </div>
 
@@ -334,7 +334,7 @@ function CreateCustodyTransferForm() {
                 {destinationOrg?.displayType || "Manufacturer"}
               </span>
             </div>
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-700 border border-amber-500/20">
               <Truck className="h-5 w-5" />
             </div>
           </div>
@@ -342,7 +342,7 @@ function CreateCustodyTransferForm() {
       </div>
 
       {errorMsg && (
-        <div className="rounded-md border border-rose-500/40 bg-rose-500/10 p-3 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-2">
+        <div className="rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 flex items-center gap-2">
           <AlertTriangle className="h-4 w-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
@@ -454,7 +454,7 @@ function CreateCustodyTransferForm() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-foreground">
-                    Receiving Organisation *
+                    Receiving Organisation <span className="text-rose-500">*</span>
                   </label>
                   <Select value={destinationOrgId} onValueChange={handleDestinationOrgChange}>
                     <SelectTrigger className="text-xs">
@@ -474,7 +474,7 @@ function CreateCustodyTransferForm() {
 
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-foreground">
-                    Receiving Facility / Location *
+                    Receiving Facility / Location <span className="text-rose-500">*</span>
                   </label>
                   <Select value={destinationFacility} onValueChange={setDestinationFacility}>
                     <SelectTrigger className="text-xs">
@@ -493,57 +493,70 @@ function CreateCustodyTransferForm() {
             </CardContent>
           </Card>
 
-          {/* Section 3: Quantity & Logistics Reference */}
+          {/* Section 3: Quantity & Logistics Details */}
           <Card className="border-border bg-card shadow-xs">
             <CardHeader className="pb-3 border-b border-border/60">
               <CardTitle className="text-base font-bold text-foreground flex items-center gap-2">
                 <Truck className="h-4 w-4 text-primary" />
-                <span>3. Transfer Logistics & Verification</span>
+                <span>3. Transfer Logistics & Transport Data</span>
               </CardTitle>
               <CardDescription className="text-xs">
-                Enter shipment weight, transport carrier identifiers, and transit dates.
+                Enter shipment weight, transport carrier reference, and dispatch dates.
               </CardDescription>
             </CardHeader>
-            <CardContent className="pt-4 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-foreground">
-                    Transfer Quantity (kg) *
+            <CardContent className="pt-4 space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="font-semibold text-foreground block">
+                    Transfer Quantity (kg) <span className="text-rose-500">*</span>
                   </label>
                   <Input
                     type="number"
                     step="0.1"
                     min="0.1"
-                    className="text-xs font-mono"
+                    max={selectedBatch?.weightKg || 1000}
                     value={quantityKg}
                     onChange={(e) => setQuantityKg(e.target.value)}
                     required
                   />
-                  <span className="text-[10px] text-muted-foreground">
-                    Defaulted from source batch weight
-                  </span>
+                  {selectedBatch && (
+                    <span className="text-[10px] text-muted-foreground mt-0.5 block">
+                      Max available: {selectedBatch.weightKg.toFixed(1)} kg
+                    </span>
+                  )}
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-foreground">
-                    Transfer Date *
+                <div className="space-y-1">
+                  <label className="font-semibold text-foreground block">
+                    Carrier / Transport Reference <span className="text-rose-500">*</span>
+                  </label>
+                  <Input
+                    type="text"
+                    value={transportRef}
+                    onChange={(e) => setTransportRef(e.target.value)}
+                    placeholder="e.g. LOG-TR-2026-8841 (Freight Truck #UK-07-TA-9921)"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-foreground block">
+                    Dispatch Date <span className="text-rose-500">*</span>
                   </label>
                   <Input
                     type="date"
-                    className="text-xs font-mono"
                     value={transferDate}
                     onChange={(e) => setTransferDate(e.target.value)}
                     required
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-foreground">
-                    Expected Arrival Date *
+                <div className="space-y-1">
+                  <label className="font-semibold text-foreground block">
+                    Expected Intake Arrival <span className="text-rose-500">*</span>
                   </label>
                   <Input
                     type="date"
-                    className="text-xs font-mono"
                     value={expectedArrivalDate}
                     onChange={(e) => setExpectedArrivalDate(e.target.value)}
                     required
@@ -551,58 +564,38 @@ function CreateCustodyTransferForm() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-foreground">
-                  Transport / Carrier Reference ID *
-                </label>
-                <Input
-                  type="text"
-                  placeholder="e.g. LOG-TR-2026-8841 or TRUCK-UK-07-A-4412"
-                  className="text-xs font-mono"
-                  value={transportRef}
-                  onChange={(e) => setTransportRef(e.target.value)}
-                  required
-                />
-                <span className="text-[10px] text-muted-foreground">
-                  Physical shipping docket, bill of lading, or vehicle tag for receiving verification.
-                </span>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-foreground">
-                  Handling & Dispatch Notes (Optional)
+              <div className="space-y-1">
+                <label className="font-semibold text-foreground block">
+                  Dispatch Notes & Handling Instructions
                 </label>
                 <Textarea
-                  placeholder="Temperature conditions, seal serial numbers, or special handling instructions..."
-                  className="text-xs min-h-[70px]"
+                  rows={3}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Temperature constraints, handling requirements, or handover observations..."
                 />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-border">
+                <Button variant="outline" asChild size="default">
+                  <Link href="/custody">Cancel</Link>
+                </Button>
+                <Button type="submit" size="default">
+                  <span>Review Transfer →</span>
+                </Button>
               </div>
             </CardContent>
           </Card>
-
-          {/* Action button */}
-          <div className="flex items-center justify-end gap-3 pt-2">
-            <Button variant="outline" asChild size="sm">
-              <Link href="/custody">Cancel</Link>
-            </Button>
-            <Button type="submit" size="sm" className="gap-1.5 font-medium shadow-xs">
-              <span>Review Custody Transfer</span>
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
         </form>
       )}
 
-      {/* REVIEW & CONFIRMATION STEP */}
+      {/* REVIEW STEP */}
       {step === "review" && (
         <div className="space-y-6">
-          <Card className="border-border bg-card shadow-xs">
+          <Card className="border-border bg-card shadow-2xs">
             <CardHeader className="pb-3 border-b border-border/60">
-              <CardTitle className="text-base font-bold text-foreground flex items-center gap-2">
-                <ShieldAlert className="h-4 w-4 text-primary" />
-                <span>Review Custody Transfer Details</span>
+              <CardTitle className="text-base font-bold text-foreground">
+                Review Custody Transfer Details
               </CardTitle>
               <CardDescription className="text-xs">
                 Please verify the handover details before initiating the transfer.
@@ -610,9 +603,9 @@ function CreateCustodyTransferForm() {
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
               {/* Immutable Provenance Warning */}
-              <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3.5 text-xs text-amber-800 dark:text-amber-300 space-y-1">
+              <div className="rounded-lg border border-amber-200 bg-amber-50/80 p-3.5 text-xs text-amber-900 space-y-1">
                 <div className="flex items-center gap-1.5 font-bold">
-                  <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                  <AlertTriangle className="h-4 w-4 text-amber-600" />
                   <span>Immutable Traceability Notice</span>
                 </div>
                 <p className="text-[11px] leading-relaxed">

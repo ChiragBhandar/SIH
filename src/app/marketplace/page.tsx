@@ -135,12 +135,12 @@ function MarketplaceContent() {
                 Active Listings
               </span>
               <div className="text-2xl font-bold text-foreground font-mono">{activeListingsCount}</div>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+              <span className="text-[10px] text-emerald-700 font-medium">
                 Ready for procurement
               </span>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              <Store className="h-5 w-5" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <Store className="h-4 w-4" />
             </div>
           </CardContent>
         </Card>
@@ -154,8 +154,8 @@ function MarketplaceContent() {
               <div className="text-2xl font-bold text-foreground font-mono">{availableBatchesCount}</div>
               <span className="text-[10px] text-muted-foreground">Authoritative identities</span>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Boxes className="h-5 w-5" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-orange-700 border border-orange-200">
+              <Boxes className="h-4 w-4" />
             </div>
           </CardContent>
         </Card>
@@ -169,8 +169,8 @@ function MarketplaceContent() {
               <div className="text-2xl font-bold text-foreground font-mono">{ordersPlacedCount}</div>
               <span className="text-[10px] text-muted-foreground">Commercial transactions</span>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-              <ShoppingBag className="h-5 w-5" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
+              <ShoppingBag className="h-4 w-4" />
             </div>
           </CardContent>
         </Card>
@@ -181,15 +181,15 @@ function MarketplaceContent() {
               <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
                 Pending Orders
               </span>
-              <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 font-mono">
+              <div className="text-2xl font-bold text-foreground font-mono">
                 {pendingOrdersCount}
               </div>
-              <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+              <span className="text-[10px] text-amber-800 font-medium">
                 Awaiting seller response
               </span>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <Clock className="h-5 w-5" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
+              <Clock className="h-4 w-4" />
             </div>
           </CardContent>
         </Card>
@@ -341,7 +341,7 @@ function MarketplaceContent() {
                         <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
                           Available Stock
                         </span>
-                        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                        <span className="font-mono font-bold text-emerald-700">
                           {listing.availableQuantity.toFixed(1)} {listing.unit}
                         </span>
                       </div>
@@ -438,7 +438,7 @@ function MarketplaceContent() {
                     </TableCell>
                     <TableCell className="text-muted-foreground">{listing.sellerOrgName}</TableCell>
                     <TableCell className="text-foreground">{listing.honeyVariety}</TableCell>
-                    <TableCell className="text-right font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                    <TableCell className="text-right font-mono font-bold text-emerald-700">
                       {listing.availableQuantity.toFixed(1)} {listing.unit}
                     </TableCell>
                     <TableCell>

@@ -90,25 +90,25 @@ export function BottlesListContent() {
     switch (status) {
       case "Published":
         return (
-          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/30 dark:text-emerald-400">
+          <Badge variant="outline" className="bg-emerald-50 text-emerald-800 border-emerald-200">
             Published
           </Badge>
         );
       case "Created":
         return (
-          <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/30 dark:text-amber-400">
+          <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200">
             Created
           </Badge>
         );
       case "Draft":
         return (
-          <Badge variant="outline" className="bg-slate-500/10 text-slate-600 border-slate-500/30 dark:text-slate-400">
+          <Badge variant="outline" className="bg-slate-100 text-slate-800 border-slate-200">
             Draft
           </Badge>
         );
       case "Suspended":
         return (
-          <Badge variant="outline" className="bg-red-500/10 text-red-600 border-red-500/30 dark:text-red-400">
+          <Badge variant="outline" className="bg-rose-50 text-rose-800 border-rose-200">
             Suspended
           </Badge>
         );
@@ -121,22 +121,22 @@ export function BottlesListContent() {
     switch (qrStatus) {
       case "Active":
         return (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             Active
           </span>
         );
       case "Generated":
         return (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400">
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700">
             <span className="h-2 w-2 rounded-full bg-amber-500" />
             Generated
           </span>
         );
       case "Suspended":
         return (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-red-600 dark:text-red-400">
-            <span className="h-2 w-2 rounded-full bg-red-500" />
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-rose-700">
+            <span className="h-2 w-2 rounded-full bg-rose-500" />
             Suspended
           </span>
         );
@@ -160,7 +160,7 @@ export function BottlesListContent() {
               <QrCode className="h-6 w-6 text-primary" />
               <span>Bottles & QR Verification</span>
             </h1>
-            <Badge variant="outline" className="bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30 text-xs">
+            <Badge variant="outline" className="bg-amber-50 text-amber-900 border-amber-300 text-xs">
               Consumer Trust
             </Badge>
           </div>
@@ -187,7 +187,7 @@ export function BottlesListContent() {
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Eligible Batches
             </CardTitle>
-            <div className="p-2 rounded-md bg-primary/10 text-primary">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-orange-700 border border-orange-200">
               <Layers className="h-4 w-4" />
             </div>
           </CardHeader>
@@ -207,7 +207,7 @@ export function BottlesListContent() {
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Bottles Created
             </CardTitle>
-            <div className="p-2 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
               <Package className="h-4 w-4" />
             </div>
           </CardHeader>
@@ -227,12 +227,12 @@ export function BottlesListContent() {
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Published
             </CardTitle>
-            <div className="p-2 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
               <Globe className="h-4 w-4" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground font-mono text-emerald-600 dark:text-emerald-400">
+            <div className="text-2xl font-bold text-foreground font-mono">
               {publishedBottles}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -247,7 +247,7 @@ export function BottlesListContent() {
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Verification Ready
             </CardTitle>
-            <div className="p-2 rounded-md bg-sky-500/10 text-sky-600 dark:text-sky-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
               <QrCode className="h-4 w-4" />
             </div>
           </CardHeader>
@@ -313,7 +313,7 @@ export function BottlesListContent() {
             variant={statusFilter === "published" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => setStatusFilter("published")}
-            className="h-8 text-xs text-emerald-600 dark:text-emerald-400 cursor-pointer"
+            className="h-8 text-xs text-emerald-700 cursor-pointer"
           >
             Published ({publishedBottles})
           </Button>
@@ -321,7 +321,7 @@ export function BottlesListContent() {
             variant={statusFilter === "created" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => setStatusFilter("created")}
-            className="h-8 text-xs text-amber-600 dark:text-amber-400 cursor-pointer"
+            className="h-8 text-xs text-amber-800 cursor-pointer"
           >
             Created / Draft ({bottles.filter((b) => b.status === "Created" || b.status === "Draft").length})
           </Button>
@@ -329,7 +329,7 @@ export function BottlesListContent() {
             variant={statusFilter === "suspended" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => setStatusFilter("suspended")}
-            className="h-8 text-xs text-red-600 dark:text-red-400 cursor-pointer"
+            className="h-8 text-xs text-rose-700 cursor-pointer"
           >
             Suspended ({bottles.filter((b) => b.status === "Suspended").length})
           </Button>

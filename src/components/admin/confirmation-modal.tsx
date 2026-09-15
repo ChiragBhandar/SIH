@@ -65,20 +65,20 @@ export function ConfirmationModal({
         };
       case "warning":
         return {
-          icon: <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />,
-          iconBg: "bg-amber-500/10 border-amber-500/20",
+          icon: <AlertTriangle className="w-5 h-5 text-amber-600" />,
+          iconBg: "bg-amber-50 border-amber-200",
           buttonVariant: "default" as const,
         };
       case "success":
         return {
-          icon: <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-          iconBg: "bg-emerald-500/10 border-emerald-500/20",
+          icon: <CheckCircle2 className="w-5 h-5 text-emerald-600" />,
+          iconBg: "bg-emerald-50 border-emerald-200",
           buttonVariant: "default" as const,
         };
       default:
         return {
-          icon: <Info className="w-5 h-5 text-sky-600 dark:text-sky-400" />,
-          iconBg: "bg-sky-500/10 border-sky-500/20",
+          icon: <Info className="w-5 h-5 text-sky-600" />,
+          iconBg: "bg-sky-50 border-sky-200",
           buttonVariant: "default" as const,
         };
     }

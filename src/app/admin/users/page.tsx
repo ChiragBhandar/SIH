@@ -284,7 +284,7 @@ export default function AdminUsersPage() {
                             className="h-7 text-xs gap-1"
                             title="Assign or add role"
                           >
-                            <Key className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                            <Key className="w-3.5 h-3.5 text-amber-600" />
                             <span>Assign Role</span>
                           </Button>
 
@@ -305,7 +305,7 @@ export default function AdminUsersPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleOpenStatusModal(user.id, "Active")}
-                              className="h-7 px-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-300"
+                              className="h-7 px-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
                               title="Enable Account"
                             >
                               <RotateCcw className="w-3.5 h-3.5" />
@@ -334,7 +334,7 @@ export default function AdminUsersPage() {
               </button>
 
               <div className="flex items-start gap-3.5 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0">
                   <Key className="w-5 h-5" />
                 </div>
                 <div>

@@ -169,10 +169,10 @@ export function QRCodeView({
             variant="outline"
             className={`text-[10px] uppercase font-semibold ${
               status === "Active" || status === "Published"
-                ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/30 dark:text-emerald-400"
+                ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                 : status === "Suspended"
-                ? "bg-red-500/10 text-red-600 border-red-500/30 dark:text-red-400"
-                : "bg-amber-500/10 text-amber-600 border-amber-500/30 dark:text-amber-400"
+                ? "bg-rose-50 text-rose-800 border-rose-200"
+                : "bg-amber-50 text-amber-800 border-amber-200"
             }`}
           >
             {status}
@@ -200,8 +200,8 @@ export function QRCodeView({
             >
               {copied ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-emerald-500" />
-                  <span className="text-[10px] text-emerald-600 font-medium">Copied!</span>
+                  <Check className="h-3.5 w-3.5 text-emerald-600" />
+                  <span className="text-[10px] text-emerald-700 font-medium">Copied!</span>
                 </>
               ) : (
                 <>
@@ -238,7 +238,7 @@ export function QRCodeView({
           </div>
 
           {downloadNotice && (
-            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 animate-in fade-in slide-in-from-top-1">
+            <p className="text-[11px] text-emerald-700 animate-in fade-in slide-in-from-top-1">
               ✓ Sticker print vector simulated for {bottleId}
             </p>
           )}

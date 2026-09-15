@@ -97,7 +97,7 @@ function SelectRoleContent() {
           {/* Progress Indicator */}
           <div className="flex items-center justify-center gap-3">
             <div className="flex items-center gap-2 text-muted-foreground">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold border border-emerald-500/20">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold border border-emerald-200">
                 ✓
               </span>
               <span className="text-xs font-medium">Organisation</span>

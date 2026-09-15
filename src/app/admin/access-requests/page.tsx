@@ -153,7 +153,7 @@ export default function AccessRequestsListPage() {
                 filteredRequests.map((req) => (
                   <TableRow key={req.id} className="hover:bg-muted/40 transition-colors">
                     {/* Request ID */}
-                    <TableCell className="font-mono font-semibold text-amber-700 dark:text-amber-400">
+                    <TableCell className="font-mono font-semibold text-amber-700">
                       <Link
                         href={`/admin/access-requests/${req.id}`}
                         className="hover:underline"
@@ -230,7 +230,7 @@ export default function AccessRequestsListPage() {
                               size="icon-xs"
                               variant="outline"
                               onClick={() => handleQuickApprove(req.id)}
-                              className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-950/40 h-7 w-7"
+                              className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 h-7 w-7"
                               title="Approve Request"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
@@ -239,7 +239,7 @@ export default function AccessRequestsListPage() {
                               size="icon-xs"
                               variant="outline"
                               onClick={() => handleOpenDeny(req.id)}
-                              className="border-rose-200 text-rose-700 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-300 dark:hover:bg-rose-950/40 h-7 w-7"
+                              className="border-rose-200 text-rose-700 hover:bg-rose-50 h-7 w-7"
                               title="Deny Request"
                             >
                               <XCircle className="w-3.5 h-3.5" />

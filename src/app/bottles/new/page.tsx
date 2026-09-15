@@ -211,8 +211,8 @@ export function CreateBottlesContent() {
       </div>
 
       {errorMsg && (
-        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 shrink-0" />
+        <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600" />
           <span>{errorMsg}</span>
         </div>
       )}
@@ -401,8 +401,8 @@ export function CreateBottlesContent() {
             <div
               className={`p-3.5 rounded-lg border text-xs space-y-2 ${
                 isOverLimit
-                  ? "bg-red-500/10 border-red-500/30 text-red-700 dark:text-red-300"
-                  : "bg-amber-500/10 border-amber-500/30 text-amber-900 dark:text-amber-200"
+                  ? "bg-rose-50 border-rose-200 text-rose-900"
+                  : "bg-amber-50 border-amber-200 text-amber-900"
               }`}
             >
               <div className="flex items-center justify-between font-semibold">
@@ -411,11 +411,11 @@ export function CreateBottlesContent() {
                   <span>Batch Weight Allocation Balance</span>
                 </span>
                 {isOverLimit ? (
-                  <span className="text-red-600 dark:text-red-400 font-bold">
+                  <span className="text-rose-700 font-bold">
                     Allocation Exceeds Batch Limit!
                   </span>
                 ) : (
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                  <span className="text-emerald-700 font-bold flex items-center gap-1">
                     <CheckCircle2 className="h-3.5 w-3.5" />
                     <span>Valid Allocation</span>
                   </span>
@@ -447,7 +447,7 @@ export function CreateBottlesContent() {
                   </span>
                   <span
                     className={`font-bold ${
-                      isOverLimit ? "text-red-600" : "text-emerald-600 dark:text-emerald-400"
+                      isOverLimit ? "text-rose-700" : "text-emerald-700"
                     }`}
                   >
                     {remainingWeightKg.toFixed(1)} kg

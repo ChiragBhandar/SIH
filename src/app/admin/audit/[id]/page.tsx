@@ -94,14 +94,14 @@ export default function AuditEventDetailPage() {
         </div>
 
         {/* Append-Only Immutability Notice Banner */}
-        <div className="bg-amber-50/70 border border-amber-200/80 dark:bg-amber-950/20 dark:border-amber-900/50 rounded-xl p-4 sm:p-5">
+        <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-4 sm:p-5">
           <div className="flex items-start gap-3.5">
-            <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0 mt-0.5">
+            <div className="w-9 h-9 rounded-lg bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-700 shrink-0 mt-0.5">
               <Lock className="w-4 h-4" />
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-900/40 dark:text-amber-200 dark:border-amber-700">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
                   Append-only event
                 </span>
                 <span className="text-xs font-mono text-muted-foreground">
@@ -124,7 +124,7 @@ export default function AuditEventDetailPage() {
           <Card className="border-border/80 bg-card shadow-xs">
             <CardHeader className="pb-3 border-b border-border/60">
               <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <Fingerprint className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <Fingerprint className="w-4 h-4 text-amber-600" />
                 Event Provenance & Actors
               </CardTitle>
             </CardHeader>
@@ -132,7 +132,7 @@ export default function AuditEventDetailPage() {
             <CardContent className="p-4 space-y-2.5 text-xs">
               <div className="flex justify-between py-1.5 border-b border-border/50">
                 <span className="text-muted-foreground">Event ID:</span>
-                <span className="font-mono font-bold text-amber-800 dark:text-amber-300">{evt.id}</span>
+                <span className="font-mono font-bold text-amber-800">{evt.id}</span>
               </div>
               <div className="flex justify-between py-1.5 border-b border-border/50">
                 <span className="text-muted-foreground">Event Classification:</span>
@@ -175,7 +175,7 @@ export default function AuditEventDetailPage() {
           <Card className="border-border/80 bg-card shadow-xs">
             <CardHeader className="pb-3 border-b border-border/60">
               <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <Layers className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <Layers className="w-4 h-4 text-sky-600" />
                 Associated Target Entity
               </CardTitle>
             </CardHeader>
@@ -186,7 +186,7 @@ export default function AuditEventDetailPage() {
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                     Entity Type: {evt.entity.type}
                   </span>
-                  <span className="font-mono text-xs text-amber-800 dark:text-amber-300 font-bold">
+                  <span className="font-mono text-xs text-amber-800 font-bold">
                     {evt.entity.id}
                   </span>
                 </div>
@@ -222,7 +222,7 @@ export default function AuditEventDetailPage() {
         <Card className="border-border/80 bg-card shadow-xs">
           <CardHeader className="pb-3 border-b border-border/60">
             <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <Key className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <Key className="w-4 h-4 text-emerald-600" />
               Cryptographic Integrity & Hash Chain Links
             </CardTitle>
           </CardHeader>
@@ -238,11 +238,11 @@ export default function AuditEventDetailPage() {
                 </span>
               </div>
 
-              <div className="bg-emerald-50/40 dark:bg-emerald-950/20 p-3 rounded-lg border border-emerald-200 dark:border-emerald-800 space-y-1">
-                <span className="text-[10px] text-emerald-800 dark:text-emerald-300 block uppercase tracking-wider font-semibold font-sans">
+              <div className="bg-emerald-50/40 p-3 rounded-lg border border-emerald-200 space-y-1">
+                <span className="text-[10px] text-emerald-800 block uppercase tracking-wider font-semibold font-sans">
                   Current Block Digest (SHA-256):
                 </span>
-                <span className="text-emerald-800 dark:text-emerald-300 break-all select-all font-semibold text-[11px]">
+                <span className="text-emerald-800 break-all select-all font-semibold text-[11px]">
                   {evt.currentEventHash}
                 </span>
               </div>
@@ -254,7 +254,7 @@ export default function AuditEventDetailPage() {
         <Card className="border-border/80 bg-card shadow-xs">
           <CardHeader className="pb-3 border-b border-border/60 flex flex-row items-center justify-between">
             <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <Database className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+              <Database className="w-4 h-4 text-amber-600" />
               Event Metadata Payload (Immutable Schema)
             </CardTitle>
             <span className="text-xs font-mono text-muted-foreground">

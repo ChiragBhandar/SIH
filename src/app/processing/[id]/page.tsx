@@ -113,7 +113,7 @@ export function ProcessingDetailContent() {
           <div className="flex items-center gap-2">
             <Badge
               variant="outline"
-              className="border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 text-xs py-1 px-3 gap-1.5 font-medium"
+              className="border-emerald-200 text-emerald-800 bg-emerald-50 text-xs py-1 px-3 gap-1.5 font-medium"
             >
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Immutable Processing Record</span>
@@ -154,7 +154,7 @@ export function ProcessingDetailContent() {
             <span className="text-[10px] uppercase font-semibold text-muted-foreground">
               Yield Efficiency
             </span>
-            <p className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            <p className="text-xs font-mono font-bold text-emerald-700">
               {job.yieldPercentage.toFixed(2)}%
             </p>
           </div>
@@ -316,7 +316,7 @@ export function ProcessingDetailContent() {
 
           {/* CONNECTOR ARROW */}
           <div className="flex items-center justify-center py-1">
-            <div className="flex flex-col items-center gap-1 text-emerald-600 dark:text-emerald-400">
+            <div className="flex flex-col items-center gap-1 text-emerald-600">
               <ArrowDown className="h-5 w-5 animate-pulse" />
             </div>
           </div>
@@ -324,11 +324,11 @@ export function ProcessingDetailContent() {
           {/* STEP 3: OUTPUT BATCH */}
           <div className="space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-              <Package className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <Package className="h-4 w-4 text-emerald-600" />
               Output Batch
             </span>
 
-            <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/5 p-4 space-y-3 transition-colors hover:border-emerald-500 hover:bg-emerald-500/10">
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-4 space-y-3 transition-colors hover:border-emerald-300 hover:bg-emerald-50">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
@@ -339,7 +339,7 @@ export function ProcessingDetailContent() {
                       <span>{job.outputBatchId}</span>
                       <ExternalLink className="h-3.5 w-3.5 opacity-70" />
                     </Link>
-                    <Badge variant="outline" className="text-[10px] border-emerald-500/40 text-emerald-700 dark:text-emerald-300 font-mono">
+                    <Badge variant="outline" className="text-[10px] border-emerald-200 text-emerald-800 bg-emerald-50 font-mono">
                       Processed Honey Batch
                     </Badge>
                   </div>
@@ -352,7 +352,7 @@ export function ProcessingDetailContent() {
                   <span className="text-[10px] uppercase text-muted-foreground block font-semibold">
                     Net Output Quantity
                   </span>
-                  <span className="text-base font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                  <span className="text-base font-mono font-bold text-emerald-700">
                     {job.outputQuantityKg.toFixed(1)} kg ({job.yieldPercentage.toFixed(2)}% yield)
                   </span>
                 </div>
@@ -466,7 +466,7 @@ export function ProcessingDetailContent() {
                 <span className="text-[10px] uppercase text-muted-foreground block">
                   Efficiency Status
                 </span>
-                <span className="font-semibold text-emerald-600 dark:text-emerald-400 text-xs">
+                <span className="font-semibold text-emerald-700 text-xs">
                   {job.yieldPercentage >= 95 ? "High Yield (>95%)" : "Standard Yield"}
                 </span>
               </div>

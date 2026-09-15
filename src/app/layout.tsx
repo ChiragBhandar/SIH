@@ -31,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="min-h-screen bg-background font-sans antialiased">
+    <html lang="en" className={`${inter.variable} light`} style={{ colorScheme: "light" }}>
+      <body className="min-h-screen bg-background font-sans antialiased text-foreground">
         <AuthSessionProvider>
           <TraceabilityProvider>{children}</TraceabilityProvider>
         </AuthSessionProvider>

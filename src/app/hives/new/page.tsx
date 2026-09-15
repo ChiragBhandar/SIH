@@ -116,14 +116,14 @@ function RegisterApiaryContent() {
 
       {/* Success Modal / Banner */}
       {isSuccess && (
-        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-5 text-emerald-800 dark:text-emerald-200 animate-in fade-in-50 space-y-2">
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50/90 p-4 text-emerald-800 animate-in fade-in-50 space-y-2">
           <div className="flex items-center gap-3">
-            <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
             <div>
-              <h3 className="text-sm font-bold">
+              <h3 className="text-sm font-bold text-emerald-900">
                 Apiary Successfully Registered!
               </h3>
-              <p className="text-xs text-muted-foreground mt-0.5">
+              <p className="text-xs text-emerald-700 mt-0.5">
                 Saved <strong>{name}</strong> into Honey Chain local registry. Redirecting to apiary view...
               </p>
             </div>
@@ -132,10 +132,10 @@ function RegisterApiaryContent() {
       )}
 
       {/* Main Registration Card */}
-      <Card className="border-border bg-card shadow-xs">
+      <Card className="border-border bg-card shadow-2xs">
         <CardHeader className="pb-4 border-b border-border/60">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
               <Wheat className="h-5 w-5" />
             </div>
             <div>
@@ -152,7 +152,7 @@ function RegisterApiaryContent() {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4 pt-4 text-xs">
             {errors.form && (
-              <div className="rounded-md bg-rose-500/10 border border-rose-500/30 p-3 text-rose-600 dark:text-rose-400">
+              <div className="rounded-md bg-rose-50 border border-rose-200 p-3 text-xs text-rose-800 font-medium">
                 {errors.form}
               </div>
             )}

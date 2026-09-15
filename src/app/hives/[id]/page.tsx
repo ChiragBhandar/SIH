@@ -154,33 +154,24 @@ function HiveDetailContent() {
       </div>
 
       {/* Metadata Specification Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="shadow-xs bg-card/70 border-border/80">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               Queen Status
             </span>
-            <div className="flex items-center gap-2">
-              <Badge
-                variant="outline"
-                className={`text-xs py-0.5 font-medium ${
-                  hive.queenStatus.includes("Active")
-                    ? "border-emerald-500/40 text-emerald-600 dark:text-emerald-400"
-                    : hive.queenStatus === "Virgin"
-                    ? "border-sky-500/40 text-sky-600 dark:text-sky-400"
-                    : "border-amber-500/40 text-amber-600 dark:text-amber-400"
-                }`}
-              >
+            <div className="flex items-center gap-2 pt-0.5">
+              <StatusBadge status={hive.queenStatus} size="sm">
                 {hive.queenStatus}
-              </Badge>
+              </StatusBadge>
             </div>
-            <p className="text-[10px] text-muted-foreground pt-0.5">
+            <p className="text-[11px] text-muted-foreground pt-1">
               Inspected: {hive.lastInspectionDate}
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               Hive Hardware Type
@@ -188,13 +179,13 @@ function HiveDetailContent() {
             <h4 className="text-sm font-bold text-foreground">
               {hive.hiveType}
             </h4>
-            <p className="text-[10px] text-muted-foreground pt-0.5">
+            <p className="text-[11px] text-muted-foreground pt-1">
               Standard brood frame dimensions
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               Yard Location
@@ -202,13 +193,13 @@ function HiveDetailContent() {
             <h4 className="text-sm font-bold text-foreground truncate">
               {hive.locationInApiary}
             </h4>
-            <p className="text-[10px] text-muted-foreground pt-0.5">
+            <p className="text-[11px] text-muted-foreground pt-1">
               Installed: {hive.installationDate}
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               Traceability Pairing
@@ -216,7 +207,7 @@ function HiveDetailContent() {
             <h4 className="text-xs font-mono font-bold text-primary truncate">
               {hive.nfcRfidId}
             </h4>
-            <p className="text-[10px] text-emerald-600 dark:text-emerald-400 pt-0.5">
+            <p className="text-[11px] text-emerald-700 pt-1 font-medium">
               ✓ Hardware verified & linked
             </p>
           </CardContent>
@@ -264,7 +255,7 @@ function HiveDetailContent() {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="h-8 rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="h-9 rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs cursor-pointer"
             >
               <option value="all">All Activity Types</option>
               <option value="Inspection">Inspection</option>
@@ -274,7 +265,7 @@ function HiveDetailContent() {
               <option value="Floral observation">Floral observation</option>
             </select>
 
-            <Button asChild size="sm" variant="outline" className="text-xs h-8 gap-1 cursor-pointer">
+            <Button asChild size="sm" variant="outline" className="text-xs h-9 gap-1 cursor-pointer">
               <Link href={`/activities/new?hiveId=${hive.id}`}>
                 <Plus className="h-3.5 w-3.5" />
                 <span>Log Activity</span>
@@ -374,9 +365,9 @@ function HiveDetailContent() {
 
                       <div className="flex items-center justify-between pt-1 border-t border-border/60 text-[11px] text-muted-foreground">
                         <span>Recorded by: <strong>{act.recordedBy}</strong></span>
-                        <Badge variant="outline" className="text-[10px] py-0 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
-                          ✓ Sync verified
-                        </Badge>
+                        <StatusBadge status="success" size="sm">
+                          Sync verified
+                        </StatusBadge>
                       </div>
                     </CardContent>
                   </Card>

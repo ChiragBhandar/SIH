@@ -36,11 +36,11 @@ export function AdminRoleGuard({
       <div className="min-h-[60vh] flex items-center justify-center p-6">
         <Card className="max-w-lg w-full border-border shadow-md overflow-hidden text-center">
           <CardContent className="p-8">
-            <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-5 text-amber-600 dark:text-amber-400">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-5 text-amber-600">
               <ShieldAlert className="w-7 h-7" />
             </div>
 
-            <Badge variant="outline" className="text-xs font-semibold border-amber-500/30 text-amber-800 bg-amber-50 dark:bg-amber-950/40 dark:text-amber-300 mb-3">
+            <Badge variant="outline" className="text-xs font-semibold border-amber-200 text-amber-800 bg-amber-50 mb-3">
               Simulation Security Notice
             </Badge>
 
@@ -61,7 +61,7 @@ export function AdminRoleGuard({
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span>Required Permission:</span>
-                <span className="font-mono text-amber-600 dark:text-amber-400 font-semibold">
+                <span className="font-mono text-amber-700 font-semibold">
                   SUPER_ADMIN or ORG_ADMIN
                 </span>
               </div>

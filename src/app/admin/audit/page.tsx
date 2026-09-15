@@ -96,7 +96,7 @@ export default function CompleteAuditHistoryPage() {
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
                 Complete Audit History
               </h1>
-              <Badge variant="outline" className="text-xs font-semibold border-emerald-500/30 text-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 gap-1.5">
+              <Badge variant="outline" className="text-xs font-semibold border-emerald-200 text-emerald-800 bg-emerald-50 gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Append-Only Verified
               </Badge>
@@ -108,7 +108,7 @@ export default function CompleteAuditHistoryPage() {
 
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="font-mono text-xs py-1 px-2.5 bg-card flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <Lock className="w-3.5 h-3.5 text-amber-600" />
               <span><strong className="text-foreground">{auditEvents.length}</strong> Cryptographic Blocks</span>
             </Badge>
           </div>
@@ -216,7 +216,7 @@ export default function CompleteAuditHistoryPage() {
                       <TableCell>
                         <Link
                           href={`/admin/audit/${evt.id}`}
-                          className="font-mono font-bold text-amber-800 dark:text-amber-300 hover:underline inline-flex items-center gap-1"
+                          className="font-mono font-bold text-amber-800 hover:underline inline-flex items-center gap-1"
                         >
                           {evt.id}
                         </Link>
@@ -286,7 +286,7 @@ export default function CompleteAuditHistoryPage() {
                         <Button asChild variant="outline" size="sm" className="h-7 text-xs gap-1">
                           <Link href={`/admin/audit/${evt.id}`}>
                             <span>Inspect</span>
-                            <ArrowRight className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                            <ArrowRight className="w-3 h-3 text-amber-600" />
                           </Link>
                         </Button>
                       </TableCell>

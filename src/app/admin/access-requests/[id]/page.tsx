@@ -134,7 +134,7 @@ export default function AccessRequestDetailPage() {
                   onClick={() => setDenyOpen(true)}
                   size="sm"
                   variant="outline"
-                  className="text-xs font-medium gap-1.5 border-rose-200 text-rose-700 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-300 dark:hover:bg-rose-950/40"
+                  className="text-xs font-medium gap-1.5 border-rose-200 text-rose-700 hover:bg-rose-50"
                 >
                   <XCircle className="w-3.5 h-3.5" />
                   Deny Request
@@ -149,16 +149,16 @@ export default function AccessRequestDetailPage() {
           <div
             className={`rounded-xl p-4 border ${
               req.decision.decision === "approved"
-                ? "bg-emerald-50/70 border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800"
-                : "bg-rose-50/70 border-rose-200 dark:bg-rose-950/30 dark:border-rose-800"
+                ? "bg-emerald-50/70 border-emerald-200"
+                : "bg-rose-50/70 border-rose-200"
             }`}
           >
             <div className="flex items-start gap-3.5">
               <div
                 className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
                   req.decision.decision === "approved"
-                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
-                    : "bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-300 border border-rose-300 dark:border-rose-700"
+                    ? "bg-emerald-100 text-emerald-700 border border-emerald-300"
+                    : "bg-rose-100 text-rose-700 border border-rose-300"
                 }`}
               >
                 {req.decision.decision === "approved" ? (
@@ -188,7 +188,7 @@ export default function AccessRequestDetailPage() {
                       {req.decision.grantedScope.map((scope, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200 font-mono text-[11px] border border-emerald-200 dark:border-emerald-800"
+                          className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono text-[11px] border border-emerald-200"
                         >
                           {scope}
                         </span>
@@ -285,7 +285,7 @@ export default function AccessRequestDetailPage() {
           <CardContent className="p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <KeyRound className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <KeyRound className="w-4 h-4 text-emerald-600" />
                 Requested Permission Scopes ({req.requestedScope.length})
               </h3>
               <span className="text-xs font-mono text-muted-foreground">RBAC Telemetry Matrix</span>
@@ -312,7 +312,7 @@ export default function AccessRequestDetailPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-in fade-in duration-150">
             <div className="relative w-full max-w-lg bg-card border border-border rounded-xl p-6 shadow-xl text-foreground">
               <div className="flex items-start gap-3.5 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
@@ -340,7 +340,7 @@ export default function AccessRequestDetailPage() {
                           onClick={() => handleToggleScope(scope)}
                           className={`w-full p-2.5 rounded-lg border text-left flex items-center justify-between transition-all ${
                             isChecked
-                              ? "bg-emerald-50/80 border-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200"
+                              ? "bg-emerald-50/80 border-emerald-300 text-emerald-900"
                               : "bg-background border-border/80 text-muted-foreground hover:border-border"
                           }`}
                         >

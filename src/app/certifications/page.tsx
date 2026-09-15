@@ -71,7 +71,7 @@ export function CertificationsListContent() {
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               Certificates of Analysis
             </h1>
-            <Badge variant="outline" className="font-mono text-xs border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10">
+            <Badge variant="outline" className="font-mono text-xs border-emerald-200 text-emerald-800 bg-emerald-50">
               Quality Approved Records
             </Badge>
           </div>
@@ -96,7 +96,7 @@ export function CertificationsListContent() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <CardTitle className="text-base font-bold text-foreground flex items-center gap-2">
-                <Award className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <Award className="h-4 w-4 text-emerald-600" />
                 <span>Issued Quality Certifications ({certifications.length})</span>
               </CardTitle>
               <CardDescription className="text-xs mt-0.5">
@@ -165,7 +165,7 @@ export function CertificationsListContent() {
                   {filteredCerts.map((cert) => (
                     <TableRow key={cert.id} className="hover:bg-muted/30 transition-colors">
                       <TableCell className="font-mono font-bold text-xs text-foreground">
-                        <Link href={`/certifications/${cert.id}`} className="hover:underline flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                        <Link href={`/certifications/${cert.id}`} className="hover:underline flex items-center gap-1.5 text-emerald-700">
                           <Award className="h-3.5 w-3.5 shrink-0" />
                           <span>{cert.id}</span>
                         </Link>
@@ -195,7 +195,7 @@ export function CertificationsListContent() {
                       <TableCell>
                         <Badge
                           variant="outline"
-                          className="border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 text-[11px] font-semibold"
+                          className="border-emerald-200 text-emerald-800 bg-emerald-50 text-[11px] font-semibold"
                         >
                           Quality Approved
                         </Badge>

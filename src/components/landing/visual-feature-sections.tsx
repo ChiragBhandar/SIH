@@ -75,7 +75,7 @@ export function VisualFeatureSections() {
                 <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-bold text-xs text-foreground">HC-RAW-2026-0001</span>
-                    <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px]">
+                    <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px]">
                       Sealed & Verified
                     </Badge>
                   </div>
@@ -86,7 +86,7 @@ export function VisualFeatureSections() {
                     </div>
                     <div>
                       <span className="text-[10px] text-muted-foreground block">Moisture %</span>
-                      <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">17.2%</span>
+                      <span className="font-mono font-bold text-emerald-700">17.2%</span>
                     </div>
                     <div>
                       <span className="text-[10px] text-muted-foreground block">Flora Origin</span>
@@ -115,13 +115,13 @@ export function VisualFeatureSections() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* UI Visual Left */}
           <div className="lg:col-span-6 order-2 lg:order-1">
-            <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-card via-card to-emerald-950/10 p-5 sm:p-6 shadow-xl space-y-4">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/20 p-5 sm:p-6 shadow-sm space-y-4">
               <div className="flex items-center justify-between border-b border-border/80 pb-3">
                 <div className="flex items-center gap-2">
-                  <FlaskConical className="h-4 w-4 text-emerald-500" />
+                  <FlaskConical className="h-4 w-4 text-emerald-600" />
                   <span className="font-mono text-xs font-bold text-foreground">LABORATORY PURITY CERTIFICATE</span>
                 </div>
-                <Badge className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px]">
+                <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px]">
                   Grade A Standard
                 </Badge>
               </div>
@@ -129,13 +129,13 @@ export function VisualFeatureSections() {
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div className="p-3 rounded-xl border border-border bg-card">
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">NMR Purity Match</span>
-                  <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">99.4%</div>
+                  <div className="text-lg font-bold text-emerald-700 font-mono mt-0.5">99.4%</div>
                   <span className="text-[10px] text-muted-foreground">Passed botanical spectrum</span>
                 </div>
 
                 <div className="p-3 rounded-xl border border-border bg-card">
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">C4 Sugar Adulteration</span>
-                  <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">0.8%</div>
+                  <div className="text-lg font-bold text-emerald-700 font-mono mt-0.5">0.8%</div>
                   <span className="text-[10px] text-muted-foreground">Standard limit &lt; 7.0%</span>
                 </div>
 
@@ -148,7 +148,7 @@ export function VisualFeatureSections() {
                 <div className="p-3 rounded-xl border border-border bg-card">
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Certificate Ref</span>
                   <div className="text-xs font-bold text-primary font-mono mt-1.5 truncate">CERT-HC-2026-0001</div>
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400">Cryptographically Signed</span>
+                  <span className="text-[10px] text-emerald-700 font-medium">Cryptographically Signed</span>
                 </div>
               </div>
             </div>
@@ -156,8 +156,8 @@ export function VisualFeatureSections() {
 
           {/* Text Right */}
           <div className="lg:col-span-6 order-1 lg:order-2 space-y-5">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              <FlaskConical className="h-3.5 w-3.5" />
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-0.5 text-xs font-semibold text-emerald-800">
+              <FlaskConical className="h-3.5 w-3.5 text-emerald-600" />
               <span>Scientific Purity Validation</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
@@ -237,13 +237,13 @@ export function VisualFeatureSections() {
 
           {/* UI Visual Right */}
           <div className="lg:col-span-6">
-            <div className="rounded-2xl border border-emerald-500/30 bg-card p-5 sm:p-6 shadow-xl space-y-4">
-              <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+            <div className="rounded-2xl border border-emerald-200 bg-card p-5 sm:p-6 shadow-sm space-y-4">
+              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-emerald-100 text-emerald-700">
                   <ShieldCheck className="h-6 w-6" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                  <div className="text-xs font-bold uppercase tracking-wider text-emerald-800">
                     Official Verification Confirmed
                   </div>
                   <div className="font-bold text-foreground text-sm">
@@ -262,7 +262,7 @@ export function VisualFeatureSections() {
                 </div>
                 <div className="p-2.5 rounded-lg border border-border bg-muted/20 text-center">
                   <span className="text-[10px] text-muted-foreground uppercase">Purity Standard</span>
-                  <p className="font-bold text-emerald-600 dark:text-emerald-400 text-xs mt-0.5">Grade A (99.4%)</p>
+                  <p className="font-bold text-emerald-700 text-xs mt-0.5">Grade A (99.4%)</p>
                 </div>
               </div>
 

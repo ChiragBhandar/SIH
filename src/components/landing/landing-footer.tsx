@@ -22,7 +22,7 @@ export function LandingFooter() {
             <p className="text-xs text-muted-foreground leading-relaxed">
               Enterprise honey supply chain traceability platform providing immutable batch provenance, accredited laboratory certification, and consumer QR trust validation.
             </p>
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-mono border border-emerald-500/20">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] text-emerald-800 font-mono border border-emerald-200">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Network Active • 2026 Registry
             </div>

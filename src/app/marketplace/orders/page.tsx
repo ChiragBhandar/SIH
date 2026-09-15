@@ -183,7 +183,7 @@ function MarketplaceOrdersContent() {
                   </TableCell>
                   <TableCell className="text-foreground">{order.sellerOrgName}</TableCell>
                   <TableCell className="text-foreground font-medium">{order.buyerOrgName}</TableCell>
-                  <TableCell className="text-right font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                  <TableCell className="text-right font-mono font-bold text-emerald-700">
                     {order.quantity.toFixed(1)} {order.unit}
                   </TableCell>
                   <TableCell className="text-muted-foreground text-[11px] whitespace-nowrap">

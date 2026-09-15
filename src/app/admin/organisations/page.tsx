@@ -183,7 +183,7 @@ export default function AdminOrganisationsPage() {
                       {/* ID & Code */}
                       <TableCell>
                         <div className="flex flex-col">
-                          <span className="font-mono font-bold text-amber-800 dark:text-amber-300">
+                          <span className="font-mono font-bold text-amber-800">
                             {org.id}
                           </span>
                           <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
@@ -259,7 +259,7 @@ export default function AdminOrganisationsPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleOpenAction(org.id, "Active")}
-                              className="h-7 px-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-300"
+                              className="h-7 px-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
                               title="Approve / Restore Organisation"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5 mr-1" />

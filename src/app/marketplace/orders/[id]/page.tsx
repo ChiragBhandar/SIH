@@ -198,11 +198,11 @@ function OrderDetailContent() {
 
       {/* Rejection / Cancellation Notes Alert */}
       {order.rejectionReason && (
-        <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3.5 text-xs flex items-start gap-2.5">
-          <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+        <div className="rounded-xl border border-rose-200 bg-rose-50 p-3.5 text-xs flex items-start gap-2.5">
+          <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
           <div>
-            <strong className="text-rose-800 dark:text-rose-300">Order Rejection Reason:</strong>
-            <p className="text-rose-700 dark:text-rose-300 text-[11px] mt-0.5">{order.rejectionReason}</p>
+            <strong className="text-rose-900">Order Rejection Reason:</strong>
+            <p className="text-rose-800 text-[11px] mt-0.5">{order.rejectionReason}</p>
           </div>
         </div>
       )}
@@ -280,7 +280,7 @@ function OrderDetailContent() {
                 <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
                   Ordered Quantity
                 </span>
-                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-sm">
+                <span className="font-mono font-bold text-emerald-700 text-sm">
                   {order.quantity.toFixed(1)} {order.unit}
                 </span>
               </div>
@@ -333,9 +333,9 @@ function OrderDetailContent() {
                   <div
                     className={`absolute -left-6 sm:-left-8 top-0.5 flex h-6 w-6 items-center justify-center rounded-full border text-[10px] font-bold ${
                       isCompleted
-                        ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-600 dark:text-emerald-400"
+                        ? "bg-emerald-50 border-emerald-300 text-emerald-700"
                         : isCurrent
-                        ? "bg-amber-500/10 border-amber-500/40 text-amber-600 dark:text-amber-400 animate-pulse"
+                        ? "bg-amber-50 border-amber-300 text-amber-800 animate-pulse"
                         : "bg-muted border-border text-muted-foreground"
                     }`}
                   >

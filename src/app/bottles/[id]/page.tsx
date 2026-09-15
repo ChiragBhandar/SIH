@@ -129,8 +129,8 @@ export function BottleDetailContent() {
       </div>
 
       {actionSuccessMsg && (
-        <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
+        <div className="p-3.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
           <span>{actionSuccessMsg}</span>
         </div>
       )}
@@ -147,10 +147,10 @@ export function BottleDetailContent() {
                 variant="outline"
                 className={`text-xs uppercase font-semibold ${
                   isPublished
-                    ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/30 dark:text-emerald-400"
+                    ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                     : isSuspended
-                    ? "bg-red-500/10 text-red-600 border-red-500/30 dark:text-red-400"
-                    : "bg-amber-500/10 text-amber-600 border-amber-500/30 dark:text-amber-400"
+                    ? "bg-rose-50 text-rose-800 border-rose-200"
+                    : "bg-amber-50 text-amber-800 border-amber-200"
                 }`}
               >
                 {bottle.status}
@@ -511,7 +511,7 @@ export function BottleDetailContent() {
 
             {/* Step 6: Laboratory Quality Testing & Certification */}
             <div className="relative">
-              <div className="absolute -left-[31px] top-0 p-1.5 rounded-full bg-emerald-500/20 border border-emerald-500 text-emerald-600 dark:text-emerald-400">
+              <div className="absolute -left-[31px] top-0 p-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-700">
                 <FlaskConical className="h-3.5 w-3.5" />
               </div>
               <div className="space-y-1">
@@ -519,7 +519,7 @@ export function BottleDetailContent() {
                   <span className="font-semibold text-foreground">6. Laboratory Testing & Certification</span>
                   <Link
                     href={`/certifications/${bottle.certificationId}`}
-                    className="font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+                    className="font-mono font-bold text-emerald-700 hover:underline"
                   >
                     {bottle.certificationId}
                   </Link>
@@ -544,7 +544,7 @@ export function BottleDetailContent() {
 
             {/* Step 7: Packaging & Bottle Creation */}
             <div className="relative">
-              <div className="absolute -left-[31px] top-0 p-1.5 rounded-full bg-amber-500/20 border border-amber-500 text-amber-600 dark:text-amber-400">
+              <div className="absolute -left-[31px] top-0 p-1.5 rounded-full bg-amber-50 border border-amber-300 text-amber-800">
                 <Package className="h-3.5 w-3.5" />
               </div>
               <div className="space-y-1">
@@ -618,8 +618,8 @@ export function BottleDetailContent() {
       <Dialog open={isSuspendModalOpen} onOpenChange={setIsSuspendModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base text-red-600 dark:text-red-400">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
+            <DialogTitle className="flex items-center gap-2 text-base text-rose-700">
+              <AlertTriangle className="h-5 w-5 text-rose-600" />
               <span>Suspend Public Verification?</span>
             </DialogTitle>
             <DialogDescription className="text-xs pt-1 text-muted-foreground leading-relaxed">

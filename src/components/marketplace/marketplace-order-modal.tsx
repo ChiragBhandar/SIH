@@ -170,7 +170,7 @@ export function MarketplaceOrderModal({
                 </div>
                 <div>
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Available Stock</span>
-                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                  <span className="font-mono font-bold text-emerald-700">
                     {listing.availableQuantity.toFixed(1)} {listing.unit}
                   </span>
                 </div>
@@ -184,8 +184,8 @@ export function MarketplaceOrderModal({
 
             {/* Validation Error Alert */}
             {validationError && (
-              <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-700 dark:text-rose-300 flex items-start gap-2">
-                <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+              <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs text-rose-800 flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600 mt-0.5" />
                 <div>
                   <strong>Validation Notice:</strong> {validationError}
                 </div>
@@ -435,7 +435,7 @@ export function MarketplaceOrderModal({
         {step === "confirmation" && createdOrder && (
           <div className="space-y-4 py-2">
             <div className="text-center space-y-2">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
               <DialogTitle className="text-lg font-bold text-foreground">
@@ -463,7 +463,7 @@ export function MarketplaceOrderModal({
                 </div>
                 <div>
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Status</span>
-                  <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/30 text-[11px] font-medium">
+                  <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200 text-[11px] font-medium">
                     Pending
                   </Badge>
                 </div>
@@ -487,7 +487,7 @@ export function MarketplaceOrderModal({
 
             {/* Traceability Note */}
             <div className="rounded-lg border border-border/80 bg-muted/20 p-3 text-[11px] text-muted-foreground flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
               <span>
                 Batch <strong>{createdOrder.batchNumber}</strong> remains authoritative. No duplicate batch was created, and physical custody transfer has not occurred yet.
               </span>

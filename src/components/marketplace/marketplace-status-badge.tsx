@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Badge } from "@/components/ui/badge";
 import { MarketplaceListingStatus, MarketplaceOrderStatus } from "@/types/marketplace";
 import { CheckCircle2, Clock, XCircle, AlertTriangle, ShieldCheck, Tag, Ban } from "lucide-react";
 
@@ -10,69 +9,57 @@ export function ListingStatusBadge({
   status: MarketplaceListingStatus;
   className?: string;
 }) {
+  const base = "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-semibold gap-1.5 transition-colors select-none tracking-tight";
+
   switch (status) {
     case "Active":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 gap-1 font-medium ${className}`}
-        >
-          <CheckCircle2 className="h-3 w-3" />
+        <span className={`${base} bg-emerald-50 text-emerald-800 border-emerald-200/90 ${className}`}>
+          <CheckCircle2 className="h-3 w-3 text-emerald-600" />
           Active
-        </Badge>
+        </span>
       );
     case "Reserved":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 gap-1 font-medium ${className}`}
-        >
-          <Clock className="h-3 w-3" />
+        <span className={`${base} bg-amber-50 text-amber-900 border-amber-200/90 ${className}`}>
+          <Clock className="h-3 w-3 text-amber-600" />
           Reserved
-        </Badge>
+        </span>
       );
     case "Draft":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-muted text-muted-foreground border-border gap-1 font-medium ${className}`}
-        >
-          <Tag className="h-3 w-3" />
+        <span className={`${base} bg-slate-100/80 text-slate-700 border-slate-200 ${className}`}>
+          <Tag className="h-3 w-3 text-slate-500" />
           Draft
-        </Badge>
+        </span>
       );
     case "Sold":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30 gap-1 font-medium ${className}`}
-        >
-          <ShieldCheck className="h-3 w-3" />
+        <span className={`${base} bg-sky-50 text-sky-800 border-sky-200/90 ${className}`}>
+          <ShieldCheck className="h-3 w-3 text-sky-600" />
           Sold Out
-        </Badge>
+        </span>
       );
     case "Suspended":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/30 gap-1 font-medium ${className}`}
-        >
-          <Ban className="h-3 w-3" />
+        <span className={`${base} bg-rose-50 text-rose-800 border-rose-200/90 ${className}`}>
+          <Ban className="h-3 w-3 text-rose-600" />
           Suspended
-        </Badge>
+        </span>
       );
     case "Expired":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-muted text-muted-foreground border-border gap-1 font-medium ${className}`}
-        >
-          <AlertTriangle className="h-3 w-3" />
+        <span className={`${base} bg-slate-100/80 text-slate-700 border-slate-200 ${className}`}>
+          <AlertTriangle className="h-3 w-3 text-slate-500" />
           Expired
-        </Badge>
+        </span>
       );
     default:
-      return <Badge variant="secondary">{status}</Badge>;
+      return (
+        <span className={`${base} bg-slate-100/80 text-slate-700 border-slate-200 ${className}`}>
+          {status}
+        </span>
+      );
   }
 }
 
@@ -83,58 +70,49 @@ export function OrderStatusBadge({
   status: MarketplaceOrderStatus;
   className?: string;
 }) {
+  const base = "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-semibold gap-1.5 transition-colors select-none tracking-tight";
+
   switch (status) {
     case "Pending":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 gap-1 font-medium ${className}`}
-        >
-          <Clock className="h-3 w-3" />
+        <span className={`${base} bg-amber-50 text-amber-900 border-amber-200/90 ${className}`}>
+          <Clock className="h-3 w-3 text-amber-600" />
           Pending
-        </Badge>
+        </span>
       );
     case "Accepted":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 gap-1 font-medium ${className}`}
-        >
-          <CheckCircle2 className="h-3 w-3" />
+        <span className={`${base} bg-emerald-50 text-emerald-800 border-emerald-200/90 ${className}`}>
+          <CheckCircle2 className="h-3 w-3 text-emerald-600" />
           Accepted
-        </Badge>
+        </span>
       );
     case "Fulfilled":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30 gap-1 font-medium ${className}`}
-        >
-          <ShieldCheck className="h-3 w-3" />
+        <span className={`${base} bg-sky-50 text-sky-800 border-sky-200/90 ${className}`}>
+          <ShieldCheck className="h-3 w-3 text-sky-600" />
           Fulfilled
-        </Badge>
+        </span>
       );
     case "Rejected":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/30 gap-1 font-medium ${className}`}
-        >
-          <XCircle className="h-3 w-3" />
+        <span className={`${base} bg-rose-50 text-rose-800 border-rose-200/90 ${className}`}>
+          <XCircle className="h-3 w-3 text-rose-600" />
           Rejected
-        </Badge>
+        </span>
       );
     case "Cancelled":
       return (
-        <Badge
-          variant="outline"
-          className={`bg-muted text-muted-foreground border-border gap-1 font-medium ${className}`}
-        >
-          <Ban className="h-3 w-3" />
+        <span className={`${base} bg-slate-100/80 text-slate-700 border-slate-200 ${className}`}>
+          <Ban className="h-3 w-3 text-slate-500" />
           Cancelled
-        </Badge>
+        </span>
       );
     default:
-      return <Badge variant="secondary">{status}</Badge>;
+      return (
+        <span className={`${base} bg-slate-100/80 text-slate-700 border-slate-200 ${className}`}>
+          {status}
+        </span>
+      );
   }
 }

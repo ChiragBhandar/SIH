@@ -65,10 +65,10 @@ export default function AdminDashboardPage() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/80 pb-5">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <Badge variant="outline" className="font-mono text-xs border-amber-500/30 text-amber-800 bg-amber-50 dark:bg-amber-950/40 dark:text-amber-300">
+              <Badge variant="outline" className="font-mono text-xs border-amber-200 text-amber-800 bg-amber-50">
                 Governance & Control Plane
               </Badge>
-              <span className="flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-400 font-medium">
+              <span className="flex items-center gap-1.5 text-xs text-emerald-700 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 Ledger Sync: Operational
               </span>
@@ -84,7 +84,7 @@ export default function AdminDashboardPage() {
           <div className="flex flex-wrap items-center gap-2.5">
             <Button asChild variant="outline" size="sm" className="gap-2">
               <Link href="/admin/audit">
-                <History className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <History className="w-4 h-4 text-amber-600" />
                 <span>View Immutable Audit Log</span>
               </Link>
             </Button>
@@ -107,7 +107,7 @@ export default function AdminDashboardPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     Organisations
                   </span>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-400 group-hover:bg-amber-500/20 transition-colors">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200 group-hover:bg-amber-100 transition-colors">
                     <Building2 className="w-4 h-4" />
                   </div>
                 </div>
@@ -117,13 +117,13 @@ export default function AdminDashboardPage() {
                   </div>
                   <div className="flex items-center gap-1.5 text-xs">
                     {pendingOrgs > 0 && (
-                      <span className="text-amber-700 dark:text-amber-400 font-semibold">{pendingOrgs} Pending</span>
+                      <span className="text-amber-700 font-semibold">{pendingOrgs} Pending</span>
                     )}
                     {suspendedOrgs > 0 && (
                       <span className="text-destructive font-semibold">• {suspendedOrgs} Suspended</span>
                     )}
                     {pendingOrgs === 0 && suspendedOrgs === 0 && (
-                      <span className="text-emerald-700 dark:text-emerald-400 font-medium">All Active & Verified</span>
+                      <span className="text-emerald-700 font-medium">All Active & Verified</span>
                     )}
                   </div>
                 </div>
@@ -139,7 +139,7 @@ export default function AdminDashboardPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     Users & Roles
                   </span>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 text-blue-700 dark:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200 group-hover:bg-sky-100 transition-colors">
                     <Users className="w-4 h-4" />
                   </div>
                 </div>
@@ -148,7 +148,7 @@ export default function AdminDashboardPage() {
                     {totalUsers}
                   </div>
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <span className="text-emerald-700 dark:text-emerald-400 font-semibold">{activeUsers} Active</span>
+                    <span className="text-emerald-700 font-semibold">{activeUsers} Active</span>
                     <span>across 8 entities</span>
                   </div>
                 </div>
@@ -164,7 +164,7 @@ export default function AdminDashboardPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     Open Exceptions
                   </span>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/10 text-rose-700 dark:text-rose-400 group-hover:bg-rose-500/20 transition-colors">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-700 border border-rose-200 group-hover:bg-rose-100 transition-colors">
                     <AlertTriangle className="w-4 h-4" />
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export default function AdminDashboardPage() {
                   <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight font-mono mb-1 flex items-baseline gap-2">
                     {openExceptions}
                     {criticalExceptions > 0 && (
-                      <span className="text-[10px] font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded-full border border-rose-200 dark:border-rose-800">
+                      <span className="text-[10px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
                         {criticalExceptions} Critical
                       </span>
                     )}
@@ -193,7 +193,7 @@ export default function AdminDashboardPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     Access Requests
                   </span>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-700 dark:text-purple-400 group-hover:bg-purple-500/20 transition-colors">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700 border border-purple-200 group-hover:bg-purple-100 transition-colors">
                     <KeyRound className="w-4 h-4" />
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export default function AdminDashboardPage() {
                   <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight font-mono mb-1 flex items-baseline gap-2">
                     {pendingRequests}
                     {pendingRequests > 0 && (
-                      <span className="text-[10px] font-semibold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                      <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                         Needs Review
                       </span>
                     )}
@@ -222,7 +222,7 @@ export default function AdminDashboardPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     Audit Events
                   </span>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 group-hover:bg-emerald-100 transition-colors">
                     <History className="w-4 h-4" />
                   </div>
                 </div>
@@ -230,7 +230,7 @@ export default function AdminDashboardPage() {
                   <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight font-mono mb-1">
                     {totalAuditLogs}
                   </div>
-                  <div className="text-xs text-emerald-700 dark:text-emerald-400 flex items-center gap-1 font-medium">
+                  <div className="text-xs text-emerald-700 flex items-center gap-1 font-medium">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span>Append-Only Chain</span>
                   </div>
@@ -256,7 +256,7 @@ export default function AdminDashboardPage() {
             <Link href="/admin/organisations" className="group">
               <Card className="h-full border-border/80 bg-card hover:border-primary/50 transition-all duration-150 hover:shadow-sm flex flex-col justify-between">
                 <CardHeader className="pb-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-400 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
                     <Building2 className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
@@ -281,7 +281,7 @@ export default function AdminDashboardPage() {
             <Link href="/admin/users" className="group">
               <Card className="h-full border-border/80 bg-card hover:border-primary/50 transition-all duration-150 hover:shadow-sm flex flex-col justify-between">
                 <CardHeader className="pb-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-700 dark:text-blue-400 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200 text-sky-700 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
                     <Users className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
@@ -306,7 +306,7 @@ export default function AdminDashboardPage() {
             <Link href="/admin/audit" className="group">
               <Card className="h-full border-border/80 bg-card hover:border-primary/50 transition-all duration-150 hover:shadow-sm flex flex-col justify-between">
                 <CardHeader className="pb-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
                     <History className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
@@ -331,7 +331,7 @@ export default function AdminDashboardPage() {
             <Link href="/admin/exceptions" className="group">
               <Card className="h-full border-border/80 bg-card hover:border-primary/50 transition-all duration-150 hover:shadow-sm flex flex-col justify-between">
                 <CardHeader className="pb-3">
-                  <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-700 dark:text-rose-400 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
                     <AlertTriangle className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
@@ -356,7 +356,7 @@ export default function AdminDashboardPage() {
             <Link href="/admin/access-requests" className="group">
               <Card className="h-full border-border/80 bg-card hover:border-primary/50 transition-all duration-150 hover:shadow-sm flex flex-col justify-between">
                 <CardHeader className="pb-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-700 dark:text-purple-400 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
                     <KeyRound className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
@@ -381,7 +381,7 @@ export default function AdminDashboardPage() {
             <Link href="/admin/plausibility" className="group">
               <Card className="h-full border-border/80 bg-card hover:border-primary/50 transition-all duration-150 hover:shadow-sm flex flex-col justify-between">
                 <CardHeader className="pb-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-400 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
                     <Activity className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
@@ -413,7 +413,7 @@ export default function AdminDashboardPage() {
                   <CardTitle className="text-base font-bold text-foreground">
                     System Activity
                   </CardTitle>
-                  <Badge variant="outline" className="text-[11px] font-semibold border-emerald-500/30 text-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300">
+                  <Badge variant="outline" className="text-[11px] font-semibold border-emerald-200 text-emerald-800 bg-emerald-50">
                     Live Feed
                   </Badge>
                 </div>

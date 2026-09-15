@@ -120,14 +120,14 @@ export function CertificateDetailContent() {
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 border-b border-border/80 pb-6">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200">
                 <Award className="h-6 w-6" />
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-foreground">
                   {cert.id}
                 </h1>
-                <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
+                <p className="text-xs font-semibold text-emerald-800 uppercase tracking-wider">
                   Official Certificate of Analysis & Purity
                 </p>
               </div>
@@ -199,16 +199,16 @@ export function CertificateDetailContent() {
             <p className="font-medium text-foreground text-xs">
               {cert.analystName}
             </p>
-            <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 block">
+            <span className="text-[11px] font-mono text-emerald-700 block">
               Status: {cert.validStatus}
             </span>
           </div>
         </div>
 
         {/* Verdict Summary Box */}
-        <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 space-y-1 text-xs text-emerald-950 dark:text-emerald-100">
-          <div className="flex items-center gap-2 font-bold text-emerald-800 dark:text-emerald-300">
-            <ShieldCheck className="h-4 w-4" />
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 space-y-1 text-xs text-emerald-950">
+          <div className="flex items-center gap-2 font-bold text-emerald-900">
+            <ShieldCheck className="h-4 w-4 text-emerald-700" />
             <span>Compliance Verdict</span>
           </div>
           <p className="leading-relaxed text-xs">
@@ -237,7 +237,7 @@ export function CertificateDetailContent() {
             <div className="rounded-xl border border-border/70 bg-muted/20 p-3.5 space-y-2">
               <div className="flex items-center justify-between border-b border-border/50 pb-2">
                 <span className="font-bold text-foreground flex items-center gap-1.5">
-                  <Wheat className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                  <Wheat className="h-3.5 w-3.5 text-amber-600" />
                   <span>1. Apiary & Hives</span>
                 </span>
                 <Badge variant="outline" className="text-[10px] py-0 font-mono">
@@ -261,7 +261,7 @@ export function CertificateDetailContent() {
             <div className="rounded-xl border border-border/70 bg-muted/20 p-3.5 space-y-2">
               <div className="flex items-center justify-between border-b border-border/50 pb-2">
                 <span className="font-bold text-foreground flex items-center gap-1.5">
-                  <Boxes className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                  <Boxes className="h-3.5 w-3.5 text-amber-600" />
                   <span>2. Raw Batch Harvest</span>
                 </span>
                 <Badge variant="outline" className="text-[10px] py-0 font-mono">
@@ -366,10 +366,10 @@ export function CertificateDetailContent() {
             </div>
 
             {/* 6. Certified Lab Testing */}
-            <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3.5 space-y-2">
-              <div className="flex items-center justify-between border-b border-emerald-500/30 pb-2">
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-3.5 space-y-2">
+              <div className="flex items-center justify-between border-b border-emerald-200 pb-2">
                 <span className="font-bold text-foreground flex items-center gap-1.5">
-                  <Award className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <Award className="h-3.5 w-3.5 text-emerald-600" />
                   <span>6. Certified Gate</span>
                 </span>
                 <Badge className="text-[10px] py-0 font-mono bg-emerald-600 text-white">
@@ -387,7 +387,7 @@ export function CertificateDetailContent() {
                 <p className="text-[11px] text-muted-foreground">
                   {cert.issuedBy}
                 </p>
-                <p className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
+                <p className="text-[11px] font-mono text-emerald-700 font-semibold">
                   Eligible for Bottle Creation
                 </p>
               </div>
@@ -447,7 +447,7 @@ export function CertificateDetailContent() {
                     <TableCell className="text-center">
                       <Badge
                         variant="outline"
-                        className="border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 text-xs font-semibold"
+                        className="border-emerald-200 text-emerald-800 bg-emerald-50 text-xs font-semibold"
                       >
                         Passed
                       </Badge>
@@ -461,9 +461,9 @@ export function CertificateDetailContent() {
       </Card>
 
       {/* PACKAGING READINESS BANNER */}
-      <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/5 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-3">
-          <QrCode className="h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <QrCode className="h-5 w-5 text-emerald-600 shrink-0" />
           <div>
             <h4 className="font-bold text-foreground text-sm">
               Packaging Readiness: Eligible for Bottle Creation

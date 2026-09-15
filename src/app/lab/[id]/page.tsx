@@ -254,7 +254,7 @@ export function LabTestDetailContent() {
                 {test.status}
               </StatusBadge>
               {test.priority === "Urgent" && (
-                <Badge variant="outline" className="border-rose-500/40 text-rose-600 dark:text-rose-400 bg-rose-500/10 text-xs font-mono">
+                <Badge variant="outline" className="border-rose-200 text-rose-800 bg-rose-50 text-xs font-mono">
                   Urgent Priority
                 </Badge>
               )}
@@ -366,8 +366,8 @@ export function LabTestDetailContent() {
 
       {/* CORRECTION REQUESTED BANNER */}
       {test.status === "Correction Required" && (
-        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 flex items-center gap-3 text-xs text-amber-800 dark:text-amber-200">
-          <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0" />
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 flex items-center gap-3 text-xs text-amber-900">
+          <Clock className="h-5 w-5 text-amber-700 shrink-0" />
           <div>
             <h4 className="font-bold text-sm">
               Quality Correction Requested — Re-evaluation Pending
@@ -492,8 +492,8 @@ export function LabTestDetailContent() {
                           variant="outline"
                           className={
                             param.status === "pass"
-                              ? "border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 text-xs font-semibold"
-                              : "border-rose-500/40 text-rose-700 dark:text-rose-300 bg-rose-500/10 text-xs font-semibold"
+                              ? "border-emerald-200 text-emerald-800 bg-emerald-50 text-xs font-semibold"
+                              : "border-rose-200 text-rose-800 bg-rose-50 text-xs font-semibold"
                           }
                         >
                           {param.status === "pass" ? "Passed" : "Failed"}
@@ -549,7 +549,7 @@ export function LabTestDetailContent() {
               <Button
                 onClick={() => setActiveAction("reject")}
                 variant="outline"
-                className="gap-2 border-rose-500/40 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 shadow-xs font-semibold text-xs"
+                className="gap-2 border-rose-300 text-rose-700 hover:bg-rose-50 shadow-xs font-semibold text-xs bg-white"
               >
                 <XCircle className="h-4 w-4" />
                 <span>Reject Sample</span>
@@ -558,7 +558,7 @@ export function LabTestDetailContent() {
               <Button
                 onClick={() => setActiveAction("correction")}
                 variant="outline"
-                className="gap-2 border-amber-500/40 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 shadow-xs font-semibold text-xs"
+                className="gap-2 border-amber-300 text-amber-900 hover:bg-amber-50 shadow-xs font-semibold text-xs bg-white"
               >
                 <Clock className="h-4 w-4" />
                 <span>Request Correction</span>
@@ -571,7 +571,7 @@ export function LabTestDetailContent() {
             <form onSubmit={handleApprove} className="rounded-xl border border-emerald-500/40 bg-emerald-500/5 p-4 space-y-4">
               <div className="flex items-center justify-between border-b border-emerald-500/30 pb-2">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                   <h4 className="font-bold text-sm text-foreground">
                     Approve Quality & Issue Digital Certificate
                   </h4>
@@ -738,7 +738,7 @@ export function LabTestDetailContent() {
             <form onSubmit={handleRequestCorrection} className="rounded-xl border border-amber-500/40 bg-amber-500/5 p-4 space-y-4">
               <div className="flex items-center justify-between border-b border-amber-500/30 pb-2">
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                  <Clock className="h-4 w-4 text-amber-700" />
                   <h4 className="font-bold text-sm text-foreground">
                     Request Quality Correction / Re-evaluation Event
                   </h4>
@@ -842,10 +842,10 @@ export function LabTestDetailContent() {
                   key={evt.id || idx}
                   className={`p-3.5 rounded-lg border text-xs space-y-1.5 ${
                     evt.decisionType === "Approved"
-                      ? "border-emerald-500/40 bg-emerald-500/5"
+                      ? "border-emerald-200 bg-emerald-50/50"
                       : evt.decisionType === "Rejected"
-                      ? "border-rose-500/40 bg-rose-500/5"
-                      : "border-amber-500/40 bg-amber-500/5"
+                      ? "border-rose-200 bg-rose-50/50"
+                      : "border-amber-200 bg-amber-50/50"
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
@@ -859,7 +859,7 @@ export function LabTestDetailContent() {
                         </Badge>
                       )}
                       {evt.certificateId && (
-                        <Badge variant="secondary" className="text-[10px] font-mono py-0 text-emerald-700 dark:text-emerald-300">
+                        <Badge variant="secondary" className="text-[10px] font-mono py-0 text-emerald-800 bg-emerald-50">
                           {evt.certificateId}
                         </Badge>
                       )}

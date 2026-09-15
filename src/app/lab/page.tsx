@@ -131,95 +131,87 @@ export function LaboratoryDashboardContent() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="shadow-xs bg-card/70 border-border/80">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                Awaiting Sample / Analysis
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
-                {awaitingCount}
-              </h3>
-              <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-0.5">
-                Queued for lab intake
-              </p>
+        <Card className="border-border bg-card shadow-xs">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Awaiting Sample / Analysis</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
+                <Clock className="h-4 w-4" />
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <Clock className="h-5 w-5" />
-            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
+              {awaitingCount}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
+            Queued for lab intake
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                Under Analysis
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
-                {inAnalysisCount}
-              </h3>
-              <p className="text-[10px] text-blue-600 dark:text-blue-400 mt-0.5">
-                Chromatography & screening running
-              </p>
+        <Card className="border-border bg-card shadow-xs">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Under Analysis</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
+                <FlaskConical className="h-4 w-4" />
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-              <FlaskConical className="h-5 w-5" />
-            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
+              {inAnalysisCount}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
+            Chromatography & screening running
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                Quality Approved
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
-                {approvedCount}
-              </h3>
-              <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">
-                Certified & ready for packaging
-              </p>
+        <Card className="border-border bg-card shadow-xs">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Quality Approved</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <Award className="h-4 w-4" />
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              <Award className="h-5 w-5" />
-            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
+              {approvedCount}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
+            Certified & ready for packaging
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                Rejected / Correction
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
-                {rejectedCount}
-              </h3>
-              <p className="text-[10px] text-rose-600 dark:text-rose-400 mt-0.5">
-                Investigation / Review required
-              </p>
+        <Card className="border-border bg-card shadow-xs">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Rejected / Correction</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-700 border border-rose-200">
+                <AlertTriangle className="h-4 w-4" />
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
-              <AlertTriangle className="h-5 w-5" />
-            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
+              {rejectedCount}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
+            Investigation / Review required
           </CardContent>
         </Card>
       </div>
 
       {/* Eligible Batches for Lab Submission Section */}
       {eligibleBatches.length > 0 && (
-        <Card className="border-border bg-gradient-to-r from-amber-500/5 via-card to-card shadow-xs">
+        <Card className="border-border bg-card shadow-xs">
           <CardHeader className="pb-3 border-b border-border/60">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div>
                 <div className="flex items-center gap-2">
-                  <Layers className="h-4 w-4 text-amber-500" />
+                  <Layers className="h-4 w-4 text-amber-600" />
                   <CardTitle className="text-base font-bold text-foreground">
                     Processed Batches Eligible for Laboratory Submission
                   </CardTitle>
-                  <Badge variant="outline" className="border-amber-500/40 text-amber-700 dark:text-amber-300 font-mono text-[10px]">
+                  <Badge variant="outline" className="border-amber-300 text-amber-900 bg-amber-50 font-mono text-[10px]">
                     {eligibleBatches.length} Eligible
                   </Badge>
                 </div>
@@ -234,7 +226,7 @@ export function LaboratoryDashboardContent() {
               {eligibleBatches.map((batch) => (
                 <div
                   key={batch.id}
-                  className="rounded-xl border border-amber-500/30 bg-card p-4 space-y-3 hover:border-amber-500/60 transition-colors shadow-xs"
+                  className="rounded-xl border border-amber-200 bg-amber-50/30 p-4 space-y-3 hover:border-amber-400 transition-colors shadow-xs"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -242,7 +234,7 @@ export function LaboratoryDashboardContent() {
                         <span className="font-mono font-bold text-foreground text-sm">
                           {batch.batchNumber}
                         </span>
-                        <Badge variant="outline" className="text-[10px] py-0 border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10">
+                        <Badge variant="outline" className="text-[10px] py-0 border-emerald-200 text-emerald-800 bg-emerald-50">
                           Eligible
                         </Badge>
                       </div>
@@ -262,7 +254,7 @@ export function LaboratoryDashboardContent() {
                     </div>
                     <div>
                       <span className="text-[9px] uppercase tracking-wider block font-semibold">Current Status</span>
-                      <span className="font-medium text-amber-700 dark:text-amber-300">Completed</span>
+                      <span className="font-medium text-amber-800">Completed</span>
                     </div>
                   </div>
 
@@ -421,7 +413,7 @@ export function LaboratoryDashboardContent() {
                             {test.testPanel}
                           </Badge>
                           {test.priority === "Urgent" && (
-                            <Badge variant="outline" className="text-[10px] py-0 border-rose-500/40 text-rose-600 dark:text-rose-400 bg-rose-500/10">
+                            <Badge variant="outline" className="text-[10px] py-0 border-rose-200 text-rose-800 bg-rose-50">
                               Urgent
                             </Badge>
                           )}
@@ -440,7 +432,7 @@ export function LaboratoryDashboardContent() {
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1.5">
                           {test.certificateId && (
-                            <Button asChild size="xs" variant="outline" className="border-emerald-500/40 text-emerald-700 dark:text-emerald-300">
+                            <Button asChild size="xs" variant="outline" className="border-emerald-200 text-emerald-800 bg-emerald-50 hover:bg-emerald-100">
                               <Link href={`/certifications/${test.certificateId}`}>
                                 <Award className="h-3 w-3" />
                                 <span>Cert</span>

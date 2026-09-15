@@ -25,7 +25,6 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -130,14 +129,16 @@ function CustodyTransfersContent() {
       </div>
 
       {/* Metric summary cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <Card className="border-border bg-card shadow-xs">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="p-4 pb-1">
-            <CardDescription className="text-xs font-medium text-muted-foreground flex items-center justify-between">
+            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
               <span>Total Transfers</span>
-              <ArrowLeftRight className="h-3.5 w-3.5 text-muted-foreground" />
-            </CardDescription>
-            <CardTitle className="text-2xl font-mono font-bold text-foreground">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                <ArrowLeftRight className="h-3.5 w-3.5" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-mono font-bold text-foreground mt-1">
               {stats.total}
             </CardTitle>
           </CardHeader>
@@ -146,13 +147,15 @@ function CustodyTransfersContent() {
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card shadow-xs">
+        <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="p-4 pb-1">
-            <CardDescription className="text-xs font-medium text-amber-600 dark:text-amber-400 flex items-center justify-between">
+            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
               <span>Pending Acceptance</span>
-              <Clock className="h-3.5 w-3.5 text-amber-500" />
-            </CardDescription>
-            <CardTitle className="text-2xl font-mono font-bold text-amber-600 dark:text-amber-400">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-amber-50 text-amber-700 border border-amber-200">
+                <Clock className="h-3.5 w-3.5" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-mono font-bold text-amber-700 mt-1">
               {stats.pending}
             </CardTitle>
           </CardHeader>
@@ -161,13 +164,15 @@ function CustodyTransfersContent() {
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card shadow-xs">
+        <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="p-4 pb-1">
-            <CardDescription className="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
+            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
               <span>Accepted Transfers</span>
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-            </CardDescription>
-            <CardTitle className="text-2xl font-mono font-bold text-emerald-600 dark:text-emerald-400">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-mono font-bold text-emerald-700 mt-1">
               {stats.accepted}
             </CardTitle>
           </CardHeader>
@@ -176,14 +181,16 @@ function CustodyTransfersContent() {
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card shadow-xs">
+        <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="p-4 pb-1">
-            <CardDescription className="text-xs font-medium text-muted-foreground flex items-center justify-between">
-              <span>Volume In Transit / Handed Over</span>
-              <Truck className="h-3.5 w-3.5 text-primary" />
-            </CardDescription>
-            <CardTitle className="text-2xl font-mono font-bold text-foreground">
-              {stats.totalWeight.toFixed(1)} <span className="text-xs font-normal text-muted-foreground">kg</span>
+            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+              <span>Volume In Transit</span>
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-50 text-sky-700 border border-sky-200">
+                <Truck className="h-3.5 w-3.5" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-mono font-bold text-foreground mt-1">
+              {stats.totalWeight.toFixed(1)} <span className="text-xs font-normal text-muted-foreground font-sans">kg</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
@@ -193,41 +200,38 @@ function CustodyTransfersContent() {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card p-3 rounded-lg border border-border">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-card p-3 rounded-lg border border-border shadow-2xs">
         <div className="relative w-full sm:w-80">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search transfer ID, batch, org..."
-            className="pl-8 h-9 text-xs"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-9"
           />
         </div>
-
-        <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto">
-          <SlidersHorizontal className="h-3.5 w-3.5 text-muted-foreground hidden sm:inline" />
-          <div className="flex items-center gap-1">
-            {[
-              { id: "all", label: "All" },
-              { id: "Pending Acceptance", label: "Pending" },
-              { id: "Accepted", label: "Accepted" },
-              { id: "Rejected", label: "Rejected" },
-              { id: "Draft", label: "Draft" },
-            ].map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setStatusFilter(f.id)}
-                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
-                  statusFilter === f.id
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
+        <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
+          {[
+            { id: "all", label: "All Transfers" },
+            { id: "Pending", label: "Pending" },
+            { id: "In Transit", label: "In Transit" },
+            { id: "Completed", label: "Completed" },
+            { id: "Rejected", label: "Rejected" },
+            { id: "Draft", label: "Draft" },
+          ].map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => setStatusFilter(f.id)}
+              className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
+                statusFilter === f.id
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
       </div>
 

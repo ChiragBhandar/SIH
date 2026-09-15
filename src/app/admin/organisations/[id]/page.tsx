@@ -105,7 +105,7 @@ export default function OrganisationDetailPage() {
               <StatusBadge status={org.status} variant="org" size="md" />
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-              Registered Identifier: <span className="font-mono text-amber-800 dark:text-amber-300 font-semibold">{org.id}</span> • Reg No: <span className="font-mono text-foreground font-medium">{org.registrationNumber}</span>
+              Registered Identifier: <span className="font-mono text-amber-800 font-semibold">{org.id}</span> • Reg No: <span className="font-mono text-foreground font-medium">{org.registrationNumber}</span>
             </p>
           </div>
 
@@ -174,7 +174,7 @@ export default function OrganisationDetailPage() {
                 </div>
                 <div className="flex justify-between py-1 border-b border-border/50">
                   <span className="text-muted-foreground">Compliance Rating:</span>
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400">{org.complianceRating}% Verified</span>
+                  <span className="font-bold text-emerald-700">{org.complianceRating}% Verified</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-border/50">
                   <span className="text-muted-foreground">Last External Audit:</span>
@@ -220,7 +220,7 @@ export default function OrganisationDetailPage() {
             </CardHeader>
             <CardContent className="p-4 space-y-3.5 text-xs">
               <div className="flex items-start gap-2.5 text-foreground">
-                <MapPin className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <div>
                   <span className="text-muted-foreground text-[11px] block">Headquarters:</span>
                   <span className="font-medium text-foreground">{org.headquarters}</span>
@@ -228,7 +228,7 @@ export default function OrganisationDetailPage() {
               </div>
 
               <div className="flex items-center gap-2.5 text-foreground">
-                <Mail className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                <Mail className="w-4 h-4 text-amber-600 shrink-0" />
                 <div>
                   <span className="text-muted-foreground text-[11px] block">Official Email:</span>
                   <span className="font-mono text-foreground">{org.contactEmail}</span>
@@ -236,7 +236,7 @@ export default function OrganisationDetailPage() {
               </div>
 
               <div className="flex items-center gap-2.5 text-foreground">
-                <Phone className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                <Phone className="w-4 h-4 text-amber-600 shrink-0" />
                 <div>
                   <span className="text-muted-foreground text-[11px] block">Registry Phone:</span>
                   <span className="font-mono text-foreground">{org.contactPhone}</span>
@@ -283,8 +283,8 @@ export default function OrganisationDetailPage() {
                     <span
                       className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border ${
                         fac.status === "Operational"
-                          ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
-                          : "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : "bg-amber-50 text-amber-800 border-amber-200"
                       }`}
                     >
                       {fac.status}
@@ -361,7 +361,7 @@ export default function OrganisationDetailPage() {
         <Card className="border-border/80 bg-card shadow-xs">
           <CardHeader className="pb-3 border-b border-border/60">
             <div className="flex items-center gap-2">
-              <History className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+              <History className="w-4 h-4 text-amber-600" />
               <CardTitle className="text-sm sm:text-base font-bold text-foreground">
                 Immutable Audit History for {org.name}
               </CardTitle>

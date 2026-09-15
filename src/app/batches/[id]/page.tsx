@@ -186,16 +186,13 @@ function BatchDetailContent() {
               <StatusBadge status={getBatchStatusBadgeVariant(batch.status)} size="sm">
                 {batch.status}
               </StatusBadge>
-              <Badge
-                variant="outline"
-                className={`font-mono text-xs ${
-                  isProcessedBatch
-                    ? "border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10"
-                    : "border-amber-500/40 text-amber-700 dark:text-amber-300 bg-amber-500/10"
-                }`}
+              <StatusBadge
+                status={isProcessedBatch ? "purple" : "honey"}
+                size="sm"
+                withDot={false}
               >
                 {isProcessedBatch ? "Processed Honey Batch" : "Raw Bulk Honey Batch"}
-              </Badge>
+              </StatusBadge>
             </div>
             <p className="text-xs text-muted-foreground">
               {isProcessedBatch
@@ -206,7 +203,7 @@ function BatchDetailContent() {
 
           <div className="flex flex-wrap items-center gap-2">
             {canTransfer && (
-              <Button asChild size="sm" className="gap-1.5 shadow-xs font-semibold">
+              <Button asChild size="default" className="gap-1.5 shadow-xs font-semibold">
                 <Link href={`/custody/new?batchId=${batch.batchNumber}`}>
                   <ArrowLeftRight className="h-4 w-4" />
                   <span>Initiate Custody Transfer</span>
@@ -215,7 +212,7 @@ function BatchDetailContent() {
             )}
 
             {canProcess && (
-              <Button asChild size="sm" className="gap-1.5 shadow-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white">
+              <Button asChild size="default" className="gap-1.5 shadow-xs font-semibold">
                 <Link href={`/processing/new?batchId=${batch.batchNumber}`}>
                   <Layers className="h-4 w-4" />
                   <span>Start Processing Run</span>
@@ -224,7 +221,7 @@ function BatchDetailContent() {
             )}
 
             {canSubmitLab && (
-              <Button asChild size="sm" className="gap-1.5 shadow-xs font-semibold bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Button asChild size="default" className="gap-1.5 shadow-xs font-semibold">
                 <Link href={`/lab/new?batchId=${batch.batchNumber}`}>
                   <FlaskConical className="h-4 w-4" />
                   <span>Submit Lab Sample</span>
@@ -233,16 +230,16 @@ function BatchDetailContent() {
             )}
 
             {latestLabTest && (
-              <Button asChild size="sm" variant="outline" className="gap-1.5 border-primary/40 text-primary">
+              <Button asChild size="sm" variant="outline" className="gap-1.5 text-foreground">
                 <Link href={`/lab/${latestLabTest.id}`}>
-                  <FlaskConical className="h-4 w-4" />
+                  <FlaskConical className="h-4 w-4 text-primary" />
                   <span>Lab Test: {latestLabTest.id}</span>
                 </Link>
               </Button>
             )}
 
             {cert && (
-              <Button asChild size="sm" className="gap-1.5 shadow-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white">
+              <Button asChild size="sm" variant="success" className="gap-1.5 shadow-xs font-semibold">
                 <Link href={`/certifications/${cert.id}`}>
                   <Award className="h-4 w-4" />
                   <span>Certificate: {cert.id}</span>
@@ -251,7 +248,7 @@ function BatchDetailContent() {
             )}
 
             {latestTransfer && latestTransfer.status === "Pending Acceptance" && (
-              <Button asChild size="sm" variant="outline" className="gap-1.5 border-amber-500/40 text-amber-700 dark:text-amber-300">
+              <Button asChild size="sm" variant="outline" className="gap-1.5 border-amber-300 text-amber-900 bg-amber-50">
                 <Link href={`/custody/${latestTransfer.id}`}>
                   <ArrowLeftRight className="h-4 w-4" />
                   <span>Transfer: {latestTransfer.id}</span>
@@ -259,11 +256,18 @@ function BatchDetailContent() {
               </Button>
             )}
 
-            <Badge
-              variant="outline"
-              className="border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 text-xs py-1 px-3 gap-1.5 font-medium"
+            <StatusBadge
+              status={
+                isCertified
+                  ? "success"
+                  : isProcessedBatch
+                  ? "purple"
+                  : batch.status === "Received" || batch.status === "Consumed partially for processing"
+                  ? "info"
+                  : "warning"
+              }
+              size="sm"
             >
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>
                 {isCertified
                   ? "Quality Certified & Approved"
@@ -275,7 +279,7 @@ function BatchDetailContent() {
                   ? "Custody Transfer Active"
                   : "Traceability Chain Active"}
               </span>
-            </Badge>
+            </StatusBadge>
           </div>
         </div>
 
@@ -332,7 +336,7 @@ function BatchDetailContent() {
             <span className="text-[10px] uppercase text-muted-foreground block font-semibold">
               {isProcessedBatch ? "Packaged into Bottles" : "Allocated to Processing"}
             </span>
-            <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
+            <span className="font-mono font-bold text-amber-700">
               {usedWeight.toFixed(1)} kg
             </span>
           </div>
@@ -340,7 +344,7 @@ function BatchDetailContent() {
             <span className="text-[10px] uppercase text-muted-foreground block font-semibold">
               {isProcessedBatch ? "Available Remaining for Bottling" : "Available Remaining Volume"}
             </span>
-            <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            <span className="font-mono font-bold text-emerald-700">
               {remainingWeight.toFixed(1)} kg
             </span>
           </div>
@@ -383,29 +387,23 @@ function BatchDetailContent() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div className="flex items-center gap-2">
                 {isCertified ? (
-                  <Award className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  <Award className="h-4 w-4 text-emerald-600" />
                 ) : (
                   <FlaskConical className="h-4 w-4 text-primary" />
                 )}
                 <CardTitle className="text-sm font-bold text-foreground">
                   Laboratory Testing & Quality Approval Gate
                 </CardTitle>
-                <Badge
-                  variant="outline"
-                  className={
-                    isCertified
-                      ? "border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 font-mono text-[10px]"
-                      : batch.status === "Rejected"
-                      ? "border-rose-500/40 text-rose-700 dark:text-rose-300 bg-rose-500/10 font-mono text-[10px]"
-                      : "border-primary/40 text-primary bg-primary/5 font-mono text-[10px]"
-                  }
+                <StatusBadge
+                  status={isCertified ? "success" : batch.status === "Rejected" ? "error" : "honey"}
+                  size="sm"
                 >
                   {isCertified ? "Quality Approved" : batch.status}
-                </Badge>
+                </StatusBadge>
               </div>
 
               {canSubmitLab && (
-                <Button asChild size="sm" className="h-7 text-xs gap-1.5 bg-primary hover:bg-primary/90">
+                <Button asChild size="sm" className="h-7 text-xs gap-1.5 bg-primary hover:bg-amber-600">
                   <Link href={`/lab/new?batchId=${batch.batchNumber}`}>
                     <FlaskConical className="h-3.5 w-3.5" />
                     <span>Submit Lab Sample</span>
@@ -421,8 +419,8 @@ function BatchDetailContent() {
           <CardContent className="pt-4 space-y-3">
             {/* If Approved & Certified */}
             {isCertified && cert && (
-              <div className="rounded-xl border border-emerald-500/30 bg-card p-4 space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-500/20 pb-2.5">
+              <div className="rounded-xl border border-emerald-200 bg-card p-4 space-y-3 shadow-2xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-100 pb-2.5">
                   <div>
                     <span className="font-mono font-bold text-sm text-foreground flex items-center gap-2">
                       <Award className="h-4 w-4 text-emerald-600" />
@@ -433,10 +431,10 @@ function BatchDetailContent() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge className="bg-emerald-600 text-white text-[11px] font-bold">
+                    <StatusBadge status="success" size="sm">
                       QUALITY APPROVED
-                    </Badge>
-                    <Button asChild size="sm" variant="outline" className="h-7 text-xs border-emerald-500/40 text-emerald-700 dark:text-emerald-300">
+                    </StatusBadge>
+                    <Button asChild size="sm" variant="outline" className="h-7 text-xs border-emerald-200 text-emerald-800 hover:bg-emerald-50">
                       <Link href={`/certifications/${cert.id}`}>
                         <span>View Certificate</span>
                         <ExternalLink className="h-3 w-3 ml-1" />
@@ -446,23 +444,23 @@ function BatchDetailContent() {
                 </div>
 
                 {/* Packaging Readiness Indicator */}
-                <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/30 p-3 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-200">
-                    <QrCode className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2 text-emerald-800">
+                    <QrCode className="h-4 w-4 shrink-0 text-emerald-600" />
                     <span>
                       <strong>Packaging Readiness:</strong> Eligible for bottle creation and retail QR generation.
                     </span>
                   </div>
-                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-700 dark:text-emerald-300 bg-emerald-500/20 font-mono text-[10px]">
+                  <StatusBadge status="success" size="sm">
                     Step 8 Gateway Ready
-                  </Badge>
+                  </StatusBadge>
                 </div>
               </div>
             )}
 
             {/* If Under Analysis / Awaiting Analysis */}
             {!isCertified && latestLabTest && (
-              <div className="rounded-xl border border-border/80 bg-muted/20 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="rounded-xl border border-border/80 bg-muted/20 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-foreground text-sm">
@@ -493,14 +491,14 @@ function BatchDetailContent() {
 
             {/* If Eligible but No Test Yet */}
             {!isCertified && !latestLabTest && (
-              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                <div className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
-                  <Sparkles className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+              <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
+                <div className="flex items-center gap-2 text-amber-900">
+                  <Sparkles className="h-4 w-4 shrink-0 text-amber-600" />
                   <span>
                     <strong>Eligible for Laboratory Testing:</strong> This completed processed batch is ready for composite sample extraction and purity panel certification.
                   </span>
                 </div>
-                <Button asChild size="sm" className="h-7 text-xs bg-amber-600 hover:bg-amber-700 text-white font-semibold shrink-0">
+                <Button asChild size="sm" className="h-7 text-xs font-semibold shrink-0">
                   <Link href={`/lab/new?batchId=${batch.batchNumber}`}>
                     <FlaskConical className="h-3.5 w-3.5 mr-1" />
                     <span>Submit Sample</span>
@@ -516,7 +514,7 @@ function BatchDetailContent() {
       {/* PACKAGING & BOTTLING SECTION (FOR PROCESSED BATCHES) */}
       {/* ========================================================================= */}
       {isProcessedBatch && (
-        <Card className="border-border bg-card shadow-xs">
+        <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="pb-3 border-b border-border/60">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -525,16 +523,12 @@ function BatchDetailContent() {
                   Packaging & Bottle Creation ({linkedBottles.length} Bottles)
                 </CardTitle>
               </div>
-              <Badge
-                variant="outline"
-                className={`font-mono text-[10px] ${
-                  isEligibleForBottling
-                    ? "text-emerald-600 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
-                    : "text-muted-foreground"
-                }`}
+              <StatusBadge
+                status={isEligibleForBottling ? "success" : isCertified ? "info" : "neutral"}
+                size="sm"
               >
                 {isEligibleForBottling ? "Eligible for Bottle Creation" : isCertified ? "Packaged" : "Requires Quality Approval"}
-              </Badge>
+              </StatusBadge>
             </div>
             <CardDescription className="text-xs">
               Quality-approved bulk processed honey is packaged into individual serialized retail bottles with consumer verification QR codes.
@@ -556,7 +550,7 @@ function BatchDetailContent() {
                 <span className="text-[10px] uppercase text-muted-foreground block font-semibold">
                   Packaged into Bottles
                 </span>
-                <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
+                <span className="font-mono font-bold text-amber-700">
                   {usedWeight.toFixed(1)} kg ({linkedBottles.length} units)
                 </span>
               </div>
@@ -564,7 +558,7 @@ function BatchDetailContent() {
                 <span className="text-[10px] uppercase text-muted-foreground block font-semibold">
                   Remaining Bulk
                 </span>
-                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                <span className="font-mono font-bold text-emerald-700">
                   {remainingWeight.toFixed(1)} kg
                 </span>
               </div>
@@ -721,7 +715,7 @@ function BatchDetailContent() {
                   Downstream Processing Runs ({downstreamJobs.length})
                 </CardTitle>
               </div>
-              <Badge variant="outline" className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+              <Badge variant="outline" className="font-mono text-[10px] text-emerald-700 border-emerald-200 bg-emerald-50">
                 Material Lineage Active
               </Badge>
             </div>
@@ -853,28 +847,28 @@ function BatchDetailContent() {
                         >
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-2">
-                              <span className="text-muted-foreground">Order:</span>
+                              <span className="text-muted-foreground font-medium">Order:</span>
                               <Link
                                 href={`/marketplace/orders/${ord.id}`}
                                 className="font-mono font-bold text-foreground hover:underline"
                               >
                                 {ord.id}
                               </Link>
-                              <Badge
-                                variant="outline"
-                                className={`text-[9px] py-0 ${
+                              <StatusBadge
+                                status={
                                   ord.status === "Accepted"
-                                    ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/30"
+                                    ? "success"
                                     : ord.status === "Pending"
-                                    ? "bg-amber-500/10 text-amber-600 border-amber-500/30"
-                                    : "bg-muted text-muted-foreground"
-                                }`}
+                                    ? "warning"
+                                    : "neutral"
+                                }
+                                size="sm"
                               >
-                                Status: {ord.status}
-                              </Badge>
+                                {ord.status}
+                              </StatusBadge>
                             </div>
                             <p className="text-muted-foreground text-[11px]">
-                              Buyer: <strong>{ord.buyerOrgName}</strong> • Quantity: <strong className="font-mono text-emerald-600 dark:text-emerald-400">{ord.quantity} {ord.unit}</strong> • Ref: <code>{ord.buyerReference}</code>
+                              Buyer: <strong>{ord.buyerOrgName}</strong> • Quantity: <strong className="font-mono text-emerald-700">{ord.quantity} {ord.unit}</strong> • Ref: <code>{ord.buyerReference}</code>
                             </p>
                           </div>
 
@@ -901,7 +895,7 @@ function BatchDetailContent() {
       {/* ========================================================================= */}
       {/* UNIFIED TRACEABILITY TIMELINE */}
       {/* ========================================================================= */}
-      <Card className="border-border bg-card shadow-xs">
+      <Card className="border-border bg-card shadow-2xs">
         <CardHeader className="pb-3 border-b border-border/60">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-primary" />
@@ -930,7 +924,7 @@ function BatchDetailContent() {
                   <div
                     className={`absolute -left-6 sm:-left-8 top-1 flex h-6 w-6 items-center justify-center rounded-full border-2 ${
                       isCompleted
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400"
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-600"
                         : isCurrent
                         ? "border-primary bg-primary/10 text-primary animate-pulse"
                         : "border-muted-foreground/30 bg-muted text-muted-foreground/50"

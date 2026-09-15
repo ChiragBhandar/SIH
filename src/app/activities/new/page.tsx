@@ -146,7 +146,7 @@ function CaptureActivityContent() {
         <div className="flex items-center gap-2">
           <Badge
             variant="outline"
-            className="text-[10px] py-0 border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 font-mono"
+            className="text-[10px] py-0 border-emerald-200 text-emerald-800 bg-emerald-50 font-mono"
           >
             ● Offline capture ready
           </Badge>
@@ -161,8 +161,8 @@ function CaptureActivityContent() {
 
       {/* Success Notification */}
       {isSuccess && (
-        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 text-emerald-800 dark:text-emerald-200 animate-in fade-in-50 flex items-center gap-3">
-          <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-900 animate-in fade-in-50 flex items-center gap-3">
+          <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
           <div className="text-xs">
             <span className="font-bold">Activity logged successfully.</span> Added to the hive timeline and synchronized with Honey Chain local state.
           </div>
@@ -190,7 +190,7 @@ function CaptureActivityContent() {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4 pt-4 text-xs">
             {errors.form && (
-              <div className="rounded-md bg-rose-500/10 border border-rose-500/30 p-2.5 text-xs text-rose-600 dark:text-rose-400">
+              <div className="rounded-md bg-rose-50 border border-rose-200 p-2.5 text-xs text-rose-700">
                 {errors.form}
               </div>
             )}

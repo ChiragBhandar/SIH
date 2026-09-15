@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Hexagon, Eye, EyeOff, ArrowRight, ShieldCheck, Lock, AlertCircle } from "lucide-react";
+import { Hexagon, Eye, EyeOff, ArrowRight, ShieldCheck, Lock, AlertCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -51,8 +51,8 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col bg-muted/20">
       {/* Top minimal navigation */}
       <header className="flex h-16 w-full items-center justify-between px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
+        <Link href="/" className="flex items-center gap-2.5 group transition-opacity hover:opacity-90">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs group-hover:scale-105 transition-transform">
             <Hexagon className="h-4 w-4 fill-current stroke-[2.5]" />
           </div>
           <div className="flex flex-col">
@@ -61,13 +61,24 @@ export default function LoginPage() {
               Traceability Platform
             </span>
           </div>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[11px] text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+          <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 font-mono text-[11px] text-emerald-700 border border-emerald-200">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Network Active
           </span>
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="h-8 text-xs gap-1.5 border-border/80 bg-background/90 text-foreground hover:bg-muted cursor-pointer rounded-lg shadow-2xs"
+          >
+            <Link href="/">
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Back to Home</span>
+            </Link>
+          </Button>
         </div>
       </header>
 
@@ -99,7 +110,7 @@ export default function LoginPage() {
 
             {/* Forgot password notification */}
             {forgotPasswordNotice && (
-              <div className="mb-4 flex items-start gap-2.5 rounded-lg border border-amber-500/20 bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-300">
+              <div className="mb-4 flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
                 <ShieldCheck className="h-4 w-4 shrink-0 mt-0.5" />
                 <span>Password recovery link has been simulated. In production, an email with a reset token is dispatched.</span>
               </div>

@@ -137,7 +137,7 @@ function ListingDetailContent() {
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block">
               Available Supply
             </span>
-            <div className="text-xl font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            <div className="text-xl font-mono font-bold text-emerald-700">
               {listing.availableQuantity.toFixed(1)} {listing.unit}
             </div>
             <p className="text-[10px] text-muted-foreground">

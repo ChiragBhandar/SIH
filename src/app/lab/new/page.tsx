@@ -219,7 +219,7 @@ export function SubmitSampleContent() {
                       {selectedBatch.honeyType}
                     </p>
                   </div>
-                  <Badge variant="outline" className="border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 font-mono text-xs">
+                  <Badge variant="outline" className="border-emerald-200 text-emerald-800 bg-emerald-50 font-mono text-xs">
                     Output: {selectedBatch.weightKg.toFixed(1)} kg
                   </Badge>
                 </div>
@@ -446,8 +446,8 @@ export function SubmitSampleContent() {
                 </div>
 
                 {/* Step 2 */}
-                <div className="flex-1 space-y-1 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30">
-                  <span className="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-300 block">
+                <div className="flex-1 space-y-1 p-2 rounded-lg bg-amber-50 border border-amber-200">
+                  <span className="text-[10px] uppercase font-bold text-amber-800 block">
                     LAB SAMPLE
                   </span>
                   <p className="font-mono font-bold text-foreground text-xs">
@@ -494,7 +494,7 @@ export function SubmitSampleContent() {
               </div>
 
               <div className="mt-4 pt-3 border-t border-border/60 flex items-center gap-2 text-xs text-muted-foreground">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>
                   <strong>Traceability Link Active:</strong> Laboratory test will be immutably linked to processed batch{" "}
                   <code className="font-mono font-bold text-foreground">{selectedBatch?.batchNumber || "HC-PB-2026-0003"}</code>.

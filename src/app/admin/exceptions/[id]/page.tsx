@@ -204,7 +204,7 @@ export default function ExceptionDetailPage() {
           <Card className="md:col-span-2 border-border/80 bg-card shadow-xs">
             <CardContent className="p-5 space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <FileText className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                <FileText className="w-4 h-4 text-rose-600" />
                 Incident Description & Anomalous Observation
               </h3>
               <p className="text-xs sm:text-sm text-foreground leading-relaxed bg-muted/40 p-3.5 rounded-lg border border-border/60">
@@ -213,18 +213,18 @@ export default function ExceptionDetailPage() {
 
               {exc.investigationNotes && (
                 <div className="space-y-1.5">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 block">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-amber-700 block">
                     Ongoing Investigation Notes:
                   </span>
-                  <p className="text-xs text-foreground leading-relaxed bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-200/60 dark:border-amber-800/40">
+                  <p className="text-xs text-foreground leading-relaxed bg-amber-50/50 p-3 rounded-lg border border-amber-200/60">
                     {exc.investigationNotes}
                   </p>
                 </div>
               )}
 
               {exc.resolution && (
-                <div className="bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/60 rounded-lg p-3.5 space-y-2">
-                  <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-semibold text-xs">
+                <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-3.5 space-y-2">
+                  <div className="flex items-center gap-2 text-emerald-700 font-semibold text-xs">
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Case Formally Resolved by {exc.resolution.resolvedBy}</span>
                   </div>
@@ -264,7 +264,7 @@ export default function ExceptionDetailPage() {
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
                     Identifier:
                   </span>
-                  <span className="font-mono text-amber-700 dark:text-amber-400 text-xs font-bold">
+                  <span className="font-mono text-amber-700 text-xs font-bold">
                     {exc.relatedEntity.id}
                   </span>
                 </div>
@@ -310,7 +310,7 @@ export default function ExceptionDetailPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-in fade-in duration-150">
             <div className="relative w-full max-w-lg bg-card border border-border rounded-xl p-6 shadow-xl text-foreground">
               <div className="flex items-start gap-3.5 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <div>
@@ -357,7 +357,7 @@ export default function ExceptionDetailPage() {
                 </div>
 
                 {resolveError && (
-                  <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">{resolveError}</p>
+                  <p className="text-xs text-rose-600 font-medium">{resolveError}</p>
                 )}
 
                 <div className="flex items-center justify-end gap-2.5 pt-2">

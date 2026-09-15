@@ -247,15 +247,15 @@ function ReceivingDetailContent() {
         <div
           className={`rounded-lg border p-4 text-xs space-y-1 ${
             feedbackMessage.type === "success"
-              ? "border-emerald-500/40 bg-emerald-50/60 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-300"
-              : "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-300"
+              ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+              : "border-rose-200 bg-rose-50 text-rose-900"
           }`}
         >
           <div className="flex items-center gap-2 font-bold text-sm">
             {feedbackMessage.type === "success" ? (
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <CheckCircle2 className="h-4 w-4 text-emerald-700 shrink-0" />
             ) : (
-              <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0" />
+              <AlertTriangle className="h-4 w-4 text-rose-700 shrink-0" />
             )}
             <span>{feedbackMessage.title}</span>
           </div>
@@ -507,7 +507,7 @@ function ReceivingDetailContent() {
                   variant="outline"
                   size="sm"
                   onClick={() => setIsRejectDialogOpen(true)}
-                  className="text-xs text-rose-600 dark:text-rose-400 border-rose-500/40 hover:bg-rose-500/10 w-full sm:w-auto"
+                  className="text-xs text-rose-700 border-rose-300 hover:bg-rose-50 bg-white w-full sm:w-auto"
                 >
                   <XCircle className="h-4 w-4 mr-1.5" />
                   <span>Reject Receipt</span>
@@ -533,7 +533,7 @@ function ReceivingDetailContent() {
           <CardHeader className="pb-3 border-b border-border/60">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <FileCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <FileCheck className="h-5 w-5 text-emerald-600" />
                 <div>
                   <CardTitle className="text-base font-bold text-foreground">
                     Receiving Audit Record: {existingRecord?.id || "RCV-LOGGED"}
@@ -555,9 +555,9 @@ function ReceivingDetailContent() {
 
           <CardContent className="pt-4 space-y-4">
             {isRejected ? (
-              <div className="rounded-lg border border-rose-500/40 bg-rose-500/10 p-4 text-xs space-y-2 text-rose-700 dark:text-rose-300">
+              <div className="rounded-lg border border-rose-200 bg-rose-50 p-4 text-xs space-y-2 text-rose-900">
                 <div className="flex items-center gap-1.5 font-bold text-sm">
-                  <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400" />
+                  <AlertTriangle className="h-4 w-4 text-rose-700" />
                   <span>Receipt Rejected — Investigation Required</span>
                 </div>
                 <p className="text-xs">
@@ -568,7 +568,7 @@ function ReceivingDetailContent() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-xs">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 rounded-lg bg-emerald-50/60 border border-emerald-200 text-xs">
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
                     Received Quantity

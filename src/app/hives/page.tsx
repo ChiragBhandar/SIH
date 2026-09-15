@@ -184,16 +184,16 @@ function HivesAndApiariesContent() {
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Top Banner / Notification */}
       {showSuccessBanner && (
-        <div className="flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 text-emerald-700 dark:text-emerald-300 animate-in fade-in-50">
+        <div className="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50/90 p-3.5 text-emerald-800 animate-in fade-in-50">
           <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <CheckCircle2 className="h-4.5 w-4.5 shrink-0 text-emerald-600" />
             <div className="text-xs">
               <span className="font-semibold">Apiary registration saved.</span> You can now register hives, log field inspections, and link future honey batches.
             </div>
           </div>
           <Button
             variant="ghost"
-            size="sm"
+            size="xs"
             onClick={() => setDismissedBanner(true)}
             className="h-7 text-xs text-muted-foreground hover:text-foreground"
           >
@@ -203,16 +203,16 @@ function HivesAndApiariesContent() {
       )}
 
       {justRegisteredHiveId && (
-        <div className="flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-emerald-700 dark:text-emerald-300 animate-in fade-in-50">
+        <div className="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50/90 p-3 text-emerald-800 animate-in fade-in-50">
           <div className="flex items-center gap-2 text-xs">
-            <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
             <span>New hive added successfully to <strong>{selectedApiary?.name}</strong>.</span>
           </div>
           <Button
             variant="outline"
-            size="sm"
+            size="xs"
             asChild
-            className="h-7 text-xs border-emerald-500/40 text-emerald-700 dark:text-emerald-300"
+            className="h-7 text-xs border-emerald-300 text-emerald-800 hover:bg-emerald-100"
           >
             <Link href={`/hives/${justRegisteredHiveId}`}>
               View Hive Details →
@@ -228,7 +228,7 @@ function HivesAndApiariesContent() {
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               Hives & Apiaries
             </h1>
-            <Badge variant="outline" className="font-mono text-xs">
+            <Badge variant="outline" className="font-mono text-xs text-muted-foreground border-border">
               Traceability Layer
             </Badge>
           </div>
@@ -238,7 +238,7 @@ function HivesAndApiariesContent() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild size="sm">
+          <Button asChild size="default">
             <Link href="/hives/new">
               <Plus className="h-4 w-4" />
               <span>Register Apiary</span>
@@ -248,78 +248,78 @@ function HivesAndApiariesContent() {
       </div>
 
       {/* Metrics Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="shadow-xs bg-card/70 border-border/80">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Registered Apiaries
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 {totalApiariesCount}
               </h3>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 Across 2 geographical regions
               </p>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
               <Wheat className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Total Monitored Hives
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 {totalHivesCount}
               </h3>
-              <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">
+              <p className="text-[11px] text-emerald-700 mt-0.5 font-medium">
                 {healthyHivesCount} verified healthy colonies
               </p>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
               <Layers className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 NFC / RFID Tagged
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 100%
               </h3>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 Physical sensor hardware paired
               </p>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
               <Radio className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Latest Inspection
               </p>
               <h3 className="text-lg font-bold tracking-tight text-foreground mt-0.5">
                 12 Sep 2026
               </h3>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 Highland North Apiary
               </p>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
               <Calendar className="h-5 w-5" />
             </div>
           </CardContent>
@@ -327,27 +327,27 @@ function HivesAndApiariesContent() {
       </div>
 
       {/* Search and Filters Bar */}
-      <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between bg-card p-3 rounded-lg border border-border">
+      <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between bg-card p-3 rounded-lg border border-border shadow-2xs">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search apiary by name, region, or flora..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-9 w-full rounded-md border border-input bg-background pl-8 pr-3 text-xs shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="h-9.5 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <Filter className="h-3.5 w-3.5" />
             <span>Status:</span>
           </div>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="h-9 rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="h-9.5 rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs cursor-pointer"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active</option>
@@ -616,18 +616,12 @@ function HivesAndApiariesContent() {
                                 </StatusBadge>
                               </TableCell>
                               <TableCell>
-                                <Badge
-                                  variant="outline"
-                                  className={`text-[10px] py-0 ${
-                                    hive.queenStatus.includes("Active")
-                                      ? "border-emerald-500/40 text-emerald-600 dark:text-emerald-400"
-                                      : hive.queenStatus === "Virgin"
-                                      ? "border-sky-500/40 text-sky-600 dark:text-sky-400"
-                                      : "border-amber-500/40 text-amber-600 dark:text-amber-400"
-                                  }`}
+                                <StatusBadge
+                                  status={hive.queenStatus}
+                                  size="sm"
                                 >
                                   {hive.queenStatus}
-                                </Badge>
+                                </StatusBadge>
                               </TableCell>
                               <TableCell className="text-xs text-muted-foreground">
                                 {hive.lastInspectionDate}
@@ -640,7 +634,7 @@ function HivesAndApiariesContent() {
                                   variant="ghost"
                                   size="xs"
                                   asChild
-                                  className="text-primary hover:text-primary hover:bg-primary/10 font-medium"
+                                  className="text-primary hover:text-primary hover:bg-amber-50 font-medium"
                                 >
                                   <Link href={`/hives/${hive.id}`}>
                                     View →
@@ -679,7 +673,7 @@ function HivesAndApiariesContent() {
           </DialogHeader>
 
           {registerHiveError && (
-            <div className="rounded-md bg-rose-500/10 border border-rose-500/30 p-2 text-xs text-rose-600 dark:text-rose-400">
+            <div className="rounded-md bg-rose-50 border border-rose-200 p-2.5 text-xs text-rose-800 font-medium">
               {registerHiveError}
             </div>
           )}
@@ -696,7 +690,7 @@ function HivesAndApiariesContent() {
                   value={hiveIdentifier}
                   onChange={(e) => setHiveIdentifier(e.target.value)}
                   placeholder="e.g. HIVE-HN-05"
-                  className="h-8 w-full rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="h-9 w-full rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs"
                 />
               </div>
 
@@ -710,7 +704,7 @@ function HivesAndApiariesContent() {
                   value={hiveInternalCode}
                   onChange={(e) => setHiveInternalCode(e.target.value)}
                   placeholder="e.g. BOX-2026-A05"
-                  className="h-8 w-full rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="h-9 w-full rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs"
                 />
               </div>
             </div>

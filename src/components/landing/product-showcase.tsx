@@ -156,7 +156,7 @@ export function ProductShowcase() {
                         <Shield className="h-3.5 w-3.5 text-primary" />
                         Authenticated Role
                       </span>
-                      <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">RBAC Full Access</span>
+                      <span className="text-[11px] text-emerald-700 font-medium">RBAC Full Access</span>
                     </div>
                     <div className="font-bold text-foreground text-sm flex items-center gap-1.5">
                       <Wheat className="h-4 w-4 text-primary" />
@@ -183,7 +183,7 @@ export function ProductShowcase() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-mono font-bold text-foreground">HC-RAW-2026-0001</span>
-                          <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px] py-0">
+                          <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px] py-0">
                             Lab Certified
                           </Badge>
                         </div>
@@ -194,7 +194,7 @@ export function ProductShowcase() {
                       <div className="flex items-center gap-3">
                         <div className="text-right">
                           <div className="font-mono font-bold text-foreground">17.2% Moisture</div>
-                          <div className="text-[10px] text-emerald-600 dark:text-emerald-400">Refractometer Passed</div>
+                          <div className="text-[10px] text-emerald-700 font-medium">Refractometer Passed</div>
                         </div>
                         <Button size="sm" variant="outline" className="h-7 text-xs font-medium" asChild>
                           <Link href="/login">View Lot</Link>
@@ -206,7 +206,7 @@ export function ProductShowcase() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-mono font-bold text-foreground">HC-RAW-2026-0002</span>
-                          <Badge className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 text-[10px] py-0">
+                          <Badge className="bg-amber-50 text-amber-800 border-amber-200 text-[10px] py-0">
                             In Transit (Custody)
                           </Badge>
                         </div>
@@ -217,7 +217,7 @@ export function ProductShowcase() {
                       <div className="flex items-center gap-3">
                         <div className="text-right">
                           <div className="font-mono font-bold text-foreground">16.8% Moisture</div>
-                          <div className="text-[10px] text-amber-600 dark:text-amber-400">Carrier Transferred</div>
+                          <div className="text-[10px] text-amber-700 font-medium">Carrier Transferred</div>
                         </div>
                         <Button size="sm" variant="outline" className="h-7 text-xs font-medium" asChild>
                           <Link href="/login">Track</Link>
@@ -232,22 +232,22 @@ export function ProductShowcase() {
             {/* VIEW 2: LAB TESTING & CERTIFICATION */}
             {activeTab === "lab" && (
               <div className="space-y-6 animate-in fade-in-50 duration-300">
-                <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/10 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50/20 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 border border-emerald-200">
                       <Award className="h-5 w-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-sm text-foreground">Accredited Quality Certificate</span>
-                        <Badge className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px]">
+                        <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px]">
                           Grade A Standard
                         </Badge>
                       </div>
                       <span className="font-mono text-xs text-muted-foreground">CERT-HC-2026-0001 • Issued by Apex Purity Labs</span>
                     </div>
                   </div>
-                  <Badge variant="outline" className="font-mono text-xs border-emerald-500/40 text-emerald-600 dark:text-emerald-400 self-start sm:self-auto">
+                  <Badge variant="outline" className="font-mono text-xs border-emerald-200 text-emerald-800 bg-emerald-50 self-start sm:self-auto">
                     Cryptographic Signature Valid
                   </Badge>
                 </div>
@@ -255,25 +255,25 @@ export function ProductShowcase() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                   <div className="p-3.5 rounded-xl border border-border bg-card text-center space-y-1">
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground">NMR Purity Index</span>
-                    <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 font-mono">99.4%</div>
+                    <div className="text-base font-bold text-emerald-700 font-mono">99.4%</div>
                     <span className="text-[10px] text-muted-foreground">Pure Blossom Origin</span>
                   </div>
 
                   <div className="p-3.5 rounded-xl border border-border bg-card text-center space-y-1">
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground">C4 Sugar Analysis</span>
-                    <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 font-mono">0.8%</div>
+                    <div className="text-base font-bold text-emerald-700 font-mono">0.8%</div>
                     <span className="text-[10px] text-muted-foreground">Target &lt; 7.0% (Passed)</span>
                   </div>
 
                   <div className="p-3.5 rounded-xl border border-border bg-card text-center space-y-1">
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground">HMF (Hydroxymethyl)</span>
-                    <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 font-mono">11.2 mg/kg</div>
+                    <div className="text-base font-bold text-emerald-700 font-mono">11.2 mg/kg</div>
                     <span className="text-[10px] text-muted-foreground">Target &lt; 40 mg/kg</span>
                   </div>
 
                   <div className="p-3.5 rounded-xl border border-border bg-card text-center space-y-1">
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground">Pollen Density</span>
-                    <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 font-mono">88.5% Wild</div>
+                    <div className="text-base font-bold text-emerald-700 font-mono">88.5% Wild</div>
                     <span className="text-[10px] text-muted-foreground">Himalayan Flora Spec</span>
                   </div>
                 </div>
@@ -299,7 +299,7 @@ export function ProductShowcase() {
                       <Truck className="h-4 w-4 text-primary" />
                       <span className="text-xs font-bold text-foreground">Verified Chain-of-Custody Handoff</span>
                     </div>
-                    <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">Dual-Party Signed</span>
+                    <span className="text-[11px] font-mono text-emerald-700 font-semibold">Dual-Party Signed</span>
                   </div>
 
                   <div className="relative border-l-2 border-primary/30 ml-4 pl-6 space-y-4 py-2 text-xs">
@@ -330,12 +330,12 @@ export function ProductShowcase() {
                     </div>
 
                     <div className="relative">
-                      <div className="absolute -left-[31px] top-0 p-1 rounded-full bg-emerald-500 text-white">
+                      <div className="absolute -left-[31px] top-0 p-1 rounded-full bg-emerald-600 text-white">
                         <Check className="h-3 w-3" />
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-foreground">Receipt & Verification at Packaging Facility</span>
-                        <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">Accepted</span>
+                        <span className="text-[10px] font-mono text-emerald-700 font-semibold">Accepted</span>
                       </div>
                       <p className="text-muted-foreground text-[11px]">
                         Golden Hive Packaging Line 1 (Solan). Weight reconciled: 450.0 kg exact match.
@@ -349,10 +349,10 @@ export function ProductShowcase() {
             {/* VIEW 4: CONSUMER QR VERIFICATION */}
             {activeTab === "verify" && (
               <div className="space-y-6 animate-in fade-in-50 duration-300">
-                <div className="rounded-xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/20 to-card p-5 space-y-4">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50/20 p-5 space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-3">
                     <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
+                      <div className="p-2.5 rounded-xl bg-emerald-100 border border-emerald-200 text-emerald-700">
                         <CheckCircle2 className="h-6 w-6" />
                       </div>
                       <div>
@@ -360,7 +360,7 @@ export function ProductShowcase() {
                           <span className="font-bold text-sm sm:text-base text-foreground">
                             Highland Wild Multifloral Raw Honey
                           </span>
-                          <Badge className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px]">
+                          <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px]">
                             Verified Authentic
                           </Badge>
                         </div>
@@ -380,7 +380,7 @@ export function ProductShowcase() {
                     <div className="p-3 rounded-lg border border-border bg-card text-center">
                       <span className="text-[10px] text-muted-foreground uppercase font-medium">Botanical Origin</span>
                       <p className="font-bold text-foreground mt-0.5">Chamoli, Uttarakhand</p>
-                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400">Alpine Wild Flora</span>
+                      <span className="text-[10px] text-emerald-700 font-medium">Alpine Wild Flora</span>
                     </div>
 
                     <div className="p-3 rounded-lg border border-border bg-card text-center">
@@ -391,14 +391,14 @@ export function ProductShowcase() {
 
                     <div className="p-3 rounded-lg border border-border bg-card text-center">
                       <span className="text-[10px] text-muted-foreground uppercase font-medium">Laboratory Purity</span>
-                      <p className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">Grade A (99.4%)</p>
+                      <p className="font-bold text-emerald-700 mt-0.5">Grade A (99.4%)</p>
                       <span className="text-[10px] text-muted-foreground">NMR Spectroscopy</span>
                     </div>
 
                     <div className="p-3 rounded-lg border border-border bg-card text-center">
                       <span className="text-[10px] text-muted-foreground uppercase font-medium">Tamper Status</span>
                       <p className="font-bold text-foreground mt-0.5">Active & Sealed</p>
-                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400">QR-HC-00001</span>
+                      <span className="text-[10px] text-emerald-700 font-medium">QR-HC-00001</span>
                     </div>
                   </div>
                 </div>

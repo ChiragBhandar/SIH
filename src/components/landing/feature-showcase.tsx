@@ -140,7 +140,7 @@ export function FeatureShowcase() {
             <CardContent className="pt-0">
               <div className="p-3 rounded-lg border border-border bg-muted/30 text-xs flex items-center justify-between">
                 <span className="font-semibold text-foreground">Alpine Multifloral (450 kg)</span>
-                <Badge variant="outline" className="text-[10px] text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+                <Badge variant="outline" className="text-[10px] text-emerald-800 bg-emerald-50 border-emerald-200">
                   Lab Certified
                 </Badge>
               </div>
@@ -169,7 +169,7 @@ export function FeatureShowcase() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                 <div className="p-2.5 rounded-lg border border-border bg-muted/20">
                   <div className="font-mono font-semibold text-foreground">HC-BTL-2026-00001</div>
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400">Published & Active QR</span>
+                  <span className="text-[10px] text-emerald-700 font-medium">Published & Active QR</span>
                 </div>
                 <div className="p-2.5 rounded-lg border border-border bg-muted/20">
                   <div className="font-mono font-semibold text-foreground">HC-BTL-2026-00003</div>
@@ -177,7 +177,7 @@ export function FeatureShowcase() {
                 </div>
                 <div className="p-2.5 rounded-lg border border-border bg-muted/20">
                   <div className="font-mono font-semibold text-foreground">HC-BTL-2026-00004</div>
-                  <span className="text-[10px] text-amber-600 dark:text-amber-400">Suspended QC Review</span>
+                  <span className="text-[10px] text-amber-700 font-medium">Suspended QC Review</span>
                 </div>
               </div>
             </CardContent>

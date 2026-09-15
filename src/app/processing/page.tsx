@@ -96,7 +96,7 @@ export function ProcessingContent() {
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               Processing & Blending
             </h1>
-            <Badge variant="outline" className="font-mono text-xs border-amber-500/40 text-amber-700 dark:text-amber-300">
+            <Badge variant="outline" className="font-mono text-xs border-amber-300 text-amber-900 bg-amber-50">
               Material Transformation
             </Badge>
           </div>
@@ -117,79 +117,71 @@ export function ProcessingContent() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="shadow-xs bg-card/70 border-border/80">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                Ready for Processing
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
-                {readyForProcessingCount}
-              </h3>
-              <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">
-                Received raw honey batches
-              </p>
+        <Card className="border-border bg-card shadow-xs">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Ready for Processing</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <PackageCheck className="h-4 w-4" />
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              <PackageCheck className="h-5 w-5" />
-            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
+              {readyForProcessingCount}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
+            Received raw honey batches
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                In Processing
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
-                {inProcessingCount}
-              </h3>
-              <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-0.5">
-                Active processing runs
-              </p>
+        <Card className="border-border bg-card shadow-xs">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">In Processing</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
+                <Clock className="h-4 w-4" />
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <Clock className="h-5 w-5" />
-            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
+              {inProcessingCount}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
+            Active processing runs
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                Completed Runs
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
-                {completedJobsCount}
-              </h3>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
-                Verifiable output batches created
-              </p>
+        <Card className="border-border bg-card shadow-xs">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Completed Runs</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-orange-700 border border-orange-200">
+                <CheckCircle2 className="h-4 w-4" />
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <CheckCircle2 className="h-5 w-5" />
-            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
+              {completedJobsCount}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
+            Verifiable output batches created
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                Output Volume
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
-                {totalOutputVolumeKg.toFixed(1)} kg
-              </h3>
-              <p className="text-[10px] text-sky-600 dark:text-sky-400 mt-0.5">
-                Total processed yield
-              </p>
+        <Card className="border-border bg-card shadow-xs">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Output Volume</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
+                <Scale className="h-4 w-4" />
+              </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
-              <Scale className="h-5 w-5" />
-            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
+              {totalOutputVolumeKg.toFixed(1)} <span className="text-xs font-normal text-muted-foreground">kg</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
+            Total processed yield
           </CardContent>
         </Card>
       </div>
@@ -427,7 +419,7 @@ export function ProcessingContent() {
                     </div>
                   </TableCell>
 
-                  <TableCell className="text-xs font-mono font-bold text-right text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
+                  <TableCell className="text-xs font-mono font-bold text-right text-emerald-700 whitespace-nowrap">
                     {job.yieldPercentage.toFixed(2)}%
                   </TableCell>
 

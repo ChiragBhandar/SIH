@@ -41,7 +41,7 @@ export function AcceptOrderDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200">
                 <CheckCircle2 className="h-4 w-4" />
               </div>
               <div>
@@ -64,7 +64,7 @@ export function AcceptOrderDialog({
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Quantity:</span>
-              <strong className="font-mono text-emerald-600 dark:text-emerald-400">{order.quantity} {order.unit}</strong>
+              <strong className="font-mono text-emerald-700">{order.quantity} {order.unit}</strong>
             </div>
           </div>
 
@@ -127,7 +127,7 @@ export function RejectOrderDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600 border border-rose-200">
                 <XCircle className="h-4 w-4" />
               </div>
               <div>
@@ -140,7 +140,7 @@ export function RejectOrderDialog({
           </DialogHeader>
 
           {error && (
-            <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
+            <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -221,7 +221,7 @@ export function CancelOrderDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
                 <Ban className="h-4 w-4" />
               </div>
               <div>
@@ -234,7 +234,7 @@ export function CancelOrderDialog({
           </DialogHeader>
 
           {error && (
-            <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
+            <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>

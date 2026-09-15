@@ -97,7 +97,7 @@ export default function ExceptionsListPage() {
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Open Cases
                 </span>
-                <div className="w-7 h-7 rounded-md bg-rose-50 border border-rose-200 dark:bg-rose-950/40 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400">
+                <div className="w-7 h-7 rounded-md bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
                   <AlertTriangle className="w-3.5 h-3.5" />
                 </div>
               </div>
@@ -115,7 +115,7 @@ export default function ExceptionsListPage() {
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Investigating
                 </span>
-                <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-200 dark:bg-amber-950/40 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                   <Activity className="w-3.5 h-3.5" />
                 </div>
               </div>
@@ -133,7 +133,7 @@ export default function ExceptionsListPage() {
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Resolved
                 </span>
-                <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                 </div>
               </div>
@@ -145,20 +145,20 @@ export default function ExceptionsListPage() {
           </Card>
 
           {/* Critical */}
-          <Card className="border-rose-200 dark:border-rose-900/60 bg-rose-50/30 dark:bg-rose-950/10 shadow-xs">
+          <Card className="border-rose-200 bg-rose-50/30 shadow-xs">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-rose-700 dark:text-rose-400 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-rose-700 uppercase tracking-wider">
                   Critical Severity
                 </span>
-                <div className="w-7 h-7 rounded-md bg-rose-100 border border-rose-300 dark:bg-rose-900/50 dark:border-rose-700 flex items-center justify-center text-rose-700 dark:text-rose-300">
+                <div className="w-7 h-7 rounded-md bg-rose-100 border border-rose-300 flex items-center justify-center text-rose-700">
                   <AlertOctagon className="w-3.5 h-3.5 animate-pulse" />
                 </div>
               </div>
-              <div className="text-2xl font-bold text-rose-700 dark:text-rose-300 tracking-tight">
+              <div className="text-2xl font-bold text-rose-700 tracking-tight">
                 {criticalCount}
               </div>
-              <p className="text-[11px] text-rose-600/90 dark:text-rose-400/90 mt-0.5">Immediate quarantine priority</p>
+              <p className="text-[11px] text-rose-600/90 mt-0.5">Immediate quarantine priority</p>
             </CardContent>
           </Card>
         </div>
@@ -259,7 +259,7 @@ export default function ExceptionsListPage() {
                 filteredExceptions.map((exc) => (
                   <TableRow key={exc.id} className="hover:bg-muted/40 transition-colors">
                     {/* Exception ID */}
-                    <TableCell className="font-mono font-semibold text-rose-600 dark:text-rose-400">
+                    <TableCell className="font-mono font-semibold text-rose-600">
                       <Link href={`/admin/exceptions/${exc.id}`} className="hover:underline">
                         {exc.id}
                       </Link>
@@ -276,7 +276,7 @@ export default function ExceptionsListPage() {
                         <span className="font-medium text-foreground truncate">
                           {exc.relatedEntity.title}
                         </span>
-                        <span className="font-mono text-[10px] text-amber-600 dark:text-amber-400">
+                        <span className="font-mono text-[10px] text-amber-700 font-medium">
                           {exc.relatedEntity.id}
                         </span>
                       </div>

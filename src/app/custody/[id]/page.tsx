@@ -273,9 +273,9 @@ function CustodyDetailContent() {
                   <div
                     className={`absolute -left-6 sm:-left-8 top-1 flex h-6 w-6 items-center justify-center rounded-full border-2 ${
                       isAlert
-                        ? "border-rose-500 bg-rose-50 text-rose-600 dark:bg-rose-950 dark:text-rose-400"
+                        ? "border-rose-500 bg-rose-50 text-rose-600"
                         : isCompleted
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400"
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-600"
                         : isCurrent
                         ? "border-primary bg-primary/10 text-primary animate-pulse"
                         : "border-muted-foreground/30 bg-muted text-muted-foreground/50"
@@ -397,18 +397,18 @@ function CustodyDetailContent() {
         </Card>
 
         {/* Linked Receiving Record (if received) */}
-        <Card className="border-border bg-card shadow-xs">
+        <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold text-foreground flex items-center gap-1.5">
-              <FileCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <FileCheck className="h-4 w-4 text-emerald-600" />
               <span>Receiving Intake Summary</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2.5 pt-0 text-xs">
             {receivingRecord ? (
               <div className="space-y-2">
-                <div className="flex items-center justify-between p-2 rounded-md bg-emerald-500/10 border border-emerald-500/20">
-                  <span className="font-mono font-bold text-emerald-700 dark:text-emerald-300">
+                <div className="flex items-center justify-between p-2 rounded-md bg-emerald-50 border border-emerald-200">
+                  <span className="font-mono font-bold text-emerald-800">
                     {receivingRecord.id}
                   </span>
                   <StatusBadge status="success" size="sm">

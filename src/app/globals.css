@@ -46,6 +46,8 @@
 }
 
 :root {
+  color-scheme: light !important;
+
   /* Clean B2B Neutral Canvas & Deep Charcoal Navy Text */
   --background: 210 20% 98%;
   --foreground: 222 47% 11%;
@@ -60,7 +62,7 @@
   --primary: 38 92% 44%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 214 20% 94%;
+  --secondary: 214 20% 95%;
   --secondary-foreground: 222 47% 15%;
 
   --muted: 214 20% 95%;
@@ -89,43 +91,8 @@
   --radius: 0.5rem;
 }
 
-.dark {
-  --background: 224 35% 8%;
-  --foreground: 210 20% 96%;
-
-  --card: 224 32% 11%;
-  --card-foreground: 210 20% 96%;
-
-  --popover: 224 32% 11%;
-  --popover-foreground: 210 20% 96%;
-
-  --primary: 38 92% 50%;
-  --primary-foreground: 224 35% 8%;
-
-  --secondary: 220 25% 18%;
-  --secondary-foreground: 210 20% 96%;
-
-  --muted: 220 25% 18%;
-  --muted-foreground: 215 18% 60%;
-
-  --accent: 38 45% 18%;
-  --accent-foreground: 38 92% 65%;
-
-  --destructive: 0 65% 55%;
-  --destructive-foreground: 0 0% 100%;
-
-  --success: 142 65% 42%;
-  --success-foreground: 0 0% 100%;
-
-  --warning: 36 85% 52%;
-  --warning-foreground: 0 0% 100%;
-
-  --info: 212 80% 55%;
-  --info-foreground: 0 0% 100%;
-
-  --border: 220 22% 20%;
-  --input: 220 22% 20%;
-  --ring: 38 92% 50%;
+html, body {
+  color-scheme: light !important;
 }
 
 html {

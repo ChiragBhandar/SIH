@@ -63,7 +63,7 @@ export function UserAvatar({
       ) : (
         <User
           className={cn(
-            "stroke-[1.75] text-slate-600 dark:text-slate-300",
+            "stroke-[1.75] text-slate-600",
             iconSizeClasses[size],
             iconClassName
           )}

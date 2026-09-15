@@ -121,14 +121,14 @@ function ReceivingContent() {
 
         {/* Organisation Context Switcher Tip if not manufacturer */}
         {!isManufacturer && (
-          <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-lg p-2 text-xs">
-            <span className="text-amber-700 dark:text-amber-400 font-medium">
+          <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs">
+            <span className="text-amber-800 font-medium">
               Active Org: {selectedOrg?.name}
             </span>
             <Button
               size="sm"
               variant="outline"
-              className="h-7 text-xs border-amber-500/40 text-amber-800 dark:text-amber-300 hover:bg-amber-500/20"
+              className="h-7 text-xs border-amber-300 text-amber-900 hover:bg-amber-100 bg-white"
               onClick={() => switchOrganisation("org-ghf-02")}
             >
               Switch to Golden Hive Foods →
@@ -140,61 +140,69 @@ function ReceivingContent() {
       {/* Metrics Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Card className="border-border bg-card shadow-xs">
-          <CardHeader className="p-4 pb-1">
-            <CardDescription className="text-xs font-medium text-amber-600 dark:text-amber-400 flex items-center justify-between">
-              <span>Awaiting Receipt</span>
-              <Clock className="h-3.5 w-3.5 text-amber-500" />
-            </CardDescription>
-            <CardTitle className="text-2xl font-mono font-bold text-amber-600 dark:text-amber-400">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Awaiting Receipt</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
+                <Clock className="h-4 w-4" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
               {stats.awaiting}
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
             Requires intake inspection
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
-          <CardHeader className="p-4 pb-1">
-            <CardDescription className="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
-              <span>Accepted Into Plant</span>
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-            </CardDescription>
-            <CardTitle className="text-2xl font-mono font-bold text-emerald-600 dark:text-emerald-400">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Accepted Into Plant</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <CheckCircle2 className="h-4 w-4" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
               {stats.accepted}
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
             Verified & ready for processing
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
-          <CardHeader className="p-4 pb-1">
-            <CardDescription className="text-xs font-medium text-muted-foreground flex items-center justify-between">
-              <span>Rejected / Flagged</span>
-              <AlertTriangle className="h-3.5 w-3.5 text-rose-500" />
-            </CardDescription>
-            <CardTitle className="text-2xl font-mono font-bold text-foreground">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Rejected / Flagged</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-700 border border-rose-200">
+                <AlertTriangle className="h-4 w-4" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
               {stats.rejected}
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
             Non-compliant shipments
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
-          <CardHeader className="p-4 pb-1">
-            <CardDescription className="text-xs font-medium text-muted-foreground flex items-center justify-between">
-              <span>Inbound Raw Volume</span>
-              <Truck className="h-3.5 w-3.5 text-primary" />
-            </CardDescription>
-            <CardTitle className="text-2xl font-mono font-bold text-foreground">
+          <CardHeader className="p-4 pb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Inbound Raw Volume</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-orange-700 border border-orange-200">
+                <Truck className="h-4 w-4" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
               {stats.totalWeight.toFixed(1)} <span className="text-xs font-normal text-muted-foreground">kg</span>
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
+          <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
             Total consignment intake
           </CardContent>
         </Card>

@@ -599,7 +599,7 @@ function CreateProcessingJobContent() {
                 <span className="text-[10px] uppercase font-semibold text-muted-foreground">
                   Calculated Yield %
                 </span>
-                <p className={`text-base font-mono font-bold ${isOutputExceedingInput ? "text-destructive" : "text-emerald-600 dark:text-emerald-400"}`}>
+                <p className={`text-base font-mono font-bold ${isOutputExceedingInput ? "text-destructive" : "text-emerald-700"}`}>
                   {yieldPercentage.toFixed(2)}%
                 </p>
               </div>
@@ -772,10 +772,10 @@ function CreateProcessingJobContent() {
               <div className="rounded-md border border-border bg-card p-3 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                    <Package className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <Package className="h-3.5 w-3.5 text-emerald-600" />
                     Output Material (Processed Batch)
                   </span>
-                  <span className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                  <span className="font-mono text-xs font-bold text-emerald-700">
                     {outputWeightNumber.toFixed(1)} kg ({yieldPercentage.toFixed(1)}% yield)
                   </span>
                 </div>
@@ -788,8 +788,8 @@ function CreateProcessingJobContent() {
               </div>
 
               {/* Rule Banner */}
-              <div className="rounded-md bg-emerald-500/10 border border-emerald-500/30 p-2.5 flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-300">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <div className="rounded-md bg-emerald-50 border border-emerald-200 p-2.5 flex items-center gap-2 text-xs text-emerald-800">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
                 <span className="font-medium">
                   Output remains linked to source batch. Original input batch records remain unchanged.
                 </span>
@@ -833,8 +833,8 @@ function CreateProcessingJobContent() {
 
           <div className="space-y-3 py-2 text-xs">
             {/* Info Message */}
-            <div className="rounded-lg bg-amber-500/10 border border-amber-500/30 p-3 flex items-start gap-2.5 text-amber-800 dark:text-amber-300">
-              <Info className="h-4 w-4 shrink-0 mt-0.5" />
+            <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 flex items-start gap-2.5 text-amber-900">
+              <Info className="h-4 w-4 shrink-0 mt-0.5 text-amber-700" />
               <div className="text-[11px] leading-relaxed">
                 <strong>Traceability Guarantee:</strong> Creating this processing record adds a new traceability event. Original input batch records remain unchanged.
               </div>
@@ -893,7 +893,7 @@ function CreateProcessingJobContent() {
                   <span className="text-[10px] uppercase text-muted-foreground block">
                     Output Quantity & Yield
                   </span>
-                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                  <span className="font-mono font-bold text-emerald-700">
                     {outputWeightNumber.toFixed(1)} kg ({yieldPercentage.toFixed(2)}%)
                   </span>
                 </div>

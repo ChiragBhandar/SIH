@@ -158,7 +158,7 @@ function CreateBatchContent() {
       <div className="max-w-2xl mx-auto py-8 animate-in fade-in-50 space-y-6">
         <Card className="border-emerald-500/30 bg-card shadow-md">
           <CardHeader className="text-center pb-4 pt-8">
-            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
               <CheckCircle2 className="h-8 w-8" />
             </div>
             <CardTitle className="text-2xl font-bold text-foreground">
@@ -206,7 +206,7 @@ function CreateBatchContent() {
 
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground font-medium">Traceability Status</span>
-                <Badge variant="outline" className="gap-1 text-emerald-600 dark:text-emerald-400 border-emerald-500/40 bg-emerald-500/10 text-[11px] py-0.5">
+                <Badge variant="outline" className="gap-1 text-emerald-700 border-emerald-200 bg-emerald-50 text-[11px] py-0.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   {createdBatch?.traceabilityStatus || "Traceability chain started"}
                 </Badge>
@@ -283,7 +283,7 @@ function CreateBatchContent() {
         <CardHeader className="pb-4 border-b border-border/60">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
                 <Boxes className="h-5 w-5" />
               </div>
               <div>
@@ -595,8 +595,8 @@ function CreateBatchContent() {
               </div>
             </div>
 
-            <div className="rounded-md bg-amber-500/10 border border-amber-500/30 p-2.5 text-[11px] text-amber-800 dark:text-amber-200 flex items-start gap-2">
-              <ShieldCheck className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div className="rounded-md bg-amber-50 border border-amber-200 p-2.5 text-[11px] text-amber-800 flex items-start gap-2">
+              <ShieldCheck className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
               <span>
                 Origin linking is permanent. This batch will initialize the immutable digital ledger timeline.
               </span>

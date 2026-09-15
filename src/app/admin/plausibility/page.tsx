@@ -61,7 +61,7 @@ export default function FieldVsSalesPlausibilityPage() {
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
                 Field vs Sales Plausibility
               </h1>
-              <Badge variant="outline" className="gap-1.5 text-xs bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800">
+              <Badge variant="outline" className="gap-1.5 text-xs bg-amber-50 text-amber-800 border-amber-200">
                 <Scale className="w-3.5 h-3.5" />
                 Yield & Mass Balance Sentinel
               </Badge>
@@ -79,14 +79,14 @@ export default function FieldVsSalesPlausibilityPage() {
         </div>
 
         {/* Mandatory Human Review Guard Notice */}
-        <div className="bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4 shadow-xs">
+        <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-4 shadow-xs">
           <div className="flex items-start gap-3.5">
-            <div className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/50 border border-amber-300 dark:border-amber-700 flex items-center justify-center text-amber-800 dark:text-amber-200 shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 shrink-0">
               <Info className="w-4 h-4" />
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-200/80 dark:bg-amber-900 text-amber-900 dark:text-amber-100 border border-amber-300 dark:border-amber-700">
+                <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-200/80 text-amber-900 border border-amber-300">
                   Plausibility alert — requires human review.
                 </span>
               </div>
@@ -114,7 +114,7 @@ export default function FieldVsSalesPlausibilityPage() {
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Raw Harvest Total
                   </span>
-                  <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-200 dark:bg-amber-950/40 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                  <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                     <Boxes className="w-3.5 h-3.5" />
                   </div>
                 </div>
@@ -132,7 +132,7 @@ export default function FieldVsSalesPlausibilityPage() {
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Purified & Blended
                   </span>
-                  <div className="w-7 h-7 rounded-md bg-blue-50 border border-blue-200 dark:bg-blue-950/40 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                  <div className="w-7 h-7 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
                     <Layers className="w-3.5 h-3.5" />
                   </div>
                 </div>
@@ -152,7 +152,7 @@ export default function FieldVsSalesPlausibilityPage() {
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Wholesale Listed
                   </span>
-                  <div className="w-7 h-7 rounded-md bg-purple-50 border border-purple-200 dark:bg-purple-950/40 dark:border-purple-800 flex items-center justify-center text-purple-600 dark:text-purple-400">
+                  <div className="w-7 h-7 rounded-md bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600">
                     <ShoppingBag className="w-3.5 h-3.5" />
                   </div>
                 </div>
@@ -170,7 +170,7 @@ export default function FieldVsSalesPlausibilityPage() {
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Executed Sales
                   </span>
-                  <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                  <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
                     <TrendingUp className="w-3.5 h-3.5" />
                   </div>
                 </div>
@@ -206,8 +206,8 @@ export default function FieldVsSalesPlausibilityPage() {
                     isBalanced
                       ? "border-border/80 bg-card hover:border-emerald-500/40"
                       : isAlert
-                      ? "border-rose-200 dark:border-rose-900/60 bg-rose-50/20 dark:bg-rose-950/10 hover:border-rose-400"
-                      : "border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/10 hover:border-amber-400"
+                      ? "border-rose-200 bg-rose-50/20 hover:border-rose-400"
+                      : "border-amber-200 bg-amber-50/20 hover:border-amber-400"
                   }`}
                 >
                   <CardContent className="p-5">
@@ -221,10 +221,10 @@ export default function FieldVsSalesPlausibilityPage() {
                           <span
                             className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${
                               isBalanced
-                                ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                 : isAlert
-                                ? "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800"
-                                : "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
+                                ? "bg-rose-50 text-rose-700 border-rose-200"
+                                : "bg-amber-50 text-amber-800 border-amber-200"
                             }`}
                           >
                             {alert.alertMessage}
@@ -295,8 +295,8 @@ export default function FieldVsSalesPlausibilityPage() {
                         <span
                           className={`text-base font-bold font-mono ${
                             alert.soldVolumeKg > alert.processedVolumeKg
-                              ? "text-rose-600 dark:text-rose-400"
-                              : "text-emerald-600 dark:text-emerald-400"
+                              ? "text-rose-600"
+                              : "text-emerald-600"
                           }`}
                         >
                           {alert.soldVolumeKg.toFixed(1)} kg
@@ -314,8 +314,8 @@ export default function FieldVsSalesPlausibilityPage() {
                       </div>
 
                       {alert.reviewNotes && (
-                        <div className="bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 p-3 rounded-lg text-xs text-muted-foreground">
-                          <strong className="text-amber-800 dark:text-amber-300 block mb-0.5">Auditor Review Notes:</strong>
+                        <div className="bg-amber-50/60 border border-amber-200 p-3 rounded-lg text-xs text-muted-foreground">
+                          <strong className="text-amber-800 block mb-0.5">Auditor Review Notes:</strong>
                           {alert.reviewNotes}
                         </div>
                       )}

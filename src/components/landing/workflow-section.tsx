@@ -226,7 +226,7 @@ export function WorkflowSection() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase">
                     Stage Ledger Output:
                   </span>
-                  <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono">
+                  <Badge variant="outline" className="text-[10px] border-emerald-200 text-emerald-800 bg-emerald-50 font-mono">
                     ✓ {steps[activeStep].sampleData.status}
                   </Badge>
                 </div>

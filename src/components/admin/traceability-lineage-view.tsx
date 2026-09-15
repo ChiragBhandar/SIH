@@ -30,21 +30,21 @@ export function TraceabilityLineageView({ steps, className = "" }: TraceabilityL
       case "hive":
       case "activity":
       case "batch":
-        return <Boxes className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />;
+        return <Boxes className="w-3.5 h-3.5 text-amber-600" />;
       case "transfer":
       case "custody":
-        return <ArrowLeftRight className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />;
+        return <ArrowLeftRight className="w-3.5 h-3.5 text-blue-600" />;
       case "receiving":
-        return <PackageCheck className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />;
+        return <PackageCheck className="w-3.5 h-3.5 text-purple-600" />;
       case "processing":
       case "processing_job":
-        return <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />;
+        return <Layers className="w-3.5 h-3.5 text-indigo-600" />;
       case "lab_test":
       case "quality":
-        return <FlaskConical className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />;
+        return <FlaskConical className="w-3.5 h-3.5 text-emerald-600" />;
       case "exception":
       case "plausibility":
-        return <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />;
+        return <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />;
       default:
         return <CheckCircle2 className="w-3.5 h-3.5 text-muted-foreground" />;
     }
@@ -94,7 +94,7 @@ export function TraceabilityLineageView({ steps, className = "" }: TraceabilityL
               <div
                 className={`absolute -left-[29px] top-1.5 w-5 h-5 rounded-full border flex items-center justify-center transition-transform group-hover:scale-110 ${
                   isLast
-                    ? "bg-rose-50 border-rose-400 shadow-xs dark:bg-rose-950 dark:border-rose-700"
+                    ? "bg-rose-50 border-rose-400 shadow-xs"
                     : "bg-card border-border shadow-xs"
                 }`}
               >
@@ -105,7 +105,7 @@ export function TraceabilityLineageView({ steps, className = "" }: TraceabilityL
               <div
                 className={`rounded-xl border p-3.5 transition-all ${
                   isLast
-                    ? "bg-rose-50/40 border-rose-200 dark:bg-rose-950/20 dark:border-rose-800/60 shadow-xs"
+                    ? "bg-rose-50/40 border-rose-200 shadow-xs"
                     : "bg-card border-border/80 hover:border-border shadow-xs"
                 }`}
               >
@@ -147,7 +147,7 @@ export function TraceabilityLineageView({ steps, className = "" }: TraceabilityL
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-800">
+                    <span className="font-mono text-[10px] text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
                       ID: {step.entityId}
                     </span>
                     {href && (

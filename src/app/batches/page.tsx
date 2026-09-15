@@ -115,78 +115,78 @@ function BatchesContent() {
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="shadow-xs bg-card/70 border-border/80">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Raw Honey Batches
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
                 {rawBatchesCount}
               </h3>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 {totalRawWeightKg.toFixed(1)} kg total extracted
               </p>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
               <Boxes className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Processed Batches
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
                 {processedBatchesCount}
               </h3>
-              <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">
+              <p className="text-[11px] text-emerald-700 mt-0.5 font-medium">
                 {totalProcessedWeightKg.toFixed(1)} kg processed output
               </p>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
               <Layers className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Sourced Apiaries
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
                 {apiaries.length}
               </h3>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 Active certified yards
               </p>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
               <Wheat className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xs bg-card/70 border-border/80">
+        <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Traceability Chains
               </p>
-              <h3 className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 mt-0.5 font-mono">
+              <h3 className="text-2xl font-bold tracking-tight text-emerald-700 mt-0.5 font-mono">
                 {batches.length} Active
               </h3>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 100% provenance verified
               </p>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
               <CheckCircle2 className="h-5 w-5" />
             </div>
           </CardContent>
@@ -194,45 +194,31 @@ function BatchesContent() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between bg-card p-3 rounded-lg border border-border">
+      <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between bg-card p-3 rounded-lg border border-border shadow-2xs">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search by batch ID, apiary, honey type, container..."
+            placeholder="Search batches by batch #, apiary, honey type, or custodian..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-9 w-full rounded-md border border-input bg-background pl-8 pr-3 text-xs shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="h-9.5 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs"
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <Filter className="h-3.5 w-3.5" />
             <span>Type:</span>
           </div>
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="h-9 rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="h-9.5 rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs cursor-pointer"
           >
             <option value="all">All Batches</option>
-            <option value="raw">Raw Honey Only</option>
-            <option value="processed">Processed Honey Only</option>
-          </select>
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="h-9 rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            <option value="all">All Statuses</option>
-            <option value="Raw Batch Created">Raw Batch Created</option>
-            <option value="Pending Custody Transfer">Pending Custody Transfer</option>
-            <option value="Received">Received</option>
-            <option value="Consumed partially for processing">Partially Processed</option>
-            <option value="Processed Batch Created">Processed Batch Created</option>
-            <option value="Rejected">Rejected</option>
+            <option value="Raw">Raw Honey</option>
+            <option value="Processed">Processed Honey</option>
           </select>
         </div>
       </div>
@@ -241,22 +227,25 @@ function BatchesContent() {
       {filteredBatches.length === 0 ? (
         <EmptyState
           icon={Boxes}
-          title="No honey batches found"
-          description="No honey batches match your search criteria. Create a new harvest batch to begin the traceability chain."
+          title="No batches found"
+          description="No honey batches match your current search and type filters. Log a new harvest from an apiary."
           action={
-            <Button asChild size="sm">
-              <Link href="/batches/new">+ Create Harvest Batch</Link>
+            <Button asChild size="default">
+              <Link href="/batches/new">
+                <Plus className="h-4 w-4" />
+                <span>Log New Harvest Batch</span>
+              </Link>
             </Button>
           }
         />
       ) : (
-        <div className="rounded-md border border-border bg-card overflow-hidden shadow-xs">
+        <div className="rounded-lg border border-border bg-card overflow-hidden shadow-2xs">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40">
-                <TableHead className="w-[180px]">Batch ID & Type</TableHead>
+                <TableHead className="w-[180px]">Batch Number</TableHead>
                 <TableHead>Source / Origin</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead>Harvest Date</TableHead>
                 <TableHead>Honey Type</TableHead>
                 <TableHead className="text-right">Weight / Available</TableHead>
                 <TableHead>Status</TableHead>
@@ -279,17 +268,14 @@ function BatchesContent() {
                         <span>{batch.batchNumber}</span>
                         <ExternalLink className="h-3 w-3 opacity-60" />
                       </Link>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <Badge
-                          variant="outline"
-                          className={`text-[9px] py-0 font-mono ${
-                            isProcessed
-                              ? "border-emerald-500/40 text-emerald-700 dark:text-emerald-300"
-                              : "border-amber-500/40 text-amber-700 dark:text-amber-300"
-                          }`}
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <StatusBadge
+                          status={isProcessed ? "purple" : "honey"}
+                          size="sm"
+                          withDot={false}
                         >
                           {isProcessed ? "Processed" : "Raw"}
-                        </Badge>
+                        </StatusBadge>
                         <span className="text-[10px] text-muted-foreground font-sans">
                           Ref: {batch.containerRef}
                         </span>
@@ -328,7 +314,7 @@ function BatchesContent() {
                           {batch.weightKg.toFixed(1)} kg
                         </span>
                         {!isProcessed && (
-                          <span className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400">
+                          <span className="font-mono text-[10px] text-emerald-700 font-semibold">
                             {remaining.toFixed(1)} kg avl
                           </span>
                         )}
