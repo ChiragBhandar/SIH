@@ -12,7 +12,7 @@ import {
 
 export default function RootLandingPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground selection:bg-primary/20 selection:text-primary">
+    <div className="landing-theme flex min-h-screen flex-col bg-background text-foreground selection:bg-primary/20 selection:text-primary font-sans antialiased">
       {/* Top Sticky Navigation */}
       <LandingNavbar />
 

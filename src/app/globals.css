@@ -38,6 +38,21 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
 
+  --font-heading: var(--font-manrope), var(--font-inter), sans-serif;
+
+  --color-canvas: #f8f5ed;
+  --color-paper: #fffdf8;
+  --color-paper-warm: #f2ecdf;
+  --color-ink: #231e17;
+  --color-ink-muted: #70695f;
+  --color-line: #ddd5c7;
+  --color-forest: #164a36;
+  --color-forest-hover: #1f5c44;
+  --color-forest-soft: #e2efe7;
+  --color-honey: #d8941c;
+  --color-honey-bright: #f0b83e;
+  --color-honey-soft: #fff1c8;
+
   --radius-xs: calc(var(--radius) - 4px);
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
@@ -91,7 +106,8 @@
   --radius: 0.5rem;
 }
 
-html, body {
+html,
+body {
   color-scheme: light !important;
 }
 
@@ -116,3 +132,101 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
+/* High-Quality Devanagari Typography for Hindi */
+html[lang="hi"] body {
+  font-family: var(--font-noto-devanagari), var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html[lang="hi"] .font-heading {
+  font-family: var(--font-noto-devanagari), var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: normal;
+}
+
+/* Landing Page Warm Editorial Theme Scope */
+.landing-theme {
+  --background: 40 33% 97%; /* #FAF8F5 warm ivory / off-white */
+  --foreground: 155 14% 12%; /* #1A221E deep navy-charcoal / near-black */
+
+  --card: 0 0% 100%; /* #FFFFFF crisp white surface */
+  --card-foreground: 155 14% 12%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 155 14% 12%;
+
+  /* Brand Trust Forest Green */
+  --primary: 156 50% 16%; /* #143D2B deep forest green */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 40 18% 93%; /* #ECE8E0 */
+  --secondary-foreground: 155 14% 12%;
+
+  --muted: 40 20% 93%;
+  --muted-foreground: 150 6% 40%; /* #5F6B64 soft slate / warm gray */
+
+  /* Honey Gold / Amber Accent */
+  --accent: 38 92% 44%; /* #D97706 warm honey amber */
+  --accent-foreground: 0 0% 100%;
+
+  --border: 38 18% 88%; /* #E7E3DB very subtle warm gray */
+  --input: 38 18% 88%;
+  --ring: 38 92% 44%;
+}
+
+.font-heading {
+  font-family: var(--font-manrope), var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Subtle organic warm dot texture */
+.bg-canvas-dots {
+  background-image: radial-gradient(#ded8cc 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Unified Button Classes */
+.btn-primary-honey {
+  background-color: #d97706;
+  color: #ffffff;
+  font-weight: 600;
+  transition: all 0.15s ease-in-out;
+  box-shadow: 0 1px 2px rgba(217, 119, 6, 0.2);
+}
+.btn-primary-honey:hover {
+  background-color: #b45309;
+}
+.btn-primary-honey:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary-warm {
+  background-color: #ffffff;
+  color: #1a221e;
+  border: 1px solid #e7e3db;
+  font-weight: 600;
+  transition: all 0.15s ease-in-out;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+.btn-secondary-warm:hover {
+  background-color: #f7f5f0;
+  border-color: #d8d3c7;
+}
+.btn-secondary-warm:active {
+  transform: scale(0.98);
+}
+
+/* Unified Trust & Badge Tokens */
+.badge-brand-green {
+  background-color: #ebf3ee;
+  color: #143d2b;
+  border: 1px solid #c8ddd0;
+}
+
+.badge-brand-honey {
+  background-color: #fef6e8;
+  color: #b45309;
+  border: 1px solid #fcddb5;
+}
+
+/* Honey Chain subtle hex watermark */
+.hex-pattern {
+  pointer-events: none;
+}

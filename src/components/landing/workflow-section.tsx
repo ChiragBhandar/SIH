@@ -6,129 +6,65 @@ import {
   Boxes,
   Truck,
   FlaskConical,
-  CheckCircle2,
   QrCode,
   Layers,
+  CheckCircle2,
+  ArrowRight,
+  ArrowLeft,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { BeehiveCluster } from "@/components/landing/beehive-pattern";
+import { useLanguage } from "@/context/language-context";
+
+const stepIcons = [Wheat, Boxes, Truck, FlaskConical, QrCode];
 
 export function WorkflowSection() {
+  const { t } = useLanguage();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const steps = [
-    {
-      id: "step-1",
-      number: "01",
-      title: "Apiary Registration & Hive Tracking",
-      actor: "Beekeeper & Apiary Inspector",
-      icon: Wheat,
-      shortDesc: "Establish geographic provenance, box identification, and botanical bloom records.",
-      details: [
-        "GPS coordinates and floral foraging baseline mapping",
-        "Physical hive box registration and RFID/NFC pairing",
-        "Periodic yard health, queen vigor, and treatment logs",
-      ],
-      sampleData: {
-        code: "AP-HIGH-CHAMOLI-01",
-        meta: "Chamoli Alpine Valley • 2,400m Altitude",
-        status: "Active Apiary",
-      },
-    },
-    {
-      id: "step-2",
-      number: "02",
-      title: "Harvest Extraction & Raw Batching",
-      actor: "Harvest Controller",
-      icon: Boxes,
-      shortDesc: "Extract raw honey into food-grade containers, verify moisture index, and issue batch serials.",
-      details: [
-        "Bulk harvest extraction and volume recording in kilograms",
-        "Refractometer moisture verification (target < 18.0%)",
-        "Tamper-evident container seal numbers generated on-ledger",
-      ],
-      sampleData: {
-        code: "HC-RAW-2026-0001",
-        meta: "450.0 kg • 17.2% Moisture • Wild Multifloral",
-        status: "Batch Sealed",
-      },
-    },
-    {
-      id: "step-3",
-      number: "03",
-      title: "Custody Handoff & Logistics",
-      actor: "Collector & Transport Fleet",
-      icon: Truck,
-      shortDesc: "Execute cryptographically signed transfer handoffs between field yards and refineries.",
-      details: [
-        "Dual-party digital signatures verifying sender and receiver",
-        "Container seal validation and gross weight reconciliation",
-        "Full chain-of-custody transfer history logged immutably",
-      ],
-      sampleData: {
-        code: "TR-2026-0042",
-        meta: "Himalayan Logistics Fleet • Truck #UK-07-9921",
-        status: "Custody Accepted",
-      },
-    },
-    {
-      id: "step-4",
-      number: "04",
-      title: "Laboratory Testing & Certification",
-      actor: "Accredited Testing Laboratory",
-      icon: FlaskConical,
-      shortDesc: "Conduct rigorous multi-parameter purity analysis to detect adulteration and grade quality.",
-      details: [
-        "NMR spectroscopy fingerprinting against botanical databases",
-        "C4 carbon isotope sugar testing ensuring 100% natural origin",
-        "Accredited Grade A certification issued with digital audit signatures",
-      ],
-      sampleData: {
-        code: "CERT-HC-2026-0001",
-        meta: "99.4% Purity • C4 Sugar 0.8% • Grade A Verified",
-        status: "Certified Authentic",
-      },
-    },
-    {
-      id: "step-5",
-      number: "05",
-      title: "Packaging, Serialization & Consumer Trust",
-      actor: "Packager & Retail Consumer",
-      icon: QrCode,
-      shortDesc: "Package certified honey into retail units with unique QR codes for instant public verification.",
-      details: [
-        "Micro-filtration & bottling into serialized consumer units",
-        "Unique QR code generated for every individual jar",
-        "Consumers scan to view complete harvest-to-shelf provenance timeline",
-      ],
-      sampleData: {
-        code: "HC-BTL-2026-00001",
-        meta: "500 g Glass Jar • Line 01 Micro-Filler • QR Active",
-        status: "Consumer Verified",
-      },
-    },
-  ];
+  const steps = t.workflow.steps.map((step, idx) => ({
+    ...step,
+    icon: stepIcons[idx] || Wheat,
+  }));
+
+  const currentStep = steps[activeStep] || steps[0];
+  const StepIcon = currentStep.icon;
 
   return (
-    <section id="workflow" className="py-16 md:py-24 bg-muted/20 border-b border-border/60">
+    <section id="workflow" className="py-16 md:py-24 border-b border-border/70 relative overflow-hidden">
+      {/* Subtle Ambient Honeycomb Background */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <BeehiveCluster 
+          className="top-10 -right-20 w-[420px] h-[380px]"
+          strokeColor="#E6D3B1"
+          strokeWidth={1.4}
+          opacity={0.18}
+        />
+        <BeehiveCluster 
+          className="-bottom-16 -left-20 w-[350px] h-[330px]"
+          strokeColor="#E6D3B1"
+          strokeWidth={1.4}
+          opacity={0.16}
+        />
+      </div>
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-14 space-y-3">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 text-xs font-semibold text-primary">
-            <Layers className="h-3.5 w-3.5" />
-            <span>End-to-End Workflow</span>
+        <div className="max-w-3xl mx-auto text-center mb-12 space-y-3">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E7E3DB] bg-white px-3.5 py-1 text-[11px] font-bold text-[#143D2B] shadow-2xs">
+            <Layers className="h-3.5 w-3.5 text-[#D97706]" />
+            <span>{t.workflow.badge}</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-            The 5-Stage Verification Journey
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight text-foreground leading-[1.12]">
+            {t.workflow.heading}
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Follow a single drop of honey from high-altitude mountain flora through laboratory purity validation to the consumer breakfast table.
+          <p className="text-base text-[#5F6B64] leading-relaxed">
+            {t.workflow.subheading}
           </p>
         </div>
 
-        {/* Workflow Progression Stepper (Interactive on Desktop) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
-          {/* Left Column: Step Selectors (5 steps) */}
-          <div className="lg:col-span-5 space-y-3">
+        {/* Visual 5-Stage Horizontal Progression Tracker */}
+        <div className="max-w-5xl mx-auto mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
             {steps.map((step, idx) => {
               const Icon = step.icon;
               const isSelected = activeStep === idx;
@@ -137,141 +73,154 @@ export function WorkflowSection() {
                   key={step.id}
                   type="button"
                   onClick={() => setActiveStep(idx)}
-                  className={`w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-start gap-3.5 ${
+                  className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                     isSelected
-                      ? "border-primary/50 bg-card shadow-md shadow-primary/5 ring-1 ring-primary/20"
-                      : "border-border/70 bg-card/50 hover:bg-card hover:border-border"
+                      ? "border-[#D97706] bg-white shadow-sm ring-1 ring-[#D97706]/30"
+                      : "border-[#E7E3DB] bg-white/70 hover:bg-white hover:border-[#D97706]/40"
                   }`}
                 >
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={`text-[11px] font-mono font-bold ${
+                        isSelected ? "text-[#D97706]" : "text-[#5F6B64]"
+                      }`}
+                    >
+                      {step.number}
+                    </span>
+                    <div
+                      className={`h-7 w-7 rounded-lg flex items-center justify-center ${
+                        isSelected
+                          ? "bg-[#FEF6E8] text-[#B45309]"
+                          : "bg-[#FAF8F5] text-[#5F6B64]"
+                      }`}
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                    </div>
+                  </div>
                   <div
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg font-mono font-bold text-xs transition-colors ${
-                      isSelected
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
+                    className={`font-heading text-xs font-bold leading-snug line-clamp-1 ${
+                      isSelected ? "text-foreground" : "text-[#5F6B64]"
                     }`}
                   >
-                    <Icon className="h-5 w-5" />
+                    {step.shortTitle}
                   </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono text-[11px] font-bold text-primary">
-                        Stage {step.number}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground truncate">
-                        {step.actor}
-                      </span>
-                    </div>
-                    <div className="font-bold text-foreground text-sm truncate mt-0.5">
-                      {step.title}
-                    </div>
-                    <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
-                      {step.shortDesc}
-                    </p>
-                  </div>
+                  <span className="text-[10px] text-[#5F6B64] truncate mt-0.5 font-medium">
+                    {step.actor.split("&")[0]}
+                  </span>
                 </button>
               );
             })}
           </div>
+        </div>
 
-          {/* Right Column: Deep-Dive Visual Card for Selected Step */}
-          <div className="lg:col-span-7">
-            <div className="rounded-2xl border border-primary/30 bg-card p-6 sm:p-8 shadow-xl relative overflow-hidden space-y-6">
-              {/* Subtle top background glow */}
-              <div className="absolute top-0 right-0 h-40 w-40 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-
-              {/* Step Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/80 pb-4">
+        {/* Focused Active Stage Card */}
+        <div className="max-w-4xl mx-auto">
+          <div className="rounded-2xl border border-[#E7E3DB] bg-white p-6 sm:p-8 shadow-[0_4px_24px_rgba(0,0,0,0.03)] space-y-6">
+            {/* Stage Title and Actor Lockup */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E7E3DB] pb-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FEF6E8] text-[#B45309] border border-[#FCDDB5]">
+                  <StepIcon className="h-5 w-5" />
+                </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <Badge className="bg-primary/20 text-primary border-primary/30 text-xs font-mono">
-                      Stage {steps[activeStep].number} of 05
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      Actor: <strong className="text-foreground">{steps[activeStep].actor}</strong>
+                    <span className="bg-[#FEF6E8] text-[#B45309] border border-[#FCDDB5] text-[10.5px] font-mono font-bold px-2.5 py-0.5 rounded-full">
+                      {t.workflow.stagePrefix} {currentStep.number} of 05
+                    </span>
+                    <span className="text-xs text-[#5F6B64]">
+                      {t.workflow.roleLabel}: <strong className="text-foreground font-semibold">{currentStep.actor}</strong>
                     </span>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-foreground mt-1.5">
-                    {steps[activeStep].title}
+                  <h3 className="font-heading text-xl sm:text-2xl font-bold text-foreground mt-1">
+                    {currentStep.title}
                   </h3>
                 </div>
               </div>
 
-              {/* Step Explanation */}
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {steps[activeStep].shortDesc}
-              </p>
-
-              {/* Verified Checklist */}
-              <div className="space-y-2.5">
-                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground block">
-                  Stage Verification Controls:
+              <div className="sm:text-right">
+                <span className="text-[10px] font-mono uppercase text-[#5F6B64] block font-semibold">{t.workflow.ledgerOutput}</span>
+                <span className="font-mono text-xs font-bold text-[#143D2B] bg-[#EAF3EE] border border-[#C6DDD0] px-2 py-0.5 rounded-md inline-block mt-0.5">
+                  ✓ {currentStep.sampleData.status}
                 </span>
-                <div className="grid grid-cols-1 gap-2">
-                  {steps[activeStep].details.map((detail, dIdx) => (
-                    <div
-                      key={dIdx}
-                      className="flex items-start gap-2.5 p-2.5 rounded-lg bg-muted/40 border border-border/60 text-xs text-foreground/90"
-                    >
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                      <span>{detail}</span>
-                    </div>
-                  ))}
-                </div>
+              </div>
+            </div>
+
+            {/* Plain-Language Summary paired with technical context */}
+            <div className="bg-[#FAF8F5] rounded-xl p-3.5 border border-[#E7E3DB] text-xs text-[#5F6B64] flex items-start gap-2.5">
+              <div className="h-2 w-2 rounded-full bg-[#D97706] mt-1.5 shrink-0" />
+              <div>
+                <strong className="text-foreground font-semibold">{t.workflow.whatHappensHere} </strong>
+                {currentStep.plainLanguage}{" "}
+                <span className="text-[#5F6B64]/90 block sm:inline mt-1 sm:mt-0 font-normal">
+                  ({currentStep.shortDesc})
+                </span>
+              </div>
+            </div>
+
+            {/* Stage Verification Controls Checklist */}
+            <div className="space-y-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#5F6B64] block font-mono">
+                {t.workflow.verifiedStageControls}
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {currentStep.details.map((detail, dIdx) => (
+                  <div
+                    key={dIdx}
+                    className="flex items-start gap-2 p-3 rounded-xl bg-white border border-[#E7E3DB] text-xs text-foreground/90 shadow-2xs"
+                  >
+                    <CheckCircle2 className="h-4 w-4 text-[#143D2B] shrink-0 mt-0.5" />
+                    <span className="leading-snug">{detail}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Digital Ledger Mock Proof Artifact */}
+            <div className="rounded-xl border border-[#E7E3DB] bg-[#FAF8F5] p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <div>
+                <span className="text-[10px] text-[#5F6B64] uppercase font-mono block font-semibold">{t.workflow.onChainIdentifier}</span>
+                <span className="font-mono font-bold text-foreground text-xs">{currentStep.sampleData.code}</span>
+              </div>
+              <div className="text-left sm:text-right font-mono text-[11px] text-[#5F6B64]">
+                {currentStep.sampleData.meta}
+              </div>
+            </div>
+
+            {/* Next / Previous Stepper Actions */}
+            <div className="flex items-center justify-between pt-2 border-t border-[#E7E3DB]">
+              <button
+                type="button"
+                disabled={activeStep === 0}
+                onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
+                className="text-xs text-[#5F6B64] hover:text-foreground disabled:opacity-30 cursor-pointer font-semibold flex items-center gap-1.5 transition-colors"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span>{t.workflow.prevStage}</span>
+              </button>
+
+              <div className="flex items-center gap-1.5">
+                {steps.map((_, dotIdx) => (
+                  <button
+                    key={dotIdx}
+                    type="button"
+                    onClick={() => setActiveStep(dotIdx)}
+                    className={`h-2 rounded-full transition-all cursor-pointer ${
+                      activeStep === dotIdx ? "w-6 bg-[#D97706]" : "w-2 bg-[#E7E3DB] hover:bg-[#D97706]/40"
+                    }`}
+                    aria-label={`Go to step ${dotIdx + 1}`}
+                  />
+                ))}
               </div>
 
-              {/* Digital Ledger Mock Proof Artifact */}
-              <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-[11px] font-semibold text-muted-foreground uppercase">
-                    Stage Ledger Output:
-                  </span>
-                  <Badge variant="outline" className="text-[10px] border-emerald-200 text-emerald-800 bg-emerald-50 font-mono">
-                    ✓ {steps[activeStep].sampleData.status}
-                  </Badge>
-                </div>
-                <div className="font-mono text-sm font-bold text-foreground">
-                  {steps[activeStep].sampleData.code}
-                </div>
-                <div className="text-xs text-muted-foreground font-mono">
-                  {steps[activeStep].sampleData.meta}
-                </div>
-              </div>
-
-              {/* Next / Previous Stepper Actions */}
-              <div className="flex items-center justify-between pt-2 border-t border-border/60">
-                <button
-                  type="button"
-                  disabled={activeStep === 0}
-                  onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
-                  className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-30 cursor-pointer font-medium"
-                >
-                  ← Previous Stage
-                </button>
-
-                <div className="flex items-center gap-1.5">
-                  {steps.map((_, dotIdx) => (
-                    <button
-                      key={dotIdx}
-                      type="button"
-                      onClick={() => setActiveStep(dotIdx)}
-                      className={`h-2 rounded-full transition-all cursor-pointer ${
-                        activeStep === dotIdx ? "w-6 bg-primary" : "w-2 bg-muted hover:bg-muted-foreground/40"
-                      }`}
-                      aria-label={`Go to step ${dotIdx + 1}`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  disabled={activeStep === steps.length - 1}
-                  onClick={() => setActiveStep((prev) => Math.min(steps.length - 1, prev + 1))}
-                  className="text-xs text-primary hover:underline disabled:opacity-30 cursor-pointer font-semibold flex items-center gap-1"
-                >
-                  Next Stage →
-                </button>
-              </div>
+              <button
+                type="button"
+                disabled={activeStep === steps.length - 1}
+                onClick={() => setActiveStep((prev) => Math.min(steps.length - 1, prev + 1))}
+                className="text-xs text-[#D97706] hover:text-[#B45309] disabled:opacity-30 cursor-pointer font-bold flex items-center gap-1.5 transition-colors"
+              >
+                <span>{t.workflow.nextStage}</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
             </div>
           </div>
         </div>

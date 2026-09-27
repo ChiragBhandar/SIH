@@ -3,10 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  Building2,
-  Shield,
   Wheat,
-  Boxes,
   Activity,
   FlaskConical,
   Award,
@@ -15,214 +12,213 @@ import {
   QrCode,
   ArrowRight,
   Check,
-  FileText,
   Truck,
+  Layers,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { BeehiveCluster, BeehiveBackground } from "@/components/landing/beehive-pattern";
+import { useLanguage } from "@/context/language-context";
 
 export function ProductShowcase() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = React.useState<"dashboard" | "lab" | "custody" | "verify">("dashboard");
 
   return (
-    <section id="overview" className="py-16 md:py-24 bg-muted/20 border-b border-border/60">
+    <section id="overview" className="py-16 md:py-24 border-b border-border/70 relative overflow-hidden">
+      {/* Subtle Beehive Honeycomb Background Elements */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <BeehiveBackground 
+          className="-top-12 -right-20 w-[600px] h-[480px]"
+          strokeColor="#E6D3B1"
+          strokeWidth={1.3}
+          opacity={0.16}
+        />
+        <BeehiveCluster 
+          className="bottom-4 -left-16 w-[360px] h-[340px]"
+          strokeColor="#E6D3B1"
+          strokeWidth={1.4}
+          opacity={0.18}
+        />
+      </div>
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 text-xs font-semibold text-primary">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Interactive Platform Showcase</span>
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E7E3DB] bg-white px-3.5 py-1 text-[11px] font-bold text-[#143D2B] shadow-2xs">
+            <Sparkles className="h-3.5 w-3.5 text-[#D97706]" />
+            <span>{t.showcase.badge}</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-            A Purpose-Built Operating System for Honey Traceability
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight text-foreground leading-[1.12]">
+            {t.showcase.heading}
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Experience how Honey Chain connects every link of the supply chain with unified role workspaces, tamper-evident audit trails, and automated quality governance.
+          <p className="text-base text-[#5F6B64] leading-relaxed">
+            {t.showcase.subheading}
           </p>
 
-          {/* Tab Switcher */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-4">
+          {/* Small Feature Segmented Controls */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-3">
             <button
               type="button"
               onClick={() => setActiveTab("dashboard")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === "dashboard"
-                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-[#D97706] text-white shadow-xs"
+                  : "bg-white border border-[#E7E3DB] text-[#5F6B64] hover:text-foreground hover:bg-[#FAF8F5]"
               }`}
             >
               <Activity className="h-3.5 w-3.5" />
-              <span>Operational Dashboard</span>
+              <span>{t.showcase.tabs.dashboard}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab("lab")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === "lab"
-                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-[#D97706] text-white shadow-xs"
+                  : "bg-white border border-[#E7E3DB] text-[#5F6B64] hover:text-foreground hover:bg-[#FAF8F5]"
               }`}
             >
               <FlaskConical className="h-3.5 w-3.5" />
-              <span>Lab Testing & Certs</span>
+              <span>{t.showcase.tabs.lab}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab("custody")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === "custody"
-                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-[#D97706] text-white shadow-xs"
+                  : "bg-white border border-[#E7E3DB] text-[#5F6B64] hover:text-foreground hover:bg-[#FAF8F5]"
               }`}
             >
               <Truck className="h-3.5 w-3.5" />
-              <span>Custody Transfers</span>
+              <span>{t.showcase.tabs.custody}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab("verify")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === "verify"
-                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-[#D97706] text-white shadow-xs"
+                  : "bg-white border border-[#E7E3DB] text-[#5F6B64] hover:text-foreground hover:bg-[#FAF8F5]"
               }`}
             >
               <QrCode className="h-3.5 w-3.5" />
-              <span>Consumer QR Trust</span>
+              <span>{t.showcase.tabs.verify}</span>
             </button>
           </div>
         </div>
 
-        {/* Product Showcase Window */}
-        <div className="relative rounded-2xl border border-border bg-card shadow-2xl overflow-hidden max-w-5xl mx-auto">
-          {/* Top Window Bar */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border/80 bg-muted/40 backdrop-blur-xs text-xs">
+        {/* Polished Product Preview Window */}
+        <div className="relative rounded-2xl border border-[#E7E3DB] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden max-w-5xl mx-auto">
+          {/* Top Window Chrome */}
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#E7E3DB] bg-[#FAF8F5] text-xs">
             <div className="flex items-center gap-2">
               <div className="flex gap-1.5">
-                <div className="h-3 w-3 rounded-full bg-destructive/60" />
-                <div className="h-3 w-3 rounded-full bg-amber-500/60" />
-                <div className="h-3 w-3 rounded-full bg-emerald-500/60" />
+                <div className="h-2.5 w-2.5 rounded-full bg-rose-400" />
+                <div className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+                <div className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
               </div>
-              <span className="text-[11px] font-mono text-muted-foreground pl-2 hidden sm:inline">
-                honeychain.internal.io/
+              <span className="text-[11px] font-mono text-[#5F6B64] pl-2 hidden sm:inline">
+                honeychain.io/
                 {activeTab === "dashboard"
                   ? "dashboard"
                   : activeTab === "lab"
-                  ? "lab/certifications/CERT-HC-2026-0001"
+                  ? "certifications/CERT-HC-2026-0001"
                   : activeTab === "custody"
-                  ? "custody/transfers/TR-2026-0042"
+                  ? "transfers/TR-2026-0042"
                   : "verify/HC-BTL-2026-00001"}
               </span>
             </div>
 
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-[10px] font-mono py-0 px-2 gap-1 border-primary/30 text-primary">
+              <span className="inline-flex items-center gap-1.5 text-[10.5px] font-mono px-2 py-0.5 rounded-full bg-[#EAF3EE] text-[#143D2B] border border-[#C6DDD0] font-semibold">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Ledger Connected
-              </Badge>
-              <Button size="sm" variant="ghost" asChild className="h-7 text-[11px] px-2 text-primary hover:text-primary/80">
-                <Link href="/login">Launch Live →</Link>
+                {t.showcase.ledgerConnected}
+              </span>
+              <Button size="sm" variant="ghost" asChild className="h-7 text-[11px] px-2 text-[#D97706] hover:text-[#B45309] font-semibold">
+                <Link href="/login">{t.showcase.signInArrow}</Link>
               </Button>
             </div>
           </div>
 
           {/* Screen Content Container */}
-          <div className="p-4 sm:p-6 lg:p-8 bg-background min-h-[460px]">
+          <div className="p-5 sm:p-7 md:p-8 bg-[#FAF8F5]/50">
             {/* VIEW 1: OPERATIONAL DASHBOARD */}
             {activeTab === "dashboard" && (
-              <div className="space-y-6 animate-in fade-in-50 duration-300">
-                {/* Org & Role Proof Strip */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="rounded-xl border border-primary/20 bg-card p-4 shadow-2xs">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                        <Building2 className="h-3.5 w-3.5 text-primary" />
-                        Active Organisation
+              <div className="space-y-5 animate-in fade-in-50 duration-200">
+                {/* Feature Context Banner: Role-based Access Simplified */}
+                <div className="bg-white rounded-xl border border-[#E7E3DB] p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xs">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-heading font-bold text-foreground text-sm sm:text-base">
+                        {t.showcase.dashboard.title}
                       </span>
-                      <span className="text-[11px] text-primary font-mono font-medium">ORG-HAC-01</span>
+                      <span className="text-[10px] font-semibold bg-[#EAF3EE] text-[#143D2B] border border-[#C6DDD0] px-2 py-0.5 rounded-full">
+                        {t.showcase.dashboard.rbacActive}
+                      </span>
                     </div>
-                    <div className="font-bold text-foreground text-sm">Highland Apiaries Cooperative</div>
-                    <p className="text-[11px] text-muted-foreground mt-1">
-                      Chamoli Alpine Sector • 48 Registered Hives • Organic Forest Certified
+                    <p className="text-xs text-[#5F6B64] mt-1">
+                      {t.showcase.dashboard.description}
                     </p>
                   </div>
 
-                  <div className="rounded-xl border border-primary/20 bg-card p-4 shadow-2xs">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                        <Shield className="h-3.5 w-3.5 text-primary" />
-                        Authenticated Role
-                      </span>
-                      <span className="text-[11px] text-emerald-700 font-medium">RBAC Full Access</span>
-                    </div>
-                    <div className="font-bold text-foreground text-sm flex items-center gap-1.5">
-                      <Wheat className="h-4 w-4 text-primary" />
-                      Lead Beekeeper & Harvest Controller
-                    </div>
-                    <p className="text-[11px] text-muted-foreground mt-1">
-                      Authorized for batch seal creation, moisture testing & custody handoffs.
-                    </p>
+                  {/* Flow Pills */}
+                  <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono font-medium">
+                    <span className="bg-[#FEF6E8] text-[#B45309] border border-[#FCDDB5] px-2 py-1 rounded-md flex items-center gap-1">
+                      <Wheat className="h-3 w-3" /> {t.showcase.dashboard.roles.beekeeper}
+                    </span>
+                    <span className="text-[#5F6B64]">→</span>
+                    <span className="bg-white text-foreground border border-[#E7E3DB] px-2 py-1 rounded-md">{t.showcase.dashboard.roles.collector}</span>
+                    <span className="text-[#5F6B64]">→</span>
+                    <span className="bg-white text-foreground border border-[#E7E3DB] px-2 py-1 rounded-md">{t.showcase.dashboard.roles.lab}</span>
+                    <span className="text-[#5F6B64]">→</span>
+                    <span className="bg-white text-foreground border border-[#E7E3DB] px-2 py-1 rounded-md">{t.showcase.dashboard.roles.packager}</span>
                   </div>
                 </div>
 
-                {/* Live Harvest Batches In Progress */}
-                <div className="rounded-xl border border-border bg-card p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Boxes className="h-4 w-4 text-primary" />
-                      <span className="text-xs font-bold text-foreground">Active Harvest Batches in Pipeline</span>
+                {/* Active Harvest Batch Showcase Card */}
+                <div className="bg-white rounded-xl border border-[#E7E3DB] p-4 sm:p-5 shadow-2xs space-y-3">
+                  <div className="flex items-center justify-between border-b border-[#E7E3DB] pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-8 w-8 rounded-lg bg-[#FEF6E8] text-[#B45309] flex items-center justify-center font-bold">
+                        <Layers className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <div className="font-mono text-xs font-bold text-foreground flex items-center gap-2">
+                          <span>HC-RAW-2026-0001</span>
+                          <span className="font-sans text-[10px] font-bold bg-[#EAF3EE] text-[#143D2B] border border-[#C6DDD0] px-2 py-0.5 rounded-full">
+                            {t.showcase.dashboard.sealedVerified}
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-[#5F6B64]">
+                          {t.showcase.dashboard.coopLocation}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-[11px] font-mono text-muted-foreground">3 Lots Active</span>
+                    <Button size="sm" variant="outline" className="h-7 text-xs border-[#E7E3DB]" asChild>
+                      <Link href="/login">{t.showcase.dashboard.signInToView}</Link>
+                    </Button>
                   </div>
 
-                  <div className="space-y-2">
-                    <div className="p-3 rounded-lg border border-border/80 bg-muted/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono font-bold text-foreground">HC-RAW-2026-0001</span>
-                          <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px] py-0">
-                            Lab Certified
-                          </Badge>
-                        </div>
-                        <span className="text-[11px] text-muted-foreground">
-                          Wild Multifloral • 450.0 kg • Chamoli Valley Box #01–#24
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <div className="font-mono font-bold text-foreground">17.2% Moisture</div>
-                          <div className="text-[10px] text-emerald-700 font-medium">Refractometer Passed</div>
-                        </div>
-                        <Button size="sm" variant="outline" className="h-7 text-xs font-medium" asChild>
-                          <Link href="/login">View Lot</Link>
-                        </Button>
-                      </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-1">
+                    <div className="p-2.5 bg-[#FAF8F5] rounded-lg border border-[#E7E3DB]">
+                      <span className="text-[10px] text-[#5F6B64] uppercase font-mono block">{t.showcase.dashboard.extractedNet}</span>
+                      <span className="font-mono font-bold text-foreground text-sm">450.0 kg</span>
                     </div>
-
-                    <div className="p-3 rounded-lg border border-border/80 bg-muted/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono font-bold text-foreground">HC-RAW-2026-0002</span>
-                          <Badge className="bg-amber-50 text-amber-800 border-amber-200 text-[10px] py-0">
-                            In Transit (Custody)
-                          </Badge>
-                        </div>
-                        <span className="text-[11px] text-muted-foreground">
-                          Acacia Monofloral • 280.0 kg • Solan Apiary Yard
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <div className="font-mono font-bold text-foreground">16.8% Moisture</div>
-                          <div className="text-[10px] text-amber-700 font-medium">Carrier Transferred</div>
-                        </div>
-                        <Button size="sm" variant="outline" className="h-7 text-xs font-medium" asChild>
-                          <Link href="/login">Track</Link>
-                        </Button>
-                      </div>
+                    <div className="p-2.5 bg-[#FAF8F5] rounded-lg border border-[#E7E3DB]">
+                      <span className="text-[10px] text-[#5F6B64] uppercase font-mono block">{t.showcase.dashboard.moistureIndex}</span>
+                      <span className="font-mono font-bold text-[#143D2B] text-sm">{t.showcase.dashboard.moisturePassed}</span>
+                    </div>
+                    <div className="p-2.5 bg-[#FAF8F5] rounded-lg border border-[#E7E3DB]">
+                      <span className="text-[10px] text-[#5F6B64] uppercase font-mono block">{t.showcase.dashboard.floralOrigin}</span>
+                      <span className="font-semibold text-foreground text-xs mt-0.5 block">{t.showcase.dashboard.wildMultifloral}</span>
+                    </div>
+                    <div className="p-2.5 bg-[#FAF8F5] rounded-lg border border-[#E7E3DB]">
+                      <span className="text-[10px] text-[#5F6B64] uppercase font-mono block">{t.showcase.dashboard.ledgerState}</span>
+                      <span className="font-semibold text-[#143D2B] text-xs mt-0.5 block">{t.showcase.dashboard.cryptographicallySealed}</span>
                     </div>
                   </div>
                 </div>
@@ -231,114 +227,106 @@ export function ProductShowcase() {
 
             {/* VIEW 2: LAB TESTING & CERTIFICATION */}
             {activeTab === "lab" && (
-              <div className="space-y-6 animate-in fade-in-50 duration-300">
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50/20 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-5 animate-in fade-in-50 duration-200">
+                <div className="bg-white rounded-xl border border-[#C6DDD0] p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 border border-emerald-200">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF3EE] text-[#143D2B] border border-[#C6DDD0]">
                       <Award className="h-5 w-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-foreground">Accredited Quality Certificate</span>
-                        <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px]">
-                          Grade A Standard
-                        </Badge>
+                        <span className="font-bold text-sm text-foreground">{t.showcase.lab.certificateTitle}</span>
+                        <span className="bg-[#EAF3EE] text-[#143D2B] border border-[#C6DDD0] text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          {t.showcase.lab.gradeA}
+                        </span>
                       </div>
-                      <span className="font-mono text-xs text-muted-foreground">CERT-HC-2026-0001 • Issued by Apex Purity Labs</span>
+                      <span className="font-mono text-xs text-[#5F6B64]">{t.showcase.lab.issuedBy}</span>
                     </div>
                   </div>
-                  <Badge variant="outline" className="font-mono text-xs border-emerald-200 text-emerald-800 bg-emerald-50 self-start sm:self-auto">
-                    Cryptographic Signature Valid
-                  </Badge>
+                  <span className="inline-flex items-center gap-1 font-mono text-[10.5px] border border-[#C6DDD0] text-[#143D2B] bg-[#EAF3EE] px-2.5 py-1 rounded-full font-semibold self-start sm:self-auto">
+                    <CheckCircle2 className="h-3 w-3" /> {t.showcase.lab.validSignature}
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div className="p-3.5 rounded-xl border border-border bg-card text-center space-y-1">
-                    <span className="text-[10px] uppercase font-semibold text-muted-foreground">NMR Purity Index</span>
-                    <div className="text-base font-bold text-emerald-700 font-mono">99.4%</div>
-                    <span className="text-[10px] text-muted-foreground">Pure Blossom Origin</span>
+                  <div className="p-3.5 rounded-xl border border-[#E7E3DB] bg-white text-center space-y-1">
+                    <span className="text-[10px] uppercase font-semibold text-[#5F6B64]">{t.showcase.lab.nmrIndex}</span>
+                    <div className="text-lg font-bold text-[#143D2B] font-mono">99.4%</div>
+                    <span className="text-[10px] text-[#5F6B64]">{t.showcase.lab.nmrDesc}</span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl border border-border bg-card text-center space-y-1">
-                    <span className="text-[10px] uppercase font-semibold text-muted-foreground">C4 Sugar Analysis</span>
-                    <div className="text-base font-bold text-emerald-700 font-mono">0.8%</div>
-                    <span className="text-[10px] text-muted-foreground">Target &lt; 7.0% (Passed)</span>
+                  <div className="p-3.5 rounded-xl border border-[#E7E3DB] bg-white text-center space-y-1">
+                    <span className="text-[10px] uppercase font-semibold text-[#5F6B64]">{t.showcase.lab.c4Analysis}</span>
+                    <div className="text-lg font-bold text-[#143D2B] font-mono">0.8%</div>
+                    <span className="text-[10px] text-[#5F6B64]">{t.showcase.lab.c4Passed}</span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl border border-border bg-card text-center space-y-1">
-                    <span className="text-[10px] uppercase font-semibold text-muted-foreground">HMF (Hydroxymethyl)</span>
-                    <div className="text-base font-bold text-emerald-700 font-mono">11.2 mg/kg</div>
-                    <span className="text-[10px] text-muted-foreground">Target &lt; 40 mg/kg</span>
+                  <div className="p-3.5 rounded-xl border border-[#E7E3DB] bg-white text-center space-y-1">
+                    <span className="text-[10px] uppercase font-semibold text-[#5F6B64]">{t.showcase.lab.hmrFreshness}</span>
+                    <div className="text-lg font-bold text-foreground font-mono">11.2 mg/kg</div>
+                    <span className="text-[10px] text-[#5F6B64]">{t.showcase.lab.hmrStandard}</span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl border border-border bg-card text-center space-y-1">
-                    <span className="text-[10px] uppercase font-semibold text-muted-foreground">Pollen Density</span>
-                    <div className="text-base font-bold text-emerald-700 font-mono">88.5% Wild</div>
-                    <span className="text-[10px] text-muted-foreground">Himalayan Flora Spec</span>
+                  <div className="p-3.5 rounded-xl border border-[#E7E3DB] bg-white text-center space-y-1">
+                    <span className="text-[10px] uppercase font-semibold text-[#5F6B64]">{t.showcase.lab.pollenDensity}</span>
+                    <div className="text-lg font-bold text-foreground font-mono">88.5% Wild</div>
+                    <span className="text-[10px] text-[#5F6B64]">{t.showcase.lab.pollenSpec}</span>
                   </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl border border-border bg-muted/20 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-primary" />
-                    <span className="text-muted-foreground">
-                      Laboratory test records are automatically attached to downstream packaging runs.
-                    </span>
-                  </div>
-                  <span className="text-primary font-medium">Ready for Serialization</span>
                 </div>
               </div>
             )}
 
             {/* VIEW 3: CUSTODY TRANSFERS */}
             {activeTab === "custody" && (
-              <div className="space-y-6 animate-in fade-in-50 duration-300">
-                <div className="rounded-xl border border-border bg-card p-4 space-y-3">
-                  <div className="flex items-center justify-between">
+              <div className="space-y-5 animate-in fade-in-50 duration-200">
+                <div className="bg-white rounded-xl border border-[#E7E3DB] p-4 sm:p-5 space-y-3 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-[#E7E3DB] pb-3">
                     <div className="flex items-center gap-2">
-                      <Truck className="h-4 w-4 text-primary" />
-                      <span className="text-xs font-bold text-foreground">Verified Chain-of-Custody Handoff</span>
+                      <Truck className="h-4 w-4 text-[#D97706]" />
+                      <span className="text-xs font-bold text-foreground">{t.showcase.custody.title}</span>
                     </div>
-                    <span className="text-[11px] font-mono text-emerald-700 font-semibold">Dual-Party Signed</span>
+                    <span className="text-[11px] font-mono text-[#143D2B] font-semibold bg-[#EAF3EE] px-2 py-0.5 rounded-full border border-[#C6DDD0]">
+                      {t.showcase.custody.dualSigned}
+                    </span>
                   </div>
 
-                  <div className="relative border-l-2 border-primary/30 ml-4 pl-6 space-y-4 py-2 text-xs">
+                  <div className="relative border-l-2 border-[#E7E3DB] ml-4 pl-6 space-y-4 py-2 text-xs">
                     <div className="relative">
-                      <div className="absolute -left-[31px] top-0 p-1 rounded-full bg-primary text-primary-foreground">
+                      <div className="absolute -left-[31px] top-0 flex h-6 w-6 items-center justify-center rounded-full bg-[#FEF6E8] text-[#B45309] border border-[#FCDDB5]">
                         <Check className="h-3 w-3" />
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-foreground">Release from Apiary Yard</span>
-                        <span className="text-[10px] font-mono text-muted-foreground">2026-09-14 09:30</span>
+                        <span className="font-bold text-foreground">{t.showcase.custody.step1Title}</span>
+                        <span className="text-[10px] font-mono text-[#5F6B64]">2026-09-14 09:30</span>
                       </div>
-                      <p className="text-muted-foreground text-[11px]">
-                        Dispatched by Highland Apiaries Co-op (Operator: Rajesh Sharma). Seal #SL-8831 verified.
+                      <p className="text-[#5F6B64] text-[11px]">
+                        {t.showcase.custody.step1Desc}
                       </p>
                     </div>
 
                     <div className="relative">
-                      <div className="absolute -left-[31px] top-0 p-1 rounded-full bg-primary text-primary-foreground">
+                      <div className="absolute -left-[31px] top-0 flex h-6 w-6 items-center justify-center rounded-full bg-[#FEF6E8] text-[#B45309] border border-[#FCDDB5]">
                         <Check className="h-3 w-3" />
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-foreground">Transit via Himalayan Logistics Fleet</span>
-                        <span className="text-[10px] font-mono text-muted-foreground">2026-09-14 13:45</span>
+                        <span className="font-bold text-foreground">{t.showcase.custody.step2Title}</span>
+                        <span className="text-[10px] font-mono text-[#5F6B64]">2026-09-14 13:45</span>
                       </div>
-                      <p className="text-muted-foreground text-[11px]">
-                        Temperature controlled vehicle #UK-07-TA-9921. GPS route logged continuously.
+                      <p className="text-[#5F6B64] text-[11px]">
+                        {t.showcase.custody.step2Desc}
                       </p>
                     </div>
 
                     <div className="relative">
-                      <div className="absolute -left-[31px] top-0 p-1 rounded-full bg-emerald-600 text-white">
+                      <div className="absolute -left-[31px] top-0 flex h-6 w-6 items-center justify-center rounded-full bg-[#EAF3EE] text-[#143D2B] border border-[#C6DDD0]">
                         <Check className="h-3 w-3" />
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-foreground">Receipt & Verification at Packaging Facility</span>
-                        <span className="text-[10px] font-mono text-emerald-700 font-semibold">Accepted</span>
+                        <span className="font-bold text-foreground">{t.showcase.custody.step3Title}</span>
+                        <span className="text-[10px] font-mono text-[#143D2B] font-semibold">{t.showcase.custody.step3Accepted}</span>
                       </div>
-                      <p className="text-muted-foreground text-[11px]">
-                        Golden Hive Packaging Line 1 (Solan). Weight reconciled: 450.0 kg exact match.
+                      <p className="text-[#5F6B64] text-[11px]">
+                        {t.showcase.custody.step3Desc}
                       </p>
                     </div>
                   </div>
@@ -348,57 +336,57 @@ export function ProductShowcase() {
 
             {/* VIEW 4: CONSUMER QR VERIFICATION */}
             {activeTab === "verify" && (
-              <div className="space-y-6 animate-in fade-in-50 duration-300">
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50/20 p-5 space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-3">
+              <div className="space-y-5 animate-in fade-in-50 duration-200">
+                <div className="bg-white rounded-xl border border-[#C6DDD0] p-4 sm:p-5 space-y-4 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E7E3DB] pb-3">
                     <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-xl bg-emerald-100 border border-emerald-200 text-emerald-700">
-                        <CheckCircle2 className="h-6 w-6" />
+                      <div className="p-2 rounded-xl bg-[#EAF3EE] border border-[#C6DDD0] text-[#143D2B]">
+                        <CheckCircle2 className="h-5 w-5" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-sm sm:text-base text-foreground">
-                            Highland Wild Multifloral Raw Honey
+                            {t.showcase.verifyPreview.productTitle}
                           </span>
-                          <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px]">
-                            Verified Authentic
-                          </Badge>
+                          <span className="bg-[#EAF3EE] text-[#143D2B] border border-[#C6DDD0] text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            {t.showcase.verifyPreview.verifiedAuthentic}
+                          </span>
                         </div>
-                        <span className="font-mono text-xs text-muted-foreground">
-                          Bottle Serial: HC-BTL-2026-00001 • 500 g Glass Jar
+                        <span className="font-mono text-xs text-[#5F6B64]">
+                          {t.showcase.verifyPreview.bottleSerial}
                         </span>
                       </div>
                     </div>
-                    <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold" asChild>
+                    <Button size="sm" className="bg-[#D97706] hover:bg-[#B45309] text-white text-xs font-semibold h-8 rounded-lg" asChild>
                       <Link href="/verify/HC-BTL-2026-00001">
-                        Open Full Consumer Page <ArrowRight className="h-3 w-3 ml-1.5" />
+                        {t.showcase.verifyPreview.openFullPage} <ArrowRight className="h-3 w-3 ml-1.5" />
                       </Link>
                     </Button>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                    <div className="p-3 rounded-lg border border-border bg-card text-center">
-                      <span className="text-[10px] text-muted-foreground uppercase font-medium">Botanical Origin</span>
-                      <p className="font-bold text-foreground mt-0.5">Chamoli, Uttarakhand</p>
-                      <span className="text-[10px] text-emerald-700 font-medium">Alpine Wild Flora</span>
+                    <div className="p-2.5 rounded-lg border border-[#E7E3DB] bg-[#FAF8F5] text-center">
+                      <span className="text-[10px] text-[#5F6B64] uppercase font-medium">{t.showcase.verifyPreview.botanicalOrigin}</span>
+                      <p className="font-bold text-foreground mt-0.5">{t.showcase.verifyPreview.originLocation}</p>
+                      <span className="text-[10px] text-[#143D2B] font-medium">{t.showcase.verifyPreview.alpineFlora}</span>
                     </div>
 
-                    <div className="p-3 rounded-lg border border-border bg-card text-center">
-                      <span className="text-[10px] text-muted-foreground uppercase font-medium">Harvest Season</span>
-                      <p className="font-bold text-foreground mt-0.5">September 2026</p>
-                      <span className="text-[10px] text-muted-foreground">Autumn Extraction</span>
+                    <div className="p-2.5 rounded-lg border border-[#E7E3DB] bg-[#FAF8F5] text-center">
+                      <span className="text-[10px] text-[#5F6B64] uppercase font-medium">{t.showcase.verifyPreview.harvestSeason}</span>
+                      <p className="font-bold text-foreground mt-0.5">{t.showcase.verifyPreview.harvestMonth}</p>
+                      <span className="text-[10px] text-[#5F6B64]">{t.showcase.verifyPreview.autumnExtraction}</span>
                     </div>
 
-                    <div className="p-3 rounded-lg border border-border bg-card text-center">
-                      <span className="text-[10px] text-muted-foreground uppercase font-medium">Laboratory Purity</span>
-                      <p className="font-bold text-emerald-700 mt-0.5">Grade A (99.4%)</p>
-                      <span className="text-[10px] text-muted-foreground">NMR Spectroscopy</span>
+                    <div className="p-2.5 rounded-lg border border-[#E7E3DB] bg-[#FAF8F5] text-center">
+                      <span className="text-[10px] text-[#5F6B64] uppercase font-medium">{t.showcase.verifyPreview.labPurity}</span>
+                      <p className="font-bold text-[#143D2B] mt-0.5">{t.showcase.verifyPreview.purityScore}</p>
+                      <span className="text-[10px] text-[#5F6B64]">{t.showcase.verifyPreview.nmrSpectroscopy}</span>
                     </div>
 
-                    <div className="p-3 rounded-lg border border-border bg-card text-center">
-                      <span className="text-[10px] text-muted-foreground uppercase font-medium">Tamper Status</span>
-                      <p className="font-bold text-foreground mt-0.5">Active & Sealed</p>
-                      <span className="text-[10px] text-emerald-700 font-medium">QR-HC-00001</span>
+                    <div className="p-2.5 rounded-lg border border-[#E7E3DB] bg-[#FAF8F5] text-center">
+                      <span className="text-[10px] text-[#5F6B64] uppercase font-medium">{t.showcase.verifyPreview.tamperStatus}</span>
+                      <p className="font-bold text-foreground mt-0.5">{t.showcase.verifyPreview.activeSealed}</p>
+                      <span className="text-[10px] text-[#143D2B] font-medium">QR-HC-00001</span>
                     </div>
                   </div>
                 </div>

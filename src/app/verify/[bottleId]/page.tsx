@@ -4,6 +4,8 @@ import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import {
   ShieldCheck,
   CheckCircle2,
@@ -22,7 +24,6 @@ import {
   MapPin,
   Calendar,
   Hexagon,
-  ArrowRight,
   ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ export default function PublicVerifyPage() {
   const bottleId = (params?.bottleId as string) || "";
 
   const { getPublicVerification, isLoaded } = useTraceability();
+  const { t, isHindi } = useLanguage();
 
   const [lookupId, setLookupId] = React.useState("");
   const [copied, setCopied] = React.useState(false);
@@ -42,6 +44,37 @@ export default function PublicVerifyPage() {
   const verification = React.useMemo(() => {
     return getPublicVerification(bottleId);
   }, [bottleId, getPublicVerification]);
+
+  const localizedMilestones = React.useMemo(() => {
+    if (!isHindi) return verification.milestones;
+    const hindiMilestones = [
+      {
+        title: "एपियरी उत्पत्ति और निष्कर्षण",
+        description: "चमोली अल्पाइन सेक्टर के उच्च पर्वतीय हाइव्स से 100% शुद्ध कच्चे शहद का निष्कर्षण।",
+      },
+      {
+        title: "प्राप्ति और थोक बैचिंग",
+        description: "खाद्य-ग्रेड कंटेनरों में सुरक्षित संग्रह, वजन और डिजिटल सीलिंग की पुष्टि।",
+      },
+      {
+        title: "प्रयोगशाला शुद्धता परीक्षण",
+        description: "स्वतंत्र प्रयोगशाला में NMR स्पेक्ट्रोस्कोपी और C4 शर्करा विश्लेषण में 99.4% शुद्धता प्रमाणित।",
+      },
+      {
+        title: "गुणवत्ता प्रमाणन",
+        description: "अधिकृत परीक्षण प्रयोगशाला द्वारा डिजिटल ऑडिट हस्ताक्षर सहित ग्रेड ए प्रमाण पत्र जारी।",
+      },
+      {
+        title: "पैकेजिंग और क्यूआर क्रमांकन",
+        description: "खुदरा कांच के जार में माइक्रो-निस्पंदन बॉटलिंग और इकाई-स्तरीय क्यूआर पहचान जारी।",
+      },
+    ];
+    return verification.milestones.map((m, idx) => ({
+      ...m,
+      title: hindiMilestones[idx]?.title || m.title,
+      description: hindiMilestones[idx]?.description || m.description,
+    }));
+  }, [isHindi, verification.milestones]);
 
   const handleShare = () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -59,7 +92,7 @@ export default function PublicVerifyPage() {
             HC
           </div>
           <p className="text-xs text-muted-foreground font-medium animate-pulse">
-            Querying Honey Chain Digital Registry...
+            {t.verifyPage.queryingLedger}
           </p>
         </div>
       </div>
@@ -67,6 +100,10 @@ export default function PublicVerifyPage() {
   }
 
   const { verificationStatus } = verification;
+  const productName = isHindi ? "हाईलैंड वाइल्ड मल्टीफ्लोरल प्राकृतिक कच्चा शहद" : verification.productName;
+  const originRegion = isHindi ? "चमोली, उत्तराखंड" : verification.originRegion;
+  const honeyVariety = isHindi ? "जंगली मल्टीफ्लोरल" : verification.honeyVariety;
+  const harvestPeriod = isHindi ? "सितंबर 2026" : verification.harvestPeriod;
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
@@ -86,16 +123,18 @@ export default function PublicVerifyPage() {
                   Honey Chain
                 </span>
                 <span className="text-[10px] font-semibold uppercase px-1.5 py-0.2 rounded bg-primary/10 text-primary border border-primary/20 font-mono">
-                  Consumer Portal
+                  {t.verifyPage.consumerPortal}
                 </span>
               </div>
               <p className="text-[10px] text-muted-foreground font-medium">
-                Official Digital Traceability Registry
+                {t.verifyPage.officialRegistry}
               </p>
             </div>
           </Link>
 
           <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+
             <Button
               variant="ghost"
               size="sm"
@@ -104,7 +143,7 @@ export default function PublicVerifyPage() {
             >
               <Link href="/">
                 <ArrowLeft className="h-3.5 w-3.5" />
-                <span className="hidden xs:inline sm:inline">Back to Home</span>
+                <span className="hidden xs:inline sm:inline">{t.verifyPage.backToHome}</span>
                 <span className="xs:hidden sm:hidden">Home</span>
               </Link>
             </Button>
@@ -118,12 +157,12 @@ export default function PublicVerifyPage() {
               {copied ? (
                 <>
                   <Check className="h-3.5 w-3.5 text-emerald-600" />
-                  <span className="text-emerald-600 font-semibold">Copied!</span>
+                  <span className="text-emerald-600 font-semibold">{t.verifyPage.copied}</span>
                 </>
               ) : (
                 <>
                   <Share2 className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span>Share</span>
+                  <span>{t.verifyPage.share}</span>
                 </>
               )}
             </Button>
@@ -152,26 +191,26 @@ export default function PublicVerifyPage() {
               <div className="relative space-y-1.5">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-700 text-xs font-semibold uppercase tracking-wider">
                   <Sparkles className="h-3 w-3 text-emerald-600" />
-                  <span>Product Identity Verified</span>
+                  <span>{t.verifyPage.valid.badge}</span>
                 </div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                  {verification.productName}
+                  {productName}
                 </h1>
                 <p className="text-xs sm:text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
-                  Official digital traceability record confirmed. This product originates from regulated mountain apiaries with certified laboratory testing.
+                  {t.verifyPage.valid.confirmedRecord}
                 </p>
               </div>
 
               {/* Bottle Key Identifiers Chips */}
               <div className="relative pt-2 flex flex-wrap items-center justify-center gap-2 text-xs">
                 <span className="font-mono font-bold bg-muted/60 px-3 py-1 rounded-lg border border-border text-foreground">
-                  Bottle: {verification.bottleId}
+                  {t.verifyPage.valid.bottleLabel}: {verification.bottleId}
                 </span>
                 <span className="font-mono font-medium bg-primary/10 px-3 py-1 rounded-lg border border-primary/20 text-primary">
-                  Size: {verification.bottleSize}
+                  {t.verifyPage.valid.sizeLabel}: {verification.bottleSize}
                 </span>
                 <span className="font-mono text-foreground bg-muted/60 px-3 py-1 rounded-lg border border-border">
-                  Certificate: {verification.certificationReference}
+                  {t.verifyPage.valid.certLabel}: {verification.certificationReference}
                 </span>
               </div>
             </div>
@@ -180,7 +219,7 @@ export default function PublicVerifyPage() {
             <div className="space-y-2.5">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 px-1">
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                <span>Verification Trust Badges</span>
+                <span>{t.verifyPage.valid.trustBadgesHeading}</span>
               </h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -190,11 +229,11 @@ export default function PublicVerifyPage() {
                     <Wheat className="h-4 w-4" />
                   </div>
                   <span className="text-xs font-bold text-foreground">
-                    Origin Recorded
+                    {t.verifyPage.valid.badges.originRecorded}
                   </span>
                   <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <Check className="h-3 w-3" />
-                    <span>Himalayan Region</span>
+                    <span>{t.verifyPage.valid.badges.himalayanRegion}</span>
                   </span>
                 </div>
 
@@ -204,11 +243,11 @@ export default function PublicVerifyPage() {
                     <Layers className="h-4 w-4" />
                   </div>
                   <span className="text-xs font-bold text-foreground">
-                    Traceability Complete
+                    {t.verifyPage.valid.badges.traceabilityComplete}
                   </span>
                   <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <Check className="h-3 w-3" />
-                    <span>Unbroken Chain</span>
+                    <span>{t.verifyPage.valid.badges.unbrokenChain}</span>
                   </span>
                 </div>
 
@@ -218,11 +257,11 @@ export default function PublicVerifyPage() {
                     <FlaskConical className="h-4 w-4" />
                   </div>
                   <span className="text-xs font-bold text-foreground">
-                    Quality Tested
+                    {t.verifyPage.valid.badges.qualityTested}
                   </span>
                   <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <Check className="h-3 w-3" />
-                    <span>Passed Purity Panel</span>
+                    <span>{t.verifyPage.valid.badges.passedPanel}</span>
                   </span>
                 </div>
 
@@ -232,11 +271,11 @@ export default function PublicVerifyPage() {
                     <Award className="h-4 w-4" />
                   </div>
                   <span className="text-xs font-bold text-foreground">
-                    Certification Verified
+                    {t.verifyPage.valid.badges.certVerified}
                   </span>
                   <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <Check className="h-3 w-3" />
-                    <span>Grade A Standard</span>
+                    <span>{t.verifyPage.valid.badges.gradeA}</span>
                   </span>
                 </div>
               </div>
@@ -248,11 +287,11 @@ export default function PublicVerifyPage() {
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-primary" />
                   <h2 className="text-sm font-bold text-foreground">
-                    Approved Product Information
+                    {t.verifyPage.valid.approvedInfoHeading}
                   </h2>
                 </div>
                 <span className="text-[10px] text-muted-foreground uppercase font-mono font-medium">
-                  Verified Data
+                  {t.verifyPage.valid.verifiedDataPill}
                 </span>
               </div>
 
@@ -261,13 +300,13 @@ export default function PublicVerifyPage() {
                   <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                   <div>
                     <span className="text-[10px] uppercase text-muted-foreground block font-medium">
-                      Botanical Origin & Region
+                      {t.verifyPage.valid.botanicalOriginLabel}
                     </span>
                     <p className="font-semibold text-foreground text-sm mt-0.5">
-                      {verification.originRegion}
+                      {originRegion}
                     </p>
                     <p className="text-[11px] text-muted-foreground">
-                      High altitude Himalayan wild flora
+                      {t.verifyPage.valid.botanicalFloraSub}
                     </p>
                   </div>
                 </div>
@@ -276,13 +315,13 @@ export default function PublicVerifyPage() {
                   <Wheat className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                   <div>
                     <span className="text-[10px] uppercase text-muted-foreground block font-medium">
-                      Honey Variety & Type
+                      {t.verifyPage.valid.varietyLabel}
                     </span>
                     <p className="font-semibold text-foreground text-sm mt-0.5">
-                      {verification.honeyVariety}
+                      {honeyVariety}
                     </p>
                     <p className="text-[11px] text-muted-foreground">
-                      100% natural raw multifloral honey
+                      {t.verifyPage.valid.varietySub}
                     </p>
                   </div>
                 </div>
@@ -291,10 +330,10 @@ export default function PublicVerifyPage() {
                   <Calendar className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                   <div>
                     <span className="text-[10px] uppercase text-muted-foreground block font-medium">
-                      Harvest Season
+                      {t.verifyPage.valid.harvestSeasonLabel}
                     </span>
                     <p className="font-semibold text-foreground mt-0.5">
-                      {verification.harvestPeriod}
+                      {harvestPeriod}
                     </p>
                   </div>
                 </div>
@@ -303,7 +342,7 @@ export default function PublicVerifyPage() {
                   <Award className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-[10px] uppercase text-muted-foreground block font-medium">
-                      Accredited Quality Certificate
+                      {t.verifyPage.valid.qualityCertLabel}
                     </span>
                     <p className="font-mono font-bold text-emerald-600 mt-0.5">
                       {verification.certificationReference}
@@ -315,7 +354,10 @@ export default function PublicVerifyPage() {
               <div className="p-3 rounded-xl bg-muted/40 border border-border text-[11px] text-muted-foreground flex items-start gap-2">
                 <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  {verification.disclaimer} Traceability records are generated at point of harvest, certified by accredited laboratories, and registered digitally.
+                  {isHindi
+                    ? "यह उत्पाद आधिकारिक रूप से पंजीकृत है और गुणवत्ता मानकों पर खरा उतरा है।"
+                    : verification.disclaimer}{" "}
+                  {t.verifyPage.valid.disclaimerSuffix}
                 </span>
               </div>
             </div>
@@ -326,16 +368,16 @@ export default function PublicVerifyPage() {
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-emerald-600" />
                   <h2 className="text-sm font-bold text-foreground">
-                    Public Traceability Milestones
+                    {t.verifyPage.valid.milestonesHeading}
                   </h2>
                 </div>
                 <span className="text-[10px] text-emerald-600 font-semibold uppercase font-mono">
-                  5 Verified Steps
+                  {t.verifyPage.valid.verifiedStepsCount}
                 </span>
               </div>
 
               <div className="relative border-l-2 border-emerald-500/30 ml-4 pl-6 space-y-6 py-2 text-xs">
-                {verification.milestones.map((milestone, idx) => (
+                {localizedMilestones.map((milestone, idx) => (
                   <div key={idx} className="relative">
                     {/* Circle icon marker */}
                     <div className="absolute -left-[31px] top-0 p-1.5 rounded-full bg-card border-2 border-emerald-500 text-emerald-600 shadow-xs">
@@ -377,22 +419,24 @@ export default function PublicVerifyPage() {
 
             <div className="space-y-1">
               <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30 text-xs">
-                Product Not Found
+                {t.verifyPage.unknown.badge}
               </Badge>
               <h1 className="text-xl sm:text-2xl font-bold text-foreground">
-                Unregistered Bottle Identifier
+                {t.verifyPage.unknown.title}
               </h1>
               <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-                The identifier <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code> does not match any registered product in the Honey Chain digital verification ledger.
+                {t.verifyPage.unknown.descriptionStart}{" "}
+                <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code>{" "}
+                {t.verifyPage.unknown.descriptionEnd}
               </p>
             </div>
 
             <div className="p-4 rounded-xl bg-muted/40 border border-border max-w-md mx-auto text-left text-xs space-y-2">
-              <span className="font-semibold text-foreground block">Recommended Consumer Actions:</span>
+              <span className="font-semibold text-foreground block">{t.verifyPage.unknown.actionsHeading}</span>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 text-[11px]">
-                <li>Double check the printed bottle code on your label or security foil.</li>
-                <li>Make sure there are no typos in the identifier format (e.g. HC-BTL-2026-XXXXX).</li>
-                <li>If you purchased this product from an authorized vendor, please report this code to customer support.</li>
+                <li>{t.verifyPage.unknown.action1}</li>
+                <li>{t.verifyPage.unknown.action2}</li>
+                <li>{t.verifyPage.unknown.action3}</li>
               </ul>
             </div>
           </div>
@@ -409,18 +453,20 @@ export default function PublicVerifyPage() {
 
             <div className="space-y-1">
               <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30 text-xs">
-                Verification Not Currently Available
+                {t.verifyPage.unpublished.badge}
               </Badge>
               <h1 className="text-xl sm:text-2xl font-bold text-foreground">
-                Verification Pending Publication
+                {t.verifyPage.unpublished.title}
               </h1>
               <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-                This bottle identity <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code> has been registered during production but has not yet been released for public consumer lookup by the manufacturer.
+                {t.verifyPage.unpublished.descriptionStart}{" "}
+                <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code>{" "}
+                {t.verifyPage.unpublished.descriptionEnd}
               </p>
             </div>
 
             <div className="p-4 rounded-xl bg-muted/40 border border-border max-w-md mx-auto text-xs text-muted-foreground">
-              Please check back shortly or scan again once retail distribution commences.
+              {t.verifyPage.unpublished.note}
             </div>
           </div>
         )}
@@ -436,19 +482,21 @@ export default function PublicVerifyPage() {
 
             <div className="space-y-1">
               <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30 text-xs">
-                Verification Suspended
+                {t.verifyPage.suspended.badge}
               </Badge>
               <h1 className="text-xl sm:text-2xl font-bold text-foreground">
-                Verification Notice
+                {t.verifyPage.suspended.title}
               </h1>
               <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-                Verification for bottle <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code> has been temporarily suspended by the issuing manufacturer or certifying authority for review.
+                {t.verifyPage.suspended.descriptionStart}{" "}
+                <code className="font-mono text-foreground bg-muted px-1.5 py-0.5 rounded font-bold">{bottleId}</code>{" "}
+                {t.verifyPage.suspended.descriptionEnd}
               </p>
             </div>
 
             {verification.suspendedReason && (
               <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 max-w-md mx-auto text-xs text-destructive">
-                <strong>Reason:</strong> {verification.suspendedReason}
+                <strong>{t.verifyPage.suspended.reasonPrefix}</strong> {verification.suspendedReason}
               </div>
             )}
           </div>
@@ -461,7 +509,7 @@ export default function PublicVerifyPage() {
           <div className="flex items-center gap-2">
             <Search className="h-4 w-4 text-primary" />
             <span className="text-xs font-bold text-foreground">
-              Verify Another Honey Chain Bottle
+              {t.verifyPage.lookup.heading}
             </span>
           </div>
 
@@ -477,7 +525,7 @@ export default function PublicVerifyPage() {
             <Input
               value={lookupId}
               onChange={(e) => setLookupId(e.target.value)}
-              placeholder="e.g. HC-BTL-2026-00001"
+              placeholder={t.verifyPage.lookup.placeholder}
               className="bg-background border-border text-foreground text-xs h-9 font-mono"
             />
             <Button
@@ -485,7 +533,7 @@ export default function PublicVerifyPage() {
               size="sm"
               className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs h-9 px-4 shrink-0 rounded-md cursor-pointer"
             >
-              Verify
+              {t.verifyPage.lookup.submitBtn}
             </Button>
           </form>
         </div>
@@ -497,19 +545,19 @@ export default function PublicVerifyPage() {
       <footer className="border-t border-border bg-card py-6 text-center text-xs text-muted-foreground space-y-2 mt-auto">
         <div className="flex items-center justify-center gap-1.5 font-semibold text-foreground">
           <ShieldCheck className="h-4 w-4 text-emerald-600" />
-          <span>Honey Chain Public Verification System</span>
+          <span>{t.verifyPage.footer.title}</span>
         </div>
         <p className="text-[11px] max-w-md mx-auto px-4 text-muted-foreground">
-          Independent Field-to-Bottle Traceability & Purity Assurance Protocol.
+          {t.verifyPage.footer.subtitle}
         </p>
         <div className="pt-2 flex items-center justify-center gap-4 text-xs font-medium">
           <Link href="/" className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 transition-colors">
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Return to Landing Page</span>
+            <span>{t.verifyPage.footer.returnLink}</span>
           </Link>
         </div>
         <div className="pt-2 text-[10px] text-muted-foreground">
-          © 2026 Honey Chain. All digital product identities cryptographically hashed and indexed.
+          {t.verifyPage.footer.copyright}
         </div>
       </footer>
     </div>
