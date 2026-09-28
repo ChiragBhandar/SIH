@@ -4,7 +4,6 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  Hexagon,
   Building2,
   Wheat,
   Factory,
@@ -23,6 +22,7 @@ import { useAuthSession } from "@/context/auth-session-context";
 import { useLanguage } from "@/context/language-context";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { AuthGuard } from "@/components/auth/auth-guard";
+import { BrandLogo } from "@/components/ui/brand-logo";
 import { ActiveRole } from "@/types/auth";
 import { cn } from "@/lib/utils";
 
@@ -69,17 +69,7 @@ function SelectRoleContent() {
     <div className="flex min-h-screen flex-col bg-muted/20">
       {/* Header */}
       <header className="flex h-16 w-full items-center justify-between px-4 sm:px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
-            <Hexagon className="h-4 w-4 fill-current stroke-[2.5]" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-foreground">{t.common.honeyChain}</span>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
-              {t.selectRolePage.headerSubtitle}
-            </span>
-          </div>
-        </div>
+        <BrandLogo href="/" size="sm" subtitle={t.selectRolePage.headerSubtitle} priority />
 
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />

@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Hexagon, ShieldCheck, QrCode } from "lucide-react";
+import { ShieldCheck, QrCode } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 export function LandingFooter() {
   const { t } = useLanguage();
@@ -14,14 +15,7 @@ export function LandingFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-10 mb-10">
           {/* Brand Col */}
           <div className="space-y-3 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#143D2B] text-white shadow-2xs">
-                <Hexagon className="h-5 w-5 fill-[#D97706] stroke-current stroke-[2.2]" />
-              </div>
-              <span className="font-heading font-extrabold text-[16.5px] tracking-tight text-foreground">
-                {t.common.honeyChain}
-              </span>
-            </Link>
+            <BrandLogo href="/" size="md" />
             <p className="text-xs text-[#5F6B64] leading-relaxed">
               {t.footer.description}
             </p>

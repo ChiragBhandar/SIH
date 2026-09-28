@@ -22,7 +22,6 @@ import {
   Info,
   MapPin,
   Calendar,
-  Hexagon,
   ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,6 +30,7 @@ import { Badge } from "@/components/ui/badge";
 import type { PublicConsumerVerification } from "@/types/bottle";
 import { normalizeBottleId, findBottle, buildPublicVerification } from "@/data/mock-bottles";
 import { getVerifyUrl } from "@/lib/constants";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 export default function PublicVerifyPage() {
   const params = useParams();
@@ -197,20 +197,12 @@ export default function PublicVerifyPage() {
       <header className="border-b border-border bg-card/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group transition-opacity hover:opacity-90">
-            {/* Hexagon Mark Logo */}
-            <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-xs">
-              <Hexagon className="h-5 w-5 fill-current stroke-[2.5]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-sm sm:text-base tracking-tight text-foreground leading-tight">
-                  Honey Chain
-                </span>
-                <span className="text-[10px] font-semibold uppercase px-1.5 py-0.2 rounded bg-primary/10 text-primary border border-primary/20 font-mono">
-                  {t.verifyPage.consumerPortal}
-                </span>
-              </div>
-              <p className="text-[10px] text-muted-foreground font-medium">
+            <BrandLogo size="md" priority />
+            <div className="hidden sm:flex flex-col border-l border-border pl-2.5">
+              <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-mono w-fit">
+                {t.verifyPage.consumerPortal}
+              </span>
+              <p className="text-[9.5px] text-muted-foreground font-medium mt-0.5">
                 {t.verifyPage.officialRegistry}
               </p>
             </div>

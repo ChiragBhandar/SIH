@@ -25,6 +25,7 @@ import { useAuthSession } from "@/context/auth-session-context";
 import { useRouter } from "next/navigation";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { useLanguage } from "@/context/language-context";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 export interface HeaderProps {
   onMenuToggle: () => void;
@@ -100,6 +101,10 @@ export function Header({
         >
           <Menu className="h-5 w-5" />
         </Button>
+
+        <div className="flex items-center md:hidden">
+          <BrandLogo href="/dashboard" size="xs" priority />
+        </div>
 
         <Breadcrumb items={breadcrumbs} className="hidden sm:flex" />
       </div>

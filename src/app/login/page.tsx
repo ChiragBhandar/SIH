@@ -3,13 +3,14 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Hexagon, Eye, EyeOff, ArrowRight, ShieldCheck, Lock, AlertCircle, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, ShieldCheck, Lock, AlertCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuthSession } from "@/context/auth-session-context";
 import { useLanguage } from "@/context/language-context";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -54,17 +55,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col bg-muted/20">
       {/* Top minimal navigation */}
       <header className="flex h-16 w-full items-center justify-between px-4 sm:px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
-        <Link href="/" className="flex items-center gap-2.5 group transition-opacity hover:opacity-90">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs group-hover:scale-105 transition-transform">
-            <Hexagon className="h-4 w-4 fill-current stroke-[2.5]" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-foreground">{t.common.honeyChain}</span>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
-              {t.loginPage.traceabilityPlatform}
-            </span>
-          </div>
-        </Link>
+        <BrandLogo href="/" size="sm" subtitle={t.loginPage.traceabilityPlatform} priority />
 
         <div className="flex items-center gap-2 sm:gap-3 text-xs text-muted-foreground">
           <LanguageSwitcher />
@@ -94,8 +85,8 @@ export default function LoginPage() {
           <div className="rounded-xl border border-border bg-card p-6 sm:p-8 shadow-xs">
             {/* Header */}
             <div className="space-y-1.5 text-center mb-6">
-              <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-primary">
-                <Hexagon className="h-6 w-6 fill-primary/20 stroke-[2]" />
+              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-muted/40 border border-border/60 shadow-2xs p-2.5">
+                <BrandLogo variant="mark" size="sm" imageClassName="h-8 w-auto" priority />
               </div>
               <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
                 {t.loginPage.title}

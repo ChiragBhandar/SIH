@@ -3,10 +3,10 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  Hexagon,
   Shield,
   Building,
 } from "lucide-react";
+import { BrandLogo } from "@/components/ui/brand-logo";
 import { Badge } from "@/components/ui/badge";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { NAVIGATION_CONFIG, NavItem } from "./nav-config";
@@ -52,19 +52,7 @@ export function Sidebar({
     <aside className="hidden h-screen w-64 flex-col shrink-0 border-r border-border bg-card md:flex z-30 select-none">
       {/* Brand Header */}
       <div className="flex h-14 shrink-0 items-center border-b border-border px-4">
-        <div className="flex items-center gap-2.5 overflow-hidden">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-xs">
-            <Hexagon className="h-4 w-4 fill-current stroke-[2.5]" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-foreground">
-              Honey Chain
-            </span>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
-              {isHindi ? "ट्रेसेबिलिटी B2B" : "Traceability B2B"}
-            </span>
-          </div>
-        </div>
+        <BrandLogo href="/dashboard" size="sm" priority />
       </div>
 
       {/* Organisation Context Indicator */}

@@ -2,10 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Hexagon, ArrowRight, QrCode, CheckCircle2 } from "lucide-react";
+import { ArrowRight, QrCode, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BeehiveCluster } from "@/components/landing/beehive-pattern";
 import { useLanguage } from "@/context/language-context";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 export function FinalCTA() {
   const { t } = useLanguage();
@@ -34,8 +35,10 @@ export function FinalCTA() {
           </div>
 
           {/* Brand Icon Lockup */}
-          <div className="relative z-10 mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#143D2B] text-white shadow-sm">
-            <Hexagon className="h-7 w-7 fill-[#D97706] stroke-current stroke-[2.2]" />
+          <div className="relative z-10 mx-auto flex items-center justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white p-2.5 shadow-sm border border-[#E7E3DB]">
+              <BrandLogo variant="mark" size="md" imageClassName="h-9 w-auto" priority={false} />
+            </div>
           </div>
 
           {/* Headline & Narrative */}

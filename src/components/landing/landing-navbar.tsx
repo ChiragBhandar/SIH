@@ -8,6 +8,8 @@ import { useLanguage } from "@/context/language-context";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { VerifyBottleModal } from "@/components/verification";
 
+import { BrandLogo } from "@/components/ui/brand-logo";
+
 export function LandingNavbar() {
   const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -38,21 +40,9 @@ export function LandingNavbar() {
       }`}
     >
       <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Left: Honey Chain Brand Lockup */}
+        {/* Left: BeeTech Brand Lockup */}
         <div className="flex items-center gap-6 lg:gap-10">
-          <Link href="/" className="group flex items-center gap-2.5 transition-opacity hover:opacity-95">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#143D2B] text-white shadow-xs transition-transform group-hover:scale-102">
-              <Hexagon className="h-5 w-5 fill-[#D97706] stroke-current stroke-[2.2]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading text-[16.5px] font-extrabold tracking-tight text-foreground leading-none">
-                {t.common.honeyChain}
-              </span>
-              <span className="text-[9.5px] uppercase font-mono tracking-widest text-[#5F6B64] font-semibold mt-1">
-                {t.common.traceabilityPlatform}
-              </span>
-            </div>
-          </Link>
+          <BrandLogo href="/" size="md" subtitle={t.common.traceabilityPlatform} priority />
 
           {/* Center: Minimal Navigation */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-7">

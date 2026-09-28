@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Hexagon, X, Building, Shield } from "lucide-react";
+import { X, Building, Shield } from "lucide-react";
+import { BrandLogo } from "@/components/ui/brand-logo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { UserAvatar } from "@/components/ui/user-avatar";
@@ -73,19 +74,7 @@ export function MobileNav({
       {/* Drawer */}
       <div className="fixed inset-y-0 left-0 flex w-72 flex-col bg-card shadow-xl border-r border-border animate-in slide-in-from-left duration-200">
         <div className="flex h-14 items-center justify-between border-b border-border px-4">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-xs">
-              <Hexagon className="h-4 w-4 fill-current stroke-[2.5]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-foreground">
-                Honey Chain
-              </span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
-                {isHindi ? "ट्रेसेबिलिटी B2B" : "Traceability B2B"}
-              </span>
-            </div>
-          </div>
+          <BrandLogo href="/dashboard" size="sm" priority />
           <Button
             variant="ghost"
             size="icon"

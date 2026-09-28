@@ -22,16 +22,16 @@ const notoDevanagari = Noto_Sans_Devanagari({
 });
 
 export const metadata: Metadata = {
-  title: "Honey Chain | Traceability & Consumer Trust Platform",
+  title: "BeeTech | Traceability & Consumer Trust Platform",
   description:
     "Enterprise honey-material traceability platform providing immutable supply chain verification, lab test certifications, and consumer trust validation.",
   icons: {
     icon: [
-      { url: "/icon", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
       { url: "/icon.svg", type: "image/svg+xml" },
     ],
-    shortcut: "/icon",
-    apple: "/apple-icon",
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
   },
 };
 

@@ -4,7 +4,6 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  Hexagon,
   ShieldCheck,
   QrCode,
   Search,
@@ -25,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { BrandLogo } from "@/components/ui/brand-logo";
 import { useLanguage } from "@/context/language-context";
 import { normalizeBottleId } from "@/data/mock-bottles";
 
@@ -70,19 +70,12 @@ export default function VerificationPortalPage() {
       {/* Top Header */}
       <header className="border-b border-[#E7E3DB] bg-white/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="h-9 w-9 rounded-lg bg-[#143D2B] flex items-center justify-center text-white shadow-xs">
-              <Hexagon className="h-5 w-5 fill-[#D97706] stroke-current stroke-[2.2]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading text-base font-extrabold tracking-tight text-foreground leading-none">
-                {t.common.honeyChain}
-              </span>
-              <span className="text-[9.5px] uppercase font-mono tracking-widest text-[#5F6B64] font-semibold mt-1">
-                {isHindi ? "सार्वजनिक सत्यापन रजिस्ट्री" : "Public Verification Registry"}
-              </span>
-            </div>
-          </Link>
+          <BrandLogo
+            href="/"
+            size="md"
+            subtitle={isHindi ? "सार्वजनिक सत्यापन रजिस्ट्री" : "Public Verification Registry"}
+            priority
+          />
 
           <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSwitcher />
