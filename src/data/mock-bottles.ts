@@ -266,3 +266,114 @@ export function buildPublicVerification(bottle?: Bottle): PublicConsumerVerifica
       "Based on the official digital traceability records available for this product on the Honey Chain registry.",
   };
 }
+
+/**
+ * Normalizes user-entered bottle codes, supporting shorthand numbers,
+ * case variations, and full pasted QR URLs.
+ * e.g. "00001" -> "HC-BTL-2026-00001"
+ *      "42"    -> "HC-BTL-2026-00042"
+ *      "hc-btl-2026-00002" -> "HC-BTL-2026-00002"
+ *      "https://honeychain.io/verify/HC-BTL-2026-00001" -> "HC-BTL-2026-00001"
+ */
+export function normalizeBottleId(input: string): string {
+  if (!input) return "";
+  let clean = input.trim();
+
+  // If a full verification URL was pasted
+  const urlMatch = clean.match(/\/verify\/([a-zA-Z0-9\-_]+)/i);
+  if (urlMatch) {
+    clean = urlMatch[1];
+  }
+
+  // Strip query strings or trailing punctuation if pasted
+  clean = clean.split("?")[0].replace(/[^a-zA-Z0-9\-_]/g, "");
+
+  // If user entered only digits, e.g. "1", "00001", "42", "100"
+  if (/^\d{1,5}$/.test(clean)) {
+    const num = parseInt(clean, 10);
+    return `HC-BTL-2026-${String(num).padStart(5, "0")}`;
+  }
+
+  // If user entered shorthand like "BTL-1", "HC-00001", "HC-BTL-00001"
+  const prefixMatch = clean.match(/^(?:HC-)?(?:BTL-)?(?:2026-)?(\d{1,5})$/i);
+  if (prefixMatch) {
+    const num = parseInt(prefixMatch[1], 10);
+    return `HC-BTL-2026-${String(num).padStart(5, "0")}`;
+  }
+
+  return clean.toUpperCase();
+}
+
+/**
+ * Intelligently resolves any bottle identifier:
+ * 1. Checks custom dynamic bottles (e.g. from localStorage)
+ * 2. Checks static MOCK_BOTTLES
+ * 3. Resolves serialized units in certified packaging runs (e.g. PKG-2026-0001 bottles 1-100)
+ */
+export function findBottle(rawId: string, customBottles?: Bottle[]): Bottle | undefined {
+  if (!rawId) return undefined;
+  const normId = normalizeBottleId(rawId);
+  const upperRaw = rawId.trim().toUpperCase();
+
+  // 1. Check custom bottles passed in
+  if (customBottles && customBottles.length > 0) {
+    const foundCustom = customBottles.find(
+      (b) => b.id.toUpperCase() === normId || b.id.toUpperCase() === upperRaw
+    );
+    if (foundCustom) return foundCustom;
+  }
+
+  // 2. Check static mock bottles
+  const foundMock = MOCK_BOTTLES.find(
+    (b) => b.id.toUpperCase() === normId || b.id.toUpperCase() === upperRaw
+  );
+  if (foundMock) return foundMock;
+
+  // 3. Check packaging run ranges (e.g. PKG-2026-0001 covers 00001 to 00100)
+  const rangeMatch = normId.match(/^HC-BTL-2026-(\d{5})$/);
+  if (rangeMatch) {
+    const num = parseInt(rangeMatch[1], 10);
+    if (num >= 1 && num <= 500) {
+      const isSecondRun = num > 100 && num <= 200;
+      const certLineage = cert1Lineage;
+      const formattedNum = String(num).padStart(5, "0");
+
+      return {
+        id: `HC-BTL-2026-${formattedNum}`,
+        productName: isSecondRun
+          ? "Valley Pure Raw Acacia Honey"
+          : "Highland Wild Multifloral Raw Honey",
+        sourceBatchId: isSecondRun ? "HC-PB-2026-0003" : "HC-PB-2026-0001",
+        sourceBatchNumber: isSecondRun ? "HC-PB-2026-0003" : "HC-PB-2026-0001",
+        honeyVariety: isSecondRun
+          ? "Kullu Valley Acacia & Apple Blossom"
+          : "Himalayan Wild Multifloral (Micro-filtered)",
+        bottleSize: (num % 2 === 0 ? "500 g" : "250 g") as BottleSize,
+        bottleSizeKg: num % 2 === 0 ? 0.5 : 0.25,
+        packagingRunId: isSecondRun ? "PKG-2026-0002" : "PKG-2026-0001",
+        packagingDate: "2026-09-14",
+        packagingFacility: "Golden Hive Packaging Line 1, Solan Industrial Facility",
+        packagingLine: "Line 01 - Automatic Micro-Filler",
+        lotReferenceCode: isSecondRun ? "LOT-2026-09-PB3" : "LOT-2026-09-PB1",
+        certificationId: isSecondRun ? "CERT-HC-2026-0003" : "CERT-HC-2026-0001",
+        status: "Published",
+        qrStatus: "Active",
+        qrIdentifier: `QR-HC-${formattedNum}`,
+        verificationUrl: `/verify/HC-BTL-2026-${formattedNum}`,
+        originRegion: isSecondRun
+          ? "Kullu Valley, Himachal Pradesh"
+          : "Chamoli, Uttarakhand / Himalayan Region",
+        harvestPeriod: "September 2026",
+        notes: isSecondRun
+          ? "Valley South spring harvest certified single-batch retail bottle."
+          : "Highland North origin single-batch certified retail bottle.",
+        createdAt: "2026-09-14T12:00:00.000Z",
+        publishedAt: "2026-09-14T12:15:00.000Z",
+        sourceLineage: certLineage,
+      };
+    }
+  }
+
+  return undefined;
+}
+

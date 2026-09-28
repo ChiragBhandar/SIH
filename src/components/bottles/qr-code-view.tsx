@@ -2,9 +2,12 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Copy, Check, ExternalLink, Download, Sparkles } from "lucide-react";
+import QRCode from "qrcode";
+import { Copy, Check, ExternalLink, Download, Printer, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/context/language-context";
+import { APP_BASE_URL } from "@/lib/constants";
 
 interface QRCodeViewProps {
   bottleId: string;
@@ -15,66 +18,6 @@ interface QRCodeViewProps {
   showActions?: boolean;
 }
 
-// Deterministic pattern generator based on string to create authentic-looking QR matrix
-function generateDeterministicMatrix(seed: string, size = 25): boolean[][] {
-  const matrix: boolean[][] = Array.from({ length: size }, () =>
-    Array(size).fill(false)
-  );
-
-  // 1. Finder patterns (Top-left, Top-right, Bottom-left) 7x7
-  const drawFinder = (startX: number, startY: number) => {
-    for (let r = 0; r < 7; r++) {
-      for (let c = 0; c < 7; c++) {
-        if (
-          r === 0 ||
-          r === 6 ||
-          c === 0 ||
-          c === 6 ||
-          (r >= 2 && r <= 4 && c >= 2 && c <= 4)
-        ) {
-          matrix[startY + r][startX + c] = true;
-        } else {
-          matrix[startY + r][startX + c] = false;
-        }
-      }
-    }
-  };
-
-  drawFinder(0, 0); // Top-left
-  drawFinder(size - 7, 0); // Top-right
-  drawFinder(0, size - 7); // Bottom-left
-
-  // Timing patterns
-  for (let i = 8; i < size - 8; i++) {
-    matrix[6][i] = i % 2 === 0;
-    matrix[i][6] = i % 2 === 0;
-  }
-
-  // Hash-based data fills
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = (hash << 5) - hash + seed.charCodeAt(i);
-    hash |= 0;
-  }
-
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      // Skip finder zones
-      const inTopLeft = r < 8 && c < 8;
-      const inTopRight = r < 8 && c >= size - 8;
-      const inBottomLeft = r >= size - 8 && c < 8;
-      const inCenter = r >= 10 && r <= 14 && c >= 10 && c <= 14;
-
-      if (inTopLeft || inTopRight || inBottomLeft || inCenter) continue;
-
-      const val = Math.sin(hash * (r + 1) * (c + 1)) * 10000;
-      matrix[r][c] = (val - Math.floor(val)) > 0.48;
-    }
-  }
-
-  return matrix;
-}
-
 export function QRCodeView({
   bottleId,
   qrIdentifier = "QR-HC-00001",
@@ -82,16 +25,48 @@ export function QRCodeView({
   size = 200,
   showActions = true,
 }: QRCodeViewProps) {
+  const { tr, trStatus } = useLanguage();
   const [copied, setCopied] = React.useState(false);
-  const [downloadNotice, setDownloadNotice] = React.useState(false);
+  const [qrDataUrl, setQrDataUrl] = React.useState<string | null>(null);
+  const [qrSvgString, setQrSvgString] = React.useState<string | null>(null);
+  const [qrError, setQrError] = React.useState(false);
 
   const verifyPath = `/verify/${bottleId}`;
-  const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const fullUrl = `${origin}${verifyPath}`;
+  // Production domain — QR codes always encode the live Vercel URL
+  const fullUrl = `${APP_BASE_URL}${verifyPath}`;
 
-  const matrix = React.useMemo(() => generateDeterministicMatrix(bottleId), [bottleId]);
-  const matrixSize = matrix.length;
-  const cellSize = 100 / matrixSize;
+  // Generate real QR code (PNG data URL for display + SVG string for download)
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function generate() {
+      try {
+        const dataUrl = await QRCode.toDataURL(fullUrl, {
+          errorCorrectionLevel: "H",
+          margin: 2,
+          width: 400,
+          color: { dark: "#0f172a", light: "#ffffff" },
+        });
+        const svgStr = await QRCode.toString(fullUrl, {
+          type: "svg",
+          errorCorrectionLevel: "H",
+          margin: 2,
+          color: { dark: "#0f172a", light: "#ffffff" },
+        });
+        if (!cancelled) {
+          setQrDataUrl(dataUrl);
+          setQrSvgString(svgStr);
+          setQrError(false);
+        }
+      } catch (err) {
+        console.error("QR generation failed:", err);
+        if (!cancelled) setQrError(true);
+      }
+    }
+
+    generate();
+    return () => { cancelled = true; };
+  }, [fullUrl]);
 
   const handleCopy = () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -101,146 +76,223 @@ export function QRCodeView({
     }
   };
 
-  const handlePrintDownload = () => {
-    setDownloadNotice(true);
-    setTimeout(() => setDownloadNotice(false), 2500);
+  const handleDownloadPng = () => {
+    if (!qrDataUrl) return;
+    const a = document.createElement("a");
+    a.href = qrDataUrl;
+    a.download = `${bottleId}-qr-code.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
+  const handleDownloadSvg = () => {
+    if (!qrSvgString) return;
+    const blob = new Blob([qrSvgString], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${bottleId}-qr-code.svg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handlePrint = () => {
+    if (!qrDataUrl) return;
+    const win = window.open("", "_blank", "width=600,height=700");
+    if (!win) return;
+    const productInfo = qrIdentifier || bottleId;
+    win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <title>QR Code — ${bottleId}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;
+         justify-content:center;min-height:100vh;background:#fff;padding:24px}
+    .card{border:2px solid #d97706;border-radius:16px;padding:28px 32px;
+          text-align:center;max-width:340px;width:100%}
+    .brand{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+           color:#d97706;margin-bottom:16px}
+    img{width:260px;height:260px;display:block;margin:0 auto}
+    .cta{margin-top:16px;font-size:13px;font-weight:700;color:#0f172a;letter-spacing:.02em}
+    .product{margin-top:6px;font-size:11px;color:#64748b}
+    .id{margin-top:10px;font-size:10px;font-family:monospace;color:#94a3b8;letter-spacing:.05em}
+    @media print{body{padding:0;justify-content:flex-start;padding-top:40px}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">🐝 Honey Chain — Verified Traceability</div>
+    <img src="${qrDataUrl}" alt="QR Code for ${bottleId}" />
+    <div class="cta">Scan to verify this product</div>
+    <div class="product">${productInfo}</div>
+    <div class="id">${bottleId}</div>
+  </div>
+  <script>window.onload=()=>{window.print()}</script>
+</body>
+</html>`);
+    win.document.close();
+  };
+
+  // ─── Status badge colour ──────────────────────────────────────────────────
+  const statusClass =
+    status === "Active" || status === "Published"
+      ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+      : status === "Suspended"
+      ? "bg-rose-50 text-rose-800 border-rose-200"
+      : "bg-amber-50 text-amber-800 border-amber-200";
+
   return (
-    <div className="flex flex-col items-center text-center space-y-4">
-      {/* QR Code Canvas Frame */}
-      <div
-        className="relative p-4 rounded-xl bg-white text-slate-900 border-2 border-amber-500/30 shadow-md flex flex-col items-center justify-center transition-all hover:border-amber-500 hover:shadow-lg group"
-        style={{ width: size + 32, height: size + 32 }}
-      >
-        <svg
-          viewBox="0 0 100 100"
-          className="w-full h-full"
-          shapeRendering="crispEdges"
+    /* Outer wrapper — full width, column, centred */
+    <div className="flex flex-col items-center gap-5 w-full">
+
+      {/* ── QR image frame ───────────────────────────────────────────────── */}
+      <div className="relative">
+        <div
+          className="p-3 rounded-2xl bg-white border-2 border-amber-400/40 shadow-md
+                     transition-all duration-200 hover:border-amber-500 hover:shadow-lg"
         >
-          {/* Background */}
-          <rect width="100" height="100" fill="#ffffff" />
-
-          {/* Matrix Cells */}
-          {matrix.map((row, rIdx) =>
-            row.map((cell, cIdx) =>
-              cell ? (
-                <rect
-                  key={`${rIdx}-${cIdx}`}
-                  x={cIdx * cellSize}
-                  y={rIdx * cellSize}
-                  width={cellSize + 0.05}
-                  height={cellSize + 0.05}
-                  fill="#0f172a"
-                />
-              ) : null
-            )
+          {qrDataUrl ? (
+            <img
+              src={qrDataUrl}
+              alt={`QR code for ${bottleId} — Scan to verify`}
+              width={size}
+              height={size}
+              className="block rounded"
+              style={{ imageRendering: "pixelated" }}
+            />
+          ) : qrError ? (
+            <div
+              className="flex flex-col items-center justify-center gap-2
+                         text-xs text-muted-foreground bg-muted/30 rounded"
+              style={{ width: size, height: size }}
+            >
+              <span className="text-xl">⚠</span>
+              <span>QR unavailable</span>
+            </div>
+          ) : (
+            <div
+              className="animate-pulse bg-muted/50 rounded"
+              style={{ width: size, height: size }}
+            />
           )}
+        </div>
 
-          {/* Center Bee Emblem */}
-          <circle cx="50" cy="50" r="8" fill="#ffffff" stroke="#d97706" strokeWidth="1" />
-          <text
-            x="50"
-            y="53.5"
-            textAnchor="middle"
-            fontSize="7"
-            fill="#d97706"
-            fontWeight="bold"
-            fontFamily="sans-serif"
-          >
-            HC
-          </text>
-        </svg>
-
-        {/* Scan indicator badge */}
-        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase shadow-xs flex items-center gap-1 whitespace-nowrap">
-          <Sparkles className="h-2.5 w-2.5" />
-          <span>Scan to Verify</span>
+        {/* Scan badge — horizontally centred below the frame */}
+        <div
+          className="absolute -bottom-3.5 left-1/2 -translate-x-1/2
+                     bg-amber-500 text-slate-950 px-3 py-0.5 rounded-full
+                     text-[10px] font-bold tracking-widest uppercase shadow-sm
+                     flex items-center gap-1 whitespace-nowrap"
+        >
+          <Sparkles className="h-2.5 w-2.5 shrink-0" />
+          <span>{tr("Scan to Verify", "सत्यापित करने के लिए स्कैन करें")}</span>
         </div>
       </div>
 
-      {/* Meta Identifiers */}
-      <div className="space-y-1 w-full max-w-xs">
-        <div className="flex items-center justify-center gap-2">
+      {/* ── Bottle ID + status + QR ref ──────────────────────────────────── */}
+      <div className="flex flex-col items-center gap-1.5 mt-1">
+        <div className="flex items-center gap-2">
           <span className="font-mono font-bold text-xs text-foreground bg-muted/60 px-2 py-0.5 rounded border border-border">
             {bottleId}
           </span>
-          <Badge
-            variant="outline"
-            className={`text-[10px] uppercase font-semibold ${
-              status === "Active" || status === "Published"
-                ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                : status === "Suspended"
-                ? "bg-rose-50 text-rose-800 border-rose-200"
-                : "bg-amber-50 text-amber-800 border-amber-200"
-            }`}
-          >
-            {status}
+          <Badge variant="outline" className={`text-[10px] uppercase font-semibold ${statusClass}`}>
+            {trStatus(status)}
           </Badge>
         </div>
-        <p className="text-[11px] font-mono text-muted-foreground truncate">
-          {qrIdentifier}
-        </p>
+        <p className="text-[11px] font-mono text-muted-foreground">{qrIdentifier}</p>
       </div>
 
-      {/* Action Buttons */}
+      {/* ── Actions section ──────────────────────────────────────────────── */}
       {showActions && (
-        <div className="w-full space-y-2 pt-1">
-          {/* Public Link Preview Box */}
-          <div className="flex items-center justify-between gap-1 p-1.5 pl-2.5 rounded-lg border border-border/80 bg-muted/40 text-left text-xs">
-            <span className="font-mono text-[11px] text-muted-foreground truncate select-all">
-              {verifyPath}
+        <div className="w-full flex flex-col gap-2">
+
+          {/* URL bar */}
+          <div className="flex items-center rounded-lg border border-border/80 bg-muted/40 overflow-hidden">
+            <span
+              className="flex-1 min-w-0 font-mono text-[10px] text-muted-foreground
+                         px-3 py-2 truncate select-all"
+            >
+              {fullUrl || verifyPath}
             </span>
-            <Button
+            <button
               type="button"
-              variant="ghost"
-              size="sm"
               onClick={handleCopy}
-              className="h-7 px-2 text-xs shrink-0 gap-1 text-primary hover:text-primary cursor-pointer"
+              className="shrink-0 flex items-center gap-1.5 px-3 py-2
+                         text-[10px] font-semibold text-primary
+                         border-l border-border/60 hover:bg-primary/8
+                         transition-colors cursor-pointer"
             >
               {copied ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-emerald-600" />
-                  <span className="text-[10px] text-emerald-700 font-medium">Copied!</span>
+                  <Check className="h-3 w-3 text-emerald-600 shrink-0" />
+                  <span className="text-emerald-700">{tr("Copied!", "कॉपी!")}</span>
                 </>
               ) : (
                 <>
-                  <Copy className="h-3.5 w-3.5" />
-                  <span className="text-[10px]">Copy</span>
+                  <Copy className="h-3 w-3 shrink-0" />
+                  <span>{tr("Copy", "कॉपी")}</span>
                 </>
               )}
-            </Button>
+            </button>
           </div>
 
-          {/* Action Row */}
-          <div className="grid grid-cols-2 gap-2">
+          {/* Three action buttons — equal width */}
+          <div className="grid grid-cols-3 gap-2">
             <Button
               variant="outline"
               size="sm"
               asChild
-              className="h-8 text-xs gap-1.5 border-primary/40 text-primary hover:bg-primary/5 cursor-pointer"
+              className="h-9 text-xs gap-1.5 border-primary/30 text-primary
+                         hover:bg-primary/5 cursor-pointer justify-center"
             >
               <Link href={verifyPath} target="_blank">
-                <ExternalLink className="h-3.5 w-3.5" />
-                <span>Test Public View</span>
+                <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+                <span>{tr("Preview", "प्रीव्यू")}</span>
               </Link>
             </Button>
 
             <Button
               variant="outline"
               size="sm"
-              onClick={handlePrintDownload}
-              className="h-8 text-xs gap-1.5 cursor-pointer"
+              onClick={handleDownloadPng}
+              disabled={!qrDataUrl}
+              className="h-9 text-xs gap-1.5 cursor-pointer justify-center disabled:opacity-50"
             >
-              <Download className="h-3.5 w-3.5 text-muted-foreground" />
-              <span>Export Sticker</span>
+              <Download className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+              <span>{tr("Download", "डाउनलोड")}</span>
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrint}
+              disabled={!qrDataUrl}
+              className="h-9 text-xs gap-1.5 cursor-pointer justify-center disabled:opacity-50"
+            >
+              <Printer className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+              <span>{tr("Print", "प्रिंट")}</span>
             </Button>
           </div>
 
-          {downloadNotice && (
-            <p className="text-[11px] text-emerald-700 animate-in fade-in slide-in-from-top-1">
-              ✓ Sticker print vector simulated for {bottleId}
-            </p>
+          {/* SVG download — subtle secondary link */}
+          {qrSvgString && (
+            <button
+              type="button"
+              onClick={handleDownloadSvg}
+              className="flex items-center justify-center gap-1.5 text-[10px]
+                         text-muted-foreground hover:text-primary transition-colors
+                         cursor-pointer py-0.5"
+            >
+              <Download className="h-2.5 w-2.5 shrink-0" />
+              <span className="underline underline-offset-2">
+                {tr("Download SVG (vector / print quality)", "SVG डाउनलोड करें (प्रिंट)")}
+              </span>
+            </button>
           )}
         </div>
       )}

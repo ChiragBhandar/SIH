@@ -6,6 +6,7 @@ import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 import {
   PackageCheck,
   Boxes,
@@ -41,16 +42,15 @@ import { EmptyState } from "@/components/ui/empty-state";
 function ReceivingContent() {
   const { custodyTransfers, isLoaded } = useTraceability();
   const { selectedOrg, switchOrganisation } = useAuthSession();
+  const { tr, isHindi, trStatus } = useLanguage();
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const [tabFilter, setTabFilter] = React.useState<"awaiting" | "all" | "accepted" | "rejected">("awaiting");
 
   // Inbound transfers targeting the currently selected organisation
-  // (If super admin or inspecting, allow viewing all incoming)
   const incomingTransfers = React.useMemo(() => {
     return custodyTransfers.filter((t) => {
       if (!selectedOrg) return true;
-      // Show if current org is destination, or if beekeeper coop show outgoing transfers with status
       return t.destinationOrgId === selectedOrg.id;
     });
   }, [custodyTransfers, selectedOrg]);
@@ -93,7 +93,7 @@ function ReceivingContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading manufacturer receiving queue...
+          {tr("Loading manufacturer receiving queue...", "निर्माता प्राप्ति कतार लोड हो रही है...")}
         </div>
       </div>
     );
@@ -111,11 +111,14 @@ function ReceivingContent() {
               <PackageCheck className="h-4 w-4" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Manufacturer Receiving
+              {tr("Manufacturer Receiving", "निर्माता प्राप्ति व आवक")}
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Intake inspection, physical weight verification, and acceptance of raw honey consignments.
+            {tr(
+              "Intake inspection, physical weight verification, and acceptance of raw honey consignments.",
+              "कच्चे शहद की खेपों का आवक निरीक्षण, भौतिक वजन सत्यापन और ब्लॉकचेन स्वीकृति।"
+            )}
           </p>
         </div>
 
@@ -123,7 +126,7 @@ function ReceivingContent() {
         {!isManufacturer && (
           <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs">
             <span className="text-amber-800 font-medium">
-              Active Org: {selectedOrg?.name}
+              {tr("Active Org:", "सक्रिय संस्था:")} {selectedOrg?.name}
             </span>
             <Button
               size="sm"
@@ -131,7 +134,7 @@ function ReceivingContent() {
               className="h-7 text-xs border-amber-300 text-amber-900 hover:bg-amber-100 bg-white"
               onClick={() => switchOrganisation("org-ghf-02")}
             >
-              Switch to Golden Hive Foods →
+              {tr("Switch to Golden Hive Foods →", "गोल्डन हाइव फूड्स पर जाएं →")}
             </Button>
           </div>
         )}
@@ -142,7 +145,9 @@ function ReceivingContent() {
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Awaiting Receipt</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {tr("Awaiting Receipt", "प्राप्ति हेतु प्रतीक्षारत")}
+              </span>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
                 <Clock className="h-4 w-4" />
               </div>
@@ -152,14 +157,16 @@ function ReceivingContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
-            Requires intake inspection
+            {tr("Requires intake inspection", "आवक निरीक्षण आवश्यक")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Accepted Into Plant</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {tr("Accepted Into Plant", "संयंत्र में स्वीकृत")}
+              </span>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
                 <CheckCircle2 className="h-4 w-4" />
               </div>
@@ -169,14 +176,16 @@ function ReceivingContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
-            Verified & ready for processing
+            {tr("Verified & ready for processing", "सत्यापित और प्रसंस्करण हेतु तैयार")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Rejected / Flagged</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {tr("Rejected / Flagged", "अस्वीकृत / चिह्नित")}
+              </span>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-700 border border-rose-200">
                 <AlertTriangle className="h-4 w-4" />
               </div>
@@ -186,24 +195,26 @@ function ReceivingContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
-            Non-compliant shipments
+            {tr("Non-compliant shipments", "गैर-अनुपालक खेप")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Inbound Raw Volume</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {tr("Inbound Raw Volume", "आवक कच्चा आयतन")}
+              </span>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-orange-700 border border-orange-200">
                 <Truck className="h-4 w-4" />
               </div>
             </div>
             <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
-              {stats.totalWeight.toFixed(1)} <span className="text-xs font-normal text-muted-foreground">kg</span>
+              {stats.totalWeight.toFixed(1)} <span className="text-xs font-normal text-muted-foreground">{tr("kg", "किग्रा")}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
-            Total consignment intake
+            {tr("Total consignment intake", "कुल खेप आवक")}
           </CardContent>
         </Card>
       </div>
@@ -213,7 +224,7 @@ function ReceivingContent() {
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search incoming batch or supplier..."
+            placeholder={tr("Search incoming batch or supplier...", "आवक बैच या आपूर्तिकर्ता खोजें...")}
             className="pl-8 h-9 text-xs"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -222,10 +233,10 @@ function ReceivingContent() {
 
         <div className="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto">
           {[
-            { id: "awaiting", label: `Awaiting Receipt (${stats.awaiting})` },
-            { id: "all", label: `All Inbound (${stats.total})` },
-            { id: "accepted", label: `Accepted (${stats.accepted})` },
-            { id: "rejected", label: `Rejected (${stats.rejected})` },
+            { id: "awaiting", label: `${tr("Awaiting Receipt", "प्राप्ति प्रतीक्षारत")} (${stats.awaiting})` },
+            { id: "all", label: `${tr("All Inbound", "सभी आवक")} (${stats.total})` },
+            { id: "accepted", label: `${tr("Accepted", "स्वीकृत")} (${stats.accepted})` },
+            { id: "rejected", label: `${tr("Rejected", "अस्वीकृत")} (${stats.rejected})` },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -249,14 +260,14 @@ function ReceivingContent() {
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Incoming Batch ID</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Source Supplier</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Origin Apiary</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold text-right">Transferred Weight</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Carrier / Ref</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Dispatch Date</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Receiving Status</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold text-right">Intake Action</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Incoming Batch ID", "आवक बैच आईडी")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Source Supplier", "स्रोत आपूर्तिकर्ता")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Origin Apiary", "मूल मधुमक्खी शाला")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold text-right">{tr("Transferred Weight", "हस्तांतरित वजन")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Carrier / Ref", "वाहक / संदर्भ")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Dispatch Date", "प्रेषण तिथि")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Receiving Status", "प्राप्ति स्थिति")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold text-right">{tr("Intake Action", "आवक कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -265,11 +276,14 @@ function ReceivingContent() {
                   <TableCell colSpan={8} className="h-48 text-center">
                     <EmptyState
                       icon={PackageCheck}
-                      title="No incoming shipments found"
+                      title={tr("No incoming shipments found", "कोई आवक खेप नहीं मिली")}
                       description={
                         !isManufacturer
-                          ? `Currently viewing as "${selectedOrg?.name}". Switch active organisation to Golden Hive Foods to review inbound manufacturer shipments.`
-                          : "No shipments currently in queue matching your filter criteria."
+                          ? tr(
+                              `Currently viewing as "${selectedOrg?.name}". Switch active organisation to Golden Hive Foods to review inbound manufacturer shipments.`,
+                              `वर्तमान में "${selectedOrg?.name}" के रूप में देख रहे हैं। आवक निर्माता खेपों की समीक्षा के लिए गोल्डन हाइव फूड्स पर स्विच करें।`
+                            )
+                          : tr("No shipments currently in queue matching your filter criteria.", "आपके फ़िल्टर से मेल खाती कोई खेप कतार में नहीं है।")
                       }
                       action={
                         !isManufacturer ? (
@@ -277,7 +291,7 @@ function ReceivingContent() {
                             size="sm"
                             onClick={() => switchOrganisation("org-ghf-02")}
                           >
-                            Switch to Golden Hive Foods
+                            {tr("Switch to Golden Hive Foods", "गोल्डन हाइव फूड्स पर स्विच करें")}
                           </Button>
                         ) : undefined
                       }
@@ -317,7 +331,7 @@ function ReceivingContent() {
                       </TableCell>
 
                       <TableCell className="font-mono text-xs text-right font-bold text-foreground">
-                        {transfer.quantityKg.toFixed(1)} kg
+                        {transfer.quantityKg.toFixed(1)} {tr("kg", "किग्रा")}
                       </TableCell>
 
                       <TableCell className="font-mono text-xs text-muted-foreground">
@@ -339,7 +353,9 @@ function ReceivingContent() {
                           }
                           size="sm"
                         >
-                          {transfer.status === "Pending Acceptance" ? "Awaiting Receipt" : transfer.status}
+                          {transfer.status === "Pending Acceptance"
+                            ? tr("Awaiting Receipt", "प्राप्ति प्रतीक्षारत")
+                            : trStatus(transfer.status)}
                         </StatusBadge>
                       </TableCell>
 
@@ -350,7 +366,7 @@ function ReceivingContent() {
                             size="xs"
                           >
                             <Link href={`/receiving/${transfer.id}`}>
-                              <span>Review & Receive</span>
+                              <span>{tr("Review & Receive", "समीक्षा और प्राप्त करें")}</span>
                               <ChevronRight className="h-3.5 w-3.5" />
                             </Link>
                           </Button>
@@ -362,7 +378,7 @@ function ReceivingContent() {
                             className="text-primary hover:text-primary font-medium"
                           >
                             <Link href={`/receiving/${transfer.id}`}>
-                              <span>View Intake</span>
+                              <span>{tr("View Intake", "आवक देखें")}</span>
                               <ExternalLink className="h-3 w-3" />
                             </Link>
                           </Button>
@@ -381,12 +397,13 @@ function ReceivingContent() {
 }
 
 export default function ReceivingPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Receiving", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Receiving", "प्राप्ति"), active: true },
         ]}
         defaultNavId="receiving"
       >

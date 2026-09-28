@@ -5,6 +5,7 @@ import Link from "next/link";
 import { MarketplaceListing, MarketplaceOrder } from "@/types/marketplace";
 import { useTraceability } from "@/context/traceability-context";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 import {
   Dialog,
   DialogContent,
@@ -42,6 +43,7 @@ export function MarketplaceOrderModal({
 }: MarketplaceOrderModalProps) {
   const { createMarketplaceOrder, marketplaceOrders } = useTraceability();
   const { selectedOrg, user } = useAuthSession();
+  const { tr, trStatus } = useLanguage();
 
   // Wizard steps: 'form' -> 'review' -> 'confirmation'
   const [step, setStep] = React.useState<"form" | "review" | "confirmation">("form");
@@ -80,24 +82,27 @@ export function MarketplaceOrderModal({
 
     const numQty = Number(quantity);
     if (isNaN(numQty) || numQty <= 0) {
-      setValidationError("Requested quantity must be greater than 0 kg.");
+      setValidationError(tr("Requested quantity must be greater than 0 kg.", "अनुरोधित मात्रा 0 किग्रा से अधिक होनी चाहिए।"));
       return;
     }
 
     if (numQty > listing.availableQuantity) {
       setValidationError(
-        `Requested quantity (${numQty} kg) exceeds available quantity (${listing.availableQuantity} kg).`
+        tr(
+          `Requested quantity (${numQty} kg) exceeds available quantity (${listing.availableQuantity} kg).`,
+          `अनुरोधित मात्रा (${numQty} किग्रा) उपलब्ध मात्रा (${listing.availableQuantity} किग्रा) से अधिक है।`
+        )
       );
       return;
     }
 
     if (!deliveryLocation.trim()) {
-      setValidationError("Delivery and reference location is required.");
+      setValidationError(tr("Delivery and reference location is required.", "वितरण एवं संदर्भ स्थान आवश्यक है।"));
       return;
     }
 
     if (!requestedDeliveryDate) {
-      setValidationError("Requested delivery date is required.");
+      setValidationError(tr("Requested delivery date is required.", "अनुरोधित वितरण तिथि आवश्यक है।"));
       return;
     }
 
@@ -127,7 +132,7 @@ export function MarketplaceOrderModal({
         onOrderCreated(order);
       }
     } catch (err: unknown) {
-      setValidationError(err instanceof Error ? err.message : "Failed to place mock order");
+      setValidationError(err instanceof Error ? err.message : tr("Failed to place mock order", "ऑर्डर देने में विफल"));
     } finally {
       setIsSubmitting(false);
     }
@@ -144,9 +149,11 @@ export function MarketplaceOrderModal({
                   <ShoppingBag className="h-4 w-4" />
                 </div>
                 <div>
-                  <DialogTitle className="text-base font-bold">Place Mock Order</DialogTitle>
+                  <DialogTitle className="text-base font-bold">
+                    {tr("Place Commercial Order", "वाणिज्यिक ऑर्डर दें")}
+                  </DialogTitle>
                   <DialogDescription className="text-xs">
-                    Create a commercial purchase commitment referencing authoritative batch{" "}
+                    {tr("Create a commercial purchase commitment referencing authoritative batch", "अधिकृत बैच के संदर्भ में वाणिज्यिक खरीद प्रतिबद्धता बनाएं")}{" "}
                     <span className="font-mono font-semibold text-foreground">{listing.batchNumber}</span>.
                   </DialogDescription>
                 </div>
@@ -157,19 +164,19 @@ export function MarketplaceOrderModal({
             <div className="rounded-lg border border-border/80 bg-muted/20 p-3 text-xs space-y-2">
               <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-border/60">
                 <div>
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Listing</span>
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">{tr("Listing", "लिस्टिंग")}</span>
                   <span className="font-mono font-bold text-foreground">{listing.id}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Authoritative Batch</span>
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">{tr("Authoritative Batch", "अधिकृत बैच")}</span>
                   <span className="font-mono font-bold text-primary">{listing.batchNumber}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Seller</span>
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">{tr("Seller", "विक्रेता")}</span>
                   <span className="font-semibold text-foreground">{listing.sellerOrgName}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Available Stock</span>
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">{tr("Available Stock", "उपलब्ध स्टॉक")}</span>
                   <span className="font-mono font-bold text-emerald-700">
                     {listing.availableQuantity.toFixed(1)} {listing.unit}
                   </span>
@@ -177,8 +184,8 @@ export function MarketplaceOrderModal({
               </div>
 
               <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                <span>Variety: <strong className="text-foreground">{listing.honeyVariety}</strong></span>
-                <span>Traceability: <strong className="text-primary">{listing.traceabilityStatus}</strong></span>
+                <span>{tr("Variety:", "किस्म:")} <strong className="text-foreground">{listing.honeyVariety}</strong></span>
+                <span>{tr("Traceability:", "ट्रेसेबिलिटी:")} <strong className="text-primary">{trStatus(listing.traceabilityStatus)}</strong></span>
               </div>
             </div>
 
@@ -187,7 +194,7 @@ export function MarketplaceOrderModal({
               <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs text-rose-800 flex items-start gap-2">
                 <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600 mt-0.5" />
                 <div>
-                  <strong>Validation Notice:</strong> {validationError}
+                  <strong>{tr("Validation Notice:", "सत्यापन सूचना:")}</strong> {validationError}
                 </div>
               </div>
             )}
@@ -196,8 +203,8 @@ export function MarketplaceOrderModal({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
               <div className="space-y-1 sm:col-span-2">
                 <label className="text-xs font-semibold text-foreground flex items-center justify-between">
-                  <span>Buyer Organisation</span>
-                  <span className="text-[10px] text-muted-foreground font-normal">Commercial purchasing party</span>
+                  <span>{tr("Buyer Organisation", "खरीदार संगठन")}</span>
+                  <span className="text-[10px] text-muted-foreground font-normal">{tr("Commercial purchasing party", "वाणिज्यिक खरीद पक्ष")}</span>
                 </label>
                 <Input
                   value={buyerOrgName}
@@ -210,8 +217,8 @@ export function MarketplaceOrderModal({
 
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-foreground flex items-center justify-between">
-                  <span>Requested Quantity ({listing.unit})</span>
-                  <span className="text-[10px] text-muted-foreground font-mono">Max: {listing.availableQuantity} {listing.unit}</span>
+                  <span>{tr("Requested Quantity", "अनुरोधित मात्रा")} ({listing.unit})</span>
+                  <span className="text-[10px] text-muted-foreground font-mono">{tr("Max:", "अधिकतम:")} {listing.availableQuantity} {listing.unit}</span>
                 </label>
                 <Input
                   type="number"
@@ -227,7 +234,7 @@ export function MarketplaceOrderModal({
 
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-foreground">
-                  Buyer Purchase Order Ref
+                  {tr("Buyer Purchase Order Ref", "खरीदार खरीद आदेश (PO) संदर्भ")}
                 </label>
                 <Input
                   value={buyerReference}
@@ -240,12 +247,12 @@ export function MarketplaceOrderModal({
 
               <div className="space-y-1 sm:col-span-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Delivery / Receiving Facility Location
+                  {tr("Delivery / Receiving Facility Location", "वितरण / आवक सुविधा स्थान")}
                 </label>
                 <Input
                   value={deliveryLocation}
                   onChange={(e) => setDeliveryLocation(e.target.value)}
-                  placeholder="Facility address, Bay # or warehouse intake dock"
+                  placeholder={tr("Facility address, Bay # or warehouse intake dock", "सुविधा का पता, बे संख्या या गोदाम इनटेक डॉक")}
                   className="h-8 text-xs"
                   required
                 />
@@ -253,7 +260,7 @@ export function MarketplaceOrderModal({
 
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-foreground">
-                  Requested Delivery Date
+                  {tr("Requested Delivery Date", "अनुरोधित वितरण तिथि")}
                 </label>
                 <Input
                   type="date"
@@ -266,7 +273,7 @@ export function MarketplaceOrderModal({
 
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-foreground">
-                  Buyer Contact / Agent Name
+                  {tr("Buyer Contact / Agent Name", "खरीदार संपर्क / एजेंट नाम")}
                 </label>
                 <Input
                   value={buyerContactName}
@@ -277,24 +284,27 @@ export function MarketplaceOrderModal({
 
               <div className="space-y-1 sm:col-span-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Commercial & Logistic Notes
+                  {tr("Commercial & Logistic Notes", "वाणिज्यिक एवं लॉजिस्टिक टिप्पणी")}
                 </label>
                 <Textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={2}
                   className="text-xs resize-none"
-                  placeholder="Optional packaging requirements, temp thresholds, or testing specs..."
+                  placeholder={tr(
+                    "Optional packaging requirements, temp thresholds, or testing specs...",
+                    "वैकल्पिक पैकेजिंग आवश्यकताएं, तापमान सीमा, या परीक्षण विनिर्देश..."
+                  )}
                 />
               </div>
             </div>
 
             <DialogFooter className="pt-2 sm:justify-between gap-2 border-t border-border/60">
               <Button type="button" variant="outline" size="sm" onClick={onClose} className="text-xs h-8">
-                Cancel
+                {tr("Cancel", "रद्द करें")}
               </Button>
               <Button type="submit" size="sm" className="text-xs h-8 gap-1.5 font-semibold">
-                <span>Continue to Review</span>
+                <span>{tr("Continue to Review", "समीक्षा के लिए आगे बढ़ें")}</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </DialogFooter>
@@ -310,9 +320,14 @@ export function MarketplaceOrderModal({
                   <FileText className="h-4 w-4" />
                 </div>
                 <div>
-                  <DialogTitle className="text-base font-bold">Review Mock Order Summary</DialogTitle>
+                  <DialogTitle className="text-base font-bold">
+                    {tr("Review Order Summary", "ऑर्डर सारांश की समीक्षा करें")}
+                  </DialogTitle>
                   <DialogDescription className="text-xs">
-                    Please verify the commercial order parameters before generating the mock purchase order.
+                    {tr(
+                      "Please verify the commercial order parameters before generating the purchase order.",
+                      "कृपया खरीद आदेश जारी करने से पहले वाणिज्यिक ऑर्डर मापदंडों की पुष्टि करें।"
+                    )}
                   </DialogDescription>
                 </div>
               </div>
@@ -323,32 +338,32 @@ export function MarketplaceOrderModal({
               <div className="flex items-center justify-between pb-3 border-b border-border/70">
                 <div>
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                    Generated Order Reference
+                    {tr("Generated Order Reference", "उत्पन्न ऑर्डर संदर्भ")}
                   </span>
                   <span className="font-mono font-bold text-primary text-sm">{previewOrderId}</span>
                 </div>
                 <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/30 text-xs font-medium">
-                  Status: Pending Seller Action
+                  {tr("Status: Pending Seller Action", "स्थिति: विक्रेता कार्रवाई लंबित")}
                 </Badge>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="p-2.5 rounded-lg bg-muted/20 border border-border/80 space-y-1">
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                    Buyer Organisation
+                    {tr("Buyer Organisation", "खरीदार संगठन")}
                   </span>
                   <div className="font-bold text-foreground text-xs">{buyerOrgName}</div>
-                  <div className="text-[11px] text-muted-foreground">Contact: {buyerContactName}</div>
-                  <div className="text-[11px] font-mono text-muted-foreground">Ref: {buyerReference}</div>
+                  <div className="text-[11px] text-muted-foreground">{tr("Contact:", "संपर्क:")} {buyerContactName}</div>
+                  <div className="text-[11px] font-mono text-muted-foreground">{tr("Ref:", "संदर्भ:")} {buyerReference}</div>
                 </div>
 
                 <div className="p-2.5 rounded-lg bg-muted/20 border border-border/80 space-y-1">
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                    Seller Organisation
+                    {tr("Seller Organisation", "विक्रेता संगठन")}
                   </span>
                   <div className="font-bold text-foreground text-xs">{listing.sellerOrgName}</div>
                   <div className="text-[11px] text-muted-foreground">{listing.sellerLocation}</div>
-                  <div className="text-[11px] font-mono text-muted-foreground">Listing: {listing.id}</div>
+                  <div className="text-[11px] font-mono text-muted-foreground">{tr("Listing:", "लिस्टिंग:")} {listing.id}</div>
                 </div>
               </div>
 
@@ -356,19 +371,19 @@ export function MarketplaceOrderModal({
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                      Authoritative Batch Identity
+                      {tr("Authoritative Batch Identity", "अधिकृत बैच पहचान")}
                     </span>
                     <span className="font-mono font-bold text-foreground text-xs">{listing.batchNumber}</span>
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                      Variety / Botanical Source
+                      {tr("Variety / Botanical Source", "किस्म / वानस्पतिक स्रोत")}
                     </span>
                     <span className="font-medium text-foreground text-xs">{listing.honeyVariety}</span>
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                      Order Quantity
+                      {tr("Order Quantity", "ऑर्डर मात्रा")}
                     </span>
                     <span className="font-mono font-bold text-primary text-sm">
                       {Number(quantity).toFixed(1)} {listing.unit}
@@ -378,30 +393,36 @@ export function MarketplaceOrderModal({
 
                 <div className="pt-2 border-t border-border/60 text-[11px] text-muted-foreground space-y-1">
                   <div>
-                    <strong className="text-foreground">Delivery Facility:</strong> {deliveryLocation}
+                    <strong className="text-foreground">{tr("Delivery Facility:", "वितरण सुविधा:")}</strong> {deliveryLocation}
                   </div>
                   <div>
-                    <strong className="text-foreground">Requested Delivery:</strong> {requestedDeliveryDate}
+                    <strong className="text-foreground">{tr("Requested Delivery:", "अनुरोधित वितरण:")}</strong> {requestedDeliveryDate}
                   </div>
                   {notes && (
                     <div>
-                      <strong className="text-foreground">Notes:</strong> {notes}
+                      <strong className="text-foreground">{tr("Notes:", "टिप्पणी:")}</strong> {notes}
                     </div>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* MANDATORY DOMAIN DISTINCTION INFORMATION MESSAGE */}
+            {/* DOMAIN DISTINCTION INFORMATION MESSAGE */}
             <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-xs flex items-start gap-2.5 text-foreground">
               <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <p className="font-semibold text-primary">Marketplace Commercial Transaction Rule</p>
+                <p className="font-semibold text-primary">{tr("Marketplace Commercial Transaction Rule", "मार्केटप्लेस वाणिज्यिक लेनदेन नियम")}</p>
                 <p className="text-muted-foreground text-[11px] leading-relaxed">
-                  &ldquo;This mock order records a marketplace transaction. It does not itself transfer custody of the material.&rdquo;
+                  {tr(
+                    "This order records a marketplace transaction. It does not itself transfer custody of the material.",
+                    "यह ऑर्डर एक मार्केटप्लेस लेनदेन दर्ज करता है। यह स्वयं सामग्री की कस्टडी को स्थानांतरित नहीं करता है।"
+                  )}
                 </p>
                 <p className="text-[10px] text-muted-foreground">
-                  Authoritative batch <code>{listing.batchNumber}</code> remains authoritative with unbroken traceability. Physical dispatch will occur as a separate custody transfer event upon seller fulfillment.
+                  {tr(
+                    "Authoritative batch remains authoritative with unbroken traceability. Physical dispatch will occur as a separate custody transfer event upon seller fulfillment.",
+                    "अधिकृत बैच अटूट ट्रेसेबिलिटी के साथ अधिकृत बना रहता है। विक्रेता पूर्ति पर भौतिक प्रेषण एक अलग कस्टडी हस्तांतरण घटना के रूप में होगा।"
+                  )}
                 </p>
               </div>
             </div>
@@ -415,7 +436,7 @@ export function MarketplaceOrderModal({
                 className="text-xs h-8"
                 disabled={isSubmitting}
               >
-                Back to Edit
+                {tr("Back to Edit", "संपादित करने के लिए वापस")}
               </Button>
               <Button
                 type="button"
@@ -425,7 +446,7 @@ export function MarketplaceOrderModal({
                 className="text-xs h-8 gap-1.5 font-bold"
               >
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>{isSubmitting ? "Submitting Order..." : "Place Mock Order"}</span>
+                <span>{isSubmitting ? tr("Submitting Order...", "ऑर्डर सबमिट हो रहा है...") : tr("Place Order", "ऑर्डर दें")}</span>
               </Button>
             </DialogFooter>
           </div>
@@ -439,10 +460,12 @@ export function MarketplaceOrderModal({
                 <CheckCircle2 className="h-6 w-6" />
               </div>
               <DialogTitle className="text-lg font-bold text-foreground">
-                Mock order placed
+                {tr("Commercial Order Placed Successfully", "वाणिज्यिक ऑर्डर सफलतापूर्वक दर्ज हुआ")}
               </DialogTitle>
               <DialogDescription className="text-xs max-w-md mx-auto">
-                Commercial mock order <strong className="font-mono text-foreground">{createdOrder.id}</strong> has been registered in the marketplace ledger.
+                {tr("Commercial purchase order", "वाणिज्यिक खरीद आदेश")}{" "}
+                <strong className="font-mono text-foreground">{createdOrder.id}</strong>{" "}
+                {tr("has been registered in the marketplace ledger.", "मार्केटप्लेस लेजर में पंजीकृत कर दिया गया है।")}
               </DialogDescription>
             </div>
 
@@ -450,36 +473,36 @@ export function MarketplaceOrderModal({
             <div className="rounded-xl border border-border bg-card p-4 space-y-3 text-xs shadow-xs">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center sm:text-left">
                 <div>
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Order ID</span>
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">{tr("Order ID", "ऑर्डर आईडी")}</span>
                   <span className="font-mono font-bold text-primary">{createdOrder.id}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Listing</span>
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">{tr("Listing", "लिस्टिंग")}</span>
                   <span className="font-mono font-bold text-foreground">{createdOrder.listingId}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Batch ID</span>
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">{tr("Batch ID", "बैच आईडी")}</span>
                   <span className="font-mono font-bold text-foreground">{createdOrder.batchNumber}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">Status</span>
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">{tr("Status", "स्थिति")}</span>
                   <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200 text-[11px] font-medium">
-                    Pending
+                    {trStatus("Pending")}
                   </Badge>
                 </div>
               </div>
 
               <div className="pt-3 border-t border-border/60 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
                 <div>
-                  <span className="text-muted-foreground">Quantity:</span>{" "}
+                  <span className="text-muted-foreground">{tr("Quantity:", "मात्रा:")}</span>{" "}
                   <strong className="font-mono text-foreground">{createdOrder.quantity.toFixed(1)} {createdOrder.unit}</strong>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Seller:</span>{" "}
+                  <span className="text-muted-foreground">{tr("Seller:", "विक्रेता:")}</span>{" "}
                   <strong className="text-foreground">{createdOrder.sellerOrgName}</strong>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Buyer:</span>{" "}
+                  <span className="text-muted-foreground">{tr("Buyer:", "खरीदार:")}</span>{" "}
                   <strong className="text-foreground">{createdOrder.buyerOrgName}</strong>
                 </div>
               </div>
@@ -489,7 +512,11 @@ export function MarketplaceOrderModal({
             <div className="rounded-lg border border-border/80 bg-muted/20 p-3 text-[11px] text-muted-foreground flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
               <span>
-                Batch <strong>{createdOrder.batchNumber}</strong> remains authoritative. No duplicate batch was created, and physical custody transfer has not occurred yet.
+                {tr("Batch", "बैच")} <strong>{createdOrder.batchNumber}</strong>{" "}
+                {tr(
+                  "remains authoritative. No duplicate batch was created, and physical custody transfer has not occurred yet.",
+                  "अधिकृत बना रहता है। कोई डुप्लिकेट बैच नहीं बनाया गया, और भौतिक कस्टडी ट्रांसफर अभी नहीं हुआ है।"
+                )}
               </span>
             </div>
 
@@ -501,7 +528,7 @@ export function MarketplaceOrderModal({
                 onClick={onClose}
                 className="text-xs h-8"
               >
-                Close Window
+                {tr("Close Window", "विंडो बंद करें")}
               </Button>
               <div className="flex items-center gap-2">
                 <Button
@@ -513,7 +540,7 @@ export function MarketplaceOrderModal({
                   onClick={onClose}
                 >
                   <Link href="/marketplace/orders">
-                    View All Orders
+                    {tr("View All Orders", "सभी ऑर्डर देखें")}
                   </Link>
                 </Button>
                 <Button
@@ -524,7 +551,7 @@ export function MarketplaceOrderModal({
                   onClick={onClose}
                 >
                   <Link href={`/marketplace/orders/${createdOrder.id}`}>
-                    <span>View Order Record</span>
+                    <span>{tr("View Order Record", "ऑर्डर रिकॉर्ड देखें")}</span>
                     <ArrowRight className="h-3.5 w-3.5 ml-1" />
                   </Link>
                 </Button>

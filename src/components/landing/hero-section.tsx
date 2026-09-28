@@ -14,16 +14,35 @@ import { Input } from "@/components/ui/input";
 import { HoneyBottleVisual } from "@/components/landing/honey-bottle-visual";
 import { BeehiveCluster } from "@/components/landing/beehive-pattern";
 import { useLanguage } from "@/context/language-context";
+import { normalizeBottleId } from "@/data/mock-bottles";
 
 export function HeroSection() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, isHindi } = useLanguage();
   const [bottleLookup, setBottleLookup] = React.useState("");
+  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const normalizedPreview = React.useMemo(() => {
+    if (!bottleLookup.trim()) return "";
+    return normalizeBottleId(bottleLookup);
+  }, [bottleLookup]);
 
   const handleVerifySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const targetId = bottleLookup.trim() || "HC-BTL-2026-00001";
-    router.push(`/verify/${targetId}`);
+    const clean = bottleLookup.trim();
+    if (!clean) {
+      setErrorMsg(
+        isHindi
+          ? "कृपया बोतल कोड दर्ज करें (उदा. HC-BTL-2026-00001) या नीचे दिए गए नमूने पर क्लिक करें।"
+          : "Please enter a bottle code (e.g. HC-BTL-2026-00001) or click a sample bottle below."
+      );
+      return;
+    }
+    setErrorMsg(null);
+    setIsSubmitting(true);
+    const targetId = normalizeBottleId(clean);
+    router.push(`/verify/${encodeURIComponent(targetId)}`);
   };
 
   return (
@@ -102,43 +121,95 @@ export function HeroSection() {
 
             {/* Compact Quick Verification Lookup */}
             <div className="pt-2 max-w-xl">
-              <div className="rounded-xl border border-[#E7E3DB] bg-white p-2.5 sm:p-3 shadow-2xs">
+              <div className="rounded-xl border border-[#E7E3DB] bg-white p-3 sm:p-3.5 shadow-2xs space-y-2">
                 <form onSubmit={handleVerifySubmit} className="flex flex-col sm:flex-row gap-2">
                   <div className="relative flex-1">
                     <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5F6B64]" />
                     <Input
                       type="text"
                       value={bottleLookup}
-                      onChange={(e) => setBottleLookup(e.target.value)}
+                      onChange={(e) => {
+                        setBottleLookup(e.target.value);
+                        if (errorMsg) setErrorMsg(null);
+                      }}
                       placeholder={t.hero.inputPlaceholder}
-                      className="h-10 pl-10 pr-3 text-xs bg-[#FAF8F5] border-[#E7E3DB] font-mono text-foreground placeholder:text-[#5F6B64]/70 rounded-lg focus-visible:ring-[#D97706]"
+                      className={`h-10 pl-10 pr-8 text-xs bg-[#FAF8F5] font-mono text-foreground placeholder:text-[#5F6B64]/70 rounded-lg focus-visible:ring-[#D97706] ${
+                        errorMsg ? "border-rose-400 focus-visible:ring-rose-400" : "border-[#E7E3DB]"
+                      }`}
                     />
+                    {bottleLookup && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setBottleLookup("");
+                          if (errorMsg) setErrorMsg(null);
+                        }}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs p-1"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
                   <Button
                     type="submit"
-                    className="h-10 px-5 text-xs font-semibold bg-[#D97706] hover:bg-[#B45309] text-white shadow-xs shrink-0 cursor-pointer rounded-lg transition-colors whitespace-nowrap"
+                    disabled={isSubmitting}
+                    className="h-10 px-5 text-xs font-semibold bg-[#D97706] hover:bg-[#B45309] text-white shadow-xs shrink-0 cursor-pointer rounded-lg transition-colors whitespace-nowrap active:scale-98"
                   >
                     <ShieldCheck className="h-3.5 w-3.5 mr-1.5" />
-                    {t.hero.verifyBtn}
+                    {isSubmitting ? (isHindi ? "खोज रहे हैं..." : "Verifying...") : t.hero.verifyBtn}
                   </Button>
                 </form>
 
+                {/* Normalization Helper */}
+                {bottleLookup.trim() && (
+                  <div className="text-[11px] text-[#143D2B] bg-[#EAF3EE] border border-[#C6DDD0] px-2.5 py-1 rounded-md font-mono flex items-center gap-1.5">
+                    <span className="font-sans text-[10px] text-[#5F6B64]">{isHindi ? "सत्यापित लक्ष्य:" : "Target ID:"}</span>
+                    <strong className="text-[#143D2B]">{normalizedPreview}</strong>
+                  </div>
+                )}
+
+                {/* Inline Error Message */}
+                {errorMsg && (
+                  <div className="text-[11.5px] text-rose-600 font-medium animate-in fade-in duration-150">
+                    {errorMsg}
+                  </div>
+                )}
+
                 {/* Sample Bottle Chips */}
-                <div className="mt-2.5 pt-2 border-t border-[#E7E3DB]/70 flex flex-wrap items-center gap-2 text-[11px] text-[#5F6B64]">
-                  <span className="font-semibold text-foreground/80">{t.hero.sampleLabel}</span>
+                <div className="pt-2 border-t border-[#E7E3DB]/70 flex flex-wrap items-center gap-1.5 text-[11px] text-[#5F6B64]">
+                  <span className="font-semibold text-foreground/80 shrink-0">{t.hero.sampleLabel}</span>
                   <button
                     type="button"
-                    onClick={() => router.push("/verify/HC-BTL-2026-00001")}
-                    className="font-mono text-[#B45309] hover:bg-[#B45309] hover:text-white transition-colors bg-[#FEF6E8] px-2 py-0.5 rounded border border-[#FCDDB5] cursor-pointer text-[10.5px] font-semibold"
+                    onClick={() => {
+                      setBottleLookup("HC-BTL-2026-00001");
+                      router.push("/verify/HC-BTL-2026-00001");
+                    }}
+                    className="font-mono text-[#B45309] hover:bg-[#B45309] hover:text-white transition-colors bg-[#FEF6E8] px-2 py-0.5 rounded border border-[#FCDDB5] cursor-pointer text-[10.5px] font-semibold flex items-center gap-1"
                   >
-                    HC-BTL-2026-00001
+                    <span>HC-BTL-2026-00001</span>
+                    <span className="text-[9px] opacity-75 hidden sm:inline">(Chamoli)</span>
                   </button>
                   <button
                     type="button"
-                    onClick={() => router.push("/verify/HC-BTL-2026-00002")}
-                    className="font-mono text-[#B45309] hover:bg-[#B45309] hover:text-white transition-colors bg-[#FEF6E8] px-2 py-0.5 rounded border border-[#FCDDB5] cursor-pointer text-[10.5px] font-semibold"
+                    onClick={() => {
+                      setBottleLookup("HC-BTL-2026-00002");
+                      router.push("/verify/HC-BTL-2026-00002");
+                    }}
+                    className="font-mono text-[#B45309] hover:bg-[#B45309] hover:text-white transition-colors bg-[#FEF6E8] px-2 py-0.5 rounded border border-[#FCDDB5] cursor-pointer text-[10.5px] font-semibold flex items-center gap-1"
                   >
-                    HC-BTL-2026-00002
+                    <span>HC-BTL-2026-00002</span>
+                    <span className="text-[9px] opacity-75 hidden sm:inline">(500g Jar)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBottleLookup("HC-BTL-2026-00005");
+                      router.push("/verify/HC-BTL-2026-00005");
+                    }}
+                    className="font-mono text-[#B45309] hover:bg-[#B45309] hover:text-white transition-colors bg-[#FEF6E8] px-2 py-0.5 rounded border border-[#FCDDB5] cursor-pointer text-[10.5px] font-semibold flex items-center gap-1"
+                  >
+                    <span>HC-BTL-2026-00005</span>
+                    <span className="text-[9px] opacity-75 hidden sm:inline">(Retail)</span>
                   </button>
                 </div>
               </div>

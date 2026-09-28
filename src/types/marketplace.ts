@@ -27,6 +27,15 @@ export interface MarketplaceListing {
   originalQuantity: number;
   unit: string; // "kg"
   pricePerUnit?: string;
+  numericPrice?: number;
+  mrpPrice?: number;
+  discountPercent?: number;
+  rating?: number;
+  reviewCount?: number;
+  badge?: string;
+  highlights?: string[];
+  moisturePercent?: number;
+  imageUrl?: string;
   traceabilityStatus: string; // e.g. "Traceability Available"
   qualityStatus: string; // e.g. "Grade A Organic", "Lab Certified"
   certificateNumber?: string;

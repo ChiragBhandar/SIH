@@ -12,6 +12,8 @@ import { UserAvatar } from "@/components/ui/user-avatar";
 import { NAVIGATION_CONFIG, NavItem } from "./nav-config";
 import { UserRole } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 
 export interface SidebarProps {
   activeNavId: string;
@@ -30,6 +32,9 @@ export function Sidebar({
   currentOrg,
   currentOrgType,
 }: SidebarProps) {
+  const session = useAuthSession();
+  const { isHindi, trRole, trOrgType } = useLanguage();
+
   // Filter navigation items by active user role context
   const filteredGroups = React.useMemo(() => {
     return NAVIGATION_CONFIG.map((group) => {
@@ -56,7 +61,7 @@ export function Sidebar({
               Honey Chain
             </span>
             <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
-              Traceability B2B
+              {isHindi ? "ट्रेसेबिलिटी B2B" : "Traceability B2B"}
             </span>
           </div>
         </div>
@@ -71,11 +76,11 @@ export function Sidebar({
               {currentOrg}
             </span>
             <span className="text-[10px] text-muted-foreground truncate">
-              {currentOrgType || "Enterprise Organization"}
+              {isHindi ? trOrgType(currentOrgType || "Enterprise Organization") : (currentOrgType || "Enterprise Organization")}
             </span>
             <span className="flex items-center gap-1 text-[10px] text-primary font-semibold mt-0.5 capitalize">
               <Shield className="h-3 w-3 text-primary/80 shrink-0" />
-              {currentRoleName || currentRole.replace("_", " ")}
+              {isHindi ? trRole(currentRoleName || currentRole) : (currentRoleName || currentRole.replace("_", " "))}
             </span>
           </div>
         </div>
@@ -86,13 +91,15 @@ export function Sidebar({
         {filteredGroups.map((group) => (
           <div key={group.id} className="space-y-1">
             <h4 className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
-              {group.label}
+              {isHindi && group.labelHi ? group.labelHi : group.label}
             </h4>
             <div className="space-y-0.5">
               {group.items.map((item: NavItem) => {
                 const Icon = item.icon;
                 const isActive = activeNavId === item.id;
                 const isRoute = item.href && item.href.startsWith("/");
+                const label = isHindi && item.labelHi ? item.labelHi : item.label;
+                const badge = isHindi && item.badgeHi !== undefined ? item.badgeHi : item.badge;
 
                 const content = (
                   <>
@@ -108,14 +115,14 @@ export function Sidebar({
                       )}
                     />
                     <span className="truncate flex-1 text-left">
-                      {item.label}
+                      {label}
                     </span>
-                    {item.badge !== undefined && (
+                    {badge !== undefined && (
                       <Badge
                         variant={item.badgeVariant || "secondary"}
                         className="ml-auto text-[10px] px-1.5 py-0 font-mono"
                       >
-                        {item.badge}
+                        {badge}
                       </Badge>
                     )}
                   </>
@@ -160,17 +167,30 @@ export function Sidebar({
       </div>
 
       {/* User Profile Footer */}
-      <div className="shrink-0 mt-auto border-t border-border p-3">
-        <div className="flex items-center gap-3 rounded-md bg-muted/30 p-2">
-          <UserAvatar name="Chirag Operator" size="md" />
+      <div className="shrink-0 mt-auto border-t border-border p-3 space-y-2">
+        <div className="flex items-center gap-3 rounded-lg bg-muted/40 p-2.5 transition-colors">
+          <UserAvatar
+            src={session.user?.avatarUrl}
+            name={session.user?.fullName || "Operator"}
+            size="md"
+          />
           <div className="flex flex-col overflow-hidden text-xs">
             <span className="truncate font-medium text-foreground">
-              Chirag Operator
+              {session.user?.fullName || "Chirag Operator"}
             </span>
             <span className="truncate text-[10px] text-muted-foreground">
-              operator@honeychain.io
+              {session.user?.email || "operator@honeychain.io"}
             </span>
           </div>
+        </div>
+
+        {/* Subtle Network / Support Status Banner */}
+        <div className="flex items-center justify-between px-1 text-[11px] text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            {isHindi ? "सहमति सक्रिय" : "Consensus Active"}
+          </span>
+          <span className="font-mono text-[10px]">v1.4</span>
         </div>
       </div>
     </aside>

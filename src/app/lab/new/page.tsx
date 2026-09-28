@@ -7,6 +7,7 @@ import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 import { TestPanelType, TestPriority } from "@/types/quality";
 import {
   FlaskConical,
@@ -32,6 +33,7 @@ export function SubmitSampleContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const prefilledBatchId = searchParams.get("batchId") || "";
+  const { tr } = useLanguage();
 
   const {
     batches,
@@ -97,7 +99,7 @@ export function SubmitSampleContent() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedBatch) {
-      setErrorMsg("Please select an eligible processed honey batch.");
+      setErrorMsg(tr("Please select an eligible processed honey batch.", "कृपया एक पात्र प्रसंस्कृत शहद बैच चुनें।"));
       return;
     }
 
@@ -120,7 +122,7 @@ export function SubmitSampleContent() {
 
       router.push(`/lab/${createdTest.id}`);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to submit laboratory sample.";
+      const msg = err instanceof Error ? err.message : tr("Failed to submit laboratory sample.", "प्रयोगशाला नमूना जमा करने में विफल।");
       setErrorMsg(msg);
       setIsSubmitting(false);
     }
@@ -130,7 +132,7 @@ export function SubmitSampleContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading batch records and sample submission form...
+          {tr("Loading batch records and sample submission form...", "बैच रिकॉर्ड और नमूना सबमिशन फॉर्म लोड हो रहा है...")}
         </div>
       </div>
     );
@@ -148,7 +150,7 @@ export function SubmitSampleContent() {
         >
           <Link href="/lab">
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Laboratory Testing</span>
+            <span>{tr("Back to Laboratory Testing", "प्रयोगशाला परीक्षण पर वापस")}</span>
           </Link>
         </Button>
       </div>
@@ -157,14 +159,14 @@ export function SubmitSampleContent() {
       <div className="space-y-1">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Submit Sample for Testing
+            {tr("Submit Sample for Testing", "परीक्षण के लिए नमूना जमा करें")}
           </h1>
           <Badge variant="outline" className="font-mono text-xs border-primary/40 text-primary bg-primary/5">
-            Quality Verification
+            {tr("Quality Verification", "गुणवत्ता सत्यापन")}
           </Badge>
         </div>
         <p className="text-xs sm:text-sm text-muted-foreground">
-          Register an official laboratory sample from a processed honey batch to initiate purity and standard compliance analysis.
+          {tr("Register an official laboratory sample from a processed honey batch to initiate purity and standard compliance analysis.", "शुद्धता और मानक अनुपालन विश्लेषण शुरू करने के लिए प्रसंस्कृत शहद बैच से आधिकारिक प्रयोगशाला नमूना दर्ज करें।")}
         </p>
       </div>
 
@@ -182,17 +184,17 @@ export function SubmitSampleContent() {
             <div className="flex items-center gap-2">
               <Boxes className="h-4 w-4 text-primary" />
               <CardTitle className="text-sm font-bold text-foreground uppercase tracking-wider">
-                1. Select Processed Honey Batch
+                {tr("1. Select Processed Honey Batch", "1. प्रसंस्कृत शहद बैच चुनें")}
               </CardTitle>
             </div>
             <CardDescription className="text-xs">
-              Choose the completed processed honey batch from which this laboratory sample was collected.
+              {tr("Choose the completed processed honey batch from which this laboratory sample was collected.", "वह पूर्ण प्रसंस्कृत शहद बैच चुनें जिससे यह प्रयोगशाला नमूना एकत्र किया गया था।")}
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-4 space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-foreground">
-                Processed Batch ID <span className="text-destructive">*</span>
+                {tr("Processed Batch ID", "प्रसंस्कृत बैच आईडी")} <span className="text-destructive">*</span>
               </label>
               <select
                 value={effectiveBatchId}
@@ -220,14 +222,14 @@ export function SubmitSampleContent() {
                     </p>
                   </div>
                   <Badge variant="outline" className="border-emerald-200 text-emerald-800 bg-emerald-50 font-mono text-xs">
-                    Output: {selectedBatch.weightKg.toFixed(1)} kg
+                    {tr("Output:", "उत्पादन:")} {selectedBatch.weightKg.toFixed(1)} kg
                   </Badge>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                      Source Lineage
+                      {tr("Source Lineage", "स्रोत वंशावली")}
                     </span>
                     <span className="font-medium text-foreground truncate block">
                       {selectedBatch.sourceApiaryName || "Highland North Apiary Origin"}
@@ -235,7 +237,7 @@ export function SubmitSampleContent() {
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                      Processing Event
+                      {tr("Processing Event", "प्रसंस्करण गतिविधि")}
                     </span>
                     <span className="font-mono font-medium text-foreground">
                       {selectedBatch.processingJobId || parentProcessingJob?.id || "PRC-2026-0001 (Micro-filtered)"}
@@ -243,7 +245,7 @@ export function SubmitSampleContent() {
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                      Storage Container
+                      {tr("Storage Container", "भंडारण कंटेनर")}
                     </span>
                     <span className="font-medium text-foreground">
                       {selectedBatch.containerRef} ({selectedBatch.storageLocation})
@@ -261,18 +263,18 @@ export function SubmitSampleContent() {
             <div className="flex items-center gap-2">
               <FlaskConical className="h-4 w-4 text-primary" />
               <CardTitle className="text-sm font-bold text-foreground uppercase tracking-wider">
-                2. Sample Collection Details
+                {tr("2. Sample Collection Details", "2. नमूना संग्रह विवरण")}
               </CardTitle>
             </div>
             <CardDescription className="text-xs">
-              Record physical sample quantity, container security seal, and sampling conditions.
+              {tr("Record physical sample quantity, container security seal, and sampling conditions.", "भौतिक नमूना मात्रा, कंटेनर सुरक्षा सील और नमूना लेने की स्थिति दर्ज करें।")}
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-4 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-foreground">
-                  Sample ID / Code <span className="text-destructive">*</span>
+                  {tr("Sample ID / Code", "नमूना आईडी / कोड")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -285,13 +287,13 @@ export function SubmitSampleContent() {
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-foreground">
-                  Sample Quantity <span className="text-destructive">*</span>
+                  {tr("Sample Quantity", "नमूना मात्रा")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
                   value={sampleQuantity}
                   onChange={(e) => setSampleQuantity(e.target.value)}
-                  placeholder="e.g. 500 g, 250 ml"
+                  placeholder={tr("e.g. 500 g, 250 ml", "उदा. 500 ग्राम, 250 मिली")}
                   required
                   className="w-full rounded-md border border-input bg-background/50 px-3 py-2 text-xs text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
                 />
@@ -299,7 +301,7 @@ export function SubmitSampleContent() {
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-foreground">
-                  Sample Container / Seal Reference <span className="text-destructive">*</span>
+                  {tr("Sample Container / Seal Reference", "नमूना कंटेनर / सील संदर्भ")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -313,7 +315,7 @@ export function SubmitSampleContent() {
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-foreground">
-                  Collection Date & Time <span className="text-destructive">*</span>
+                  {tr("Collection Date & Time", "संग्रह तिथि और समय")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -326,7 +328,7 @@ export function SubmitSampleContent() {
 
               <div className="space-y-1.5 sm:col-span-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Collected By (Technician / Quality Officer) <span className="text-destructive">*</span>
+                  {tr("Collected By (Technician / Quality Officer)", "संग्रहकर्ता (तकनीशियन / गुणवत्ता अधिकारी)")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -339,13 +341,13 @@ export function SubmitSampleContent() {
 
               <div className="space-y-1.5 sm:col-span-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Sampling Protocol Notes
+                  {tr("Sampling Protocol Notes", "नमूनाकरण प्रोटोकॉल टिप्पणियाँ")}
                 </label>
                 <textarea
                   rows={2}
                   value={samplingNotes}
                   onChange={(e) => setSamplingNotes(e.target.value)}
-                  placeholder="Notes on composite sampling method, temperature, container cleanliness..."
+                  placeholder={tr("Notes on composite sampling method, temperature, container cleanliness...", "मिश्रित नमूनाकरण पद्धति, तापमान, कंटेनर स्वच्छता पर टिप्पणियाँ...")}
                   className="w-full rounded-md border border-input bg-background/50 px-3 py-2 text-xs text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
                 />
               </div>
@@ -359,49 +361,49 @@ export function SubmitSampleContent() {
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-primary" />
               <CardTitle className="text-sm font-bold text-foreground uppercase tracking-wider">
-                3. Test Plan & Analytical Panel
+                {tr("3. Test Plan & Analytical Panel", "3. परीक्षण योजना और विश्लेषणात्मक पैनल")}
               </CardTitle>
             </div>
             <CardDescription className="text-xs">
-              Select standard analytical battery and priority for PureTrace Labs testing queue.
+              {tr("Select standard analytical battery and priority for PureTrace Labs testing queue.", "प्योरट्रेस लैब्स परीक्षण कतार के लिए मानक विश्लेषणात्मक बैटरी और प्राथमिकता चुनें।")}
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-4 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-foreground">
-                  Test Panel <span className="text-destructive">*</span>
+                  {tr("Test Panel", "परीक्षण पैनल")} <span className="text-destructive">*</span>
                 </label>
                 <select
                   value={testPanel}
                   onChange={(e) => setTestPanel(e.target.value as TestPanelType)}
                   className="w-full rounded-md border border-input bg-background/50 px-3 py-2 text-xs text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
                 >
-                  <option value="Full honey quality panel">Full honey quality panel (Recommended)</option>
-                  <option value="Basic quality panel">Basic quality panel</option>
-                  <option value="Adulteration screening">Adulteration screening (C4/C3 & NMR)</option>
-                  <option value="Microbiological panel">Microbiological panel</option>
-                  <option value="Custom">Custom quality panel</option>
+                  <option value="Full honey quality panel">{tr("Full honey quality panel (Recommended)", "पूर्ण शहद गुणवत्ता पैनल (अनुशंसित)")}</option>
+                  <option value="Basic quality panel">{tr("Basic quality panel", "बुनियादी गुणवत्ता पैनल")}</option>
+                  <option value="Adulteration screening">{tr("Adulteration screening (C4/C3 & NMR)", "मिलावट जांच (C4/C3 और NMR)")}</option>
+                  <option value="Microbiological panel">{tr("Microbiological panel", "सूक्ष्मजीवविज्ञानी पैनल")}</option>
+                  <option value="Custom">{tr("Custom quality panel", "कस्टम गुणवत्ता पैनल")}</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-foreground">
-                  Testing Priority <span className="text-destructive">*</span>
+                  {tr("Testing Priority", "परीक्षण प्राथमिकता")} <span className="text-destructive">*</span>
                 </label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as TestPriority)}
                   className="w-full rounded-md border border-input bg-background/50 px-3 py-2 text-xs text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
                 >
-                  <option value="Normal">Normal (Standard turnaround)</option>
-                  <option value="Urgent">Urgent (Priority fast-track)</option>
+                  <option value="Normal">{tr("Normal (Standard turnaround)", "सामान्य (मानक समय)")}</option>
+                  <option value="Urgent">{tr("Urgent (Priority fast-track)", "अति आवश्यक (प्राथमिकता फास्ट-ट्रैक)")}</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-foreground">
-                  Expected Completion Date
+                  {tr("Expected Completion Date", "अपेक्षित पूर्णता तिथि")}
                 </label>
                 <input
                   type="date"
@@ -419,10 +421,10 @@ export function SubmitSampleContent() {
           <CardHeader className="pb-3 border-b border-border/60">
             <CardTitle className="text-sm font-bold text-foreground flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-primary" />
-              <span>Traceability Chain Preview</span>
+              <span>{tr("Traceability Chain Preview", "अनुरेखणीयता श्रृंखला पूर्वावलोकन")}</span>
             </CardTitle>
             <CardDescription className="text-xs">
-              Preview the cryptographic linkage before creating the laboratory test record.
+              {tr("Preview the cryptographic linkage before creating the laboratory test record.", "प्रयोगशाला परीक्षण रिकॉर्ड बनाने से पहले क्रिप्टोग्राफ़िक लिंकेज का पूर्वावलोकन करें।")}
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-4 space-y-3">
@@ -431,13 +433,13 @@ export function SubmitSampleContent() {
                 {/* Step 1 */}
                 <div className="flex-1 space-y-1 p-2 rounded-lg bg-muted/30 border border-border/40">
                   <span className="text-[10px] uppercase font-bold text-muted-foreground block">
-                    SOURCE BATCH
+                    {tr("SOURCE BATCH", "स्रोत बैच")}
                   </span>
                   <p className="font-mono font-bold text-foreground text-xs">
                     {selectedBatch?.batchNumber || "HC-PB-2026-0003"}
                   </p>
                   <p className="text-[11px] text-muted-foreground">
-                    Processed Honey
+                    {tr("Processed Honey", "प्रसंस्कृत शहद")}
                   </p>
                 </div>
 
@@ -448,13 +450,13 @@ export function SubmitSampleContent() {
                 {/* Step 2 */}
                 <div className="flex-1 space-y-1 p-2 rounded-lg bg-amber-50 border border-amber-200">
                   <span className="text-[10px] uppercase font-bold text-amber-800 block">
-                    LAB SAMPLE
+                    {tr("LAB SAMPLE", "लैब नमूना")}
                   </span>
                   <p className="font-mono font-bold text-foreground text-xs">
                     {sampleId}
                   </p>
                   <p className="text-[11px] text-muted-foreground">
-                    {sampleQuantity} Sealed
+                    {sampleQuantity} {tr("Sealed", "सील बंद")}
                   </p>
                 </div>
 
@@ -465,13 +467,13 @@ export function SubmitSampleContent() {
                 {/* Step 3 */}
                 <div className="flex-1 space-y-1 p-2 rounded-lg bg-primary/10 border border-primary/30">
                   <span className="text-[10px] uppercase font-bold text-primary block">
-                    TEST PANEL
+                    {tr("TEST PANEL", "परीक्षण पैनल")}
                   </span>
                   <p className="font-medium text-foreground text-xs">
                     {testPanel}
                   </p>
                   <p className="text-[11px] text-muted-foreground font-mono">
-                    Priority: {priority}
+                    {tr("Priority:", "प्राथमिकता:")} {priority}
                   </p>
                 </div>
 
@@ -482,13 +484,13 @@ export function SubmitSampleContent() {
                 {/* Step 4 */}
                 <div className="flex-1 space-y-1 p-2 rounded-lg bg-muted/30 border border-border/40">
                   <span className="text-[10px] uppercase font-bold text-muted-foreground block">
-                    STATUS
+                    {tr("STATUS", "स्थिति")}
                   </span>
                   <p className="font-bold text-foreground text-xs">
-                    Pending Lab Review
+                    {tr("Pending Lab Review", "लैब समीक्षा लंबित")}
                   </p>
                   <p className="text-[11px] text-muted-foreground">
-                    Awaiting Analysis
+                    {tr("Awaiting Analysis", "विश्लेषण की प्रतीक्षा")}
                   </p>
                 </div>
               </div>
@@ -496,7 +498,7 @@ export function SubmitSampleContent() {
               <div className="mt-4 pt-3 border-t border-border/60 flex items-center gap-2 text-xs text-muted-foreground">
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>
-                  <strong>Traceability Link Active:</strong> Laboratory test will be immutably linked to processed batch{" "}
+                  <strong>{tr("Traceability Link Active:", "ट्रेसिबिलिटी लिंक सक्रिय:")}</strong> {tr("Laboratory test will be immutably linked to processed batch", "प्रयोगशाला परीक्षण प्रसंस्कृत बैच से स्थायी रूप से जुड़ा रहेगा")}{" "}
                   <code className="font-mono font-bold text-foreground">{selectedBatch?.batchNumber || "HC-PB-2026-0003"}</code>.
                 </span>
               </div>
@@ -507,7 +509,7 @@ export function SubmitSampleContent() {
         {/* Submit Actions */}
         <div className="flex items-center justify-end gap-3 pt-2">
           <Button type="button" variant="outline" asChild size="sm">
-            <Link href="/lab">Cancel</Link>
+            <Link href="/lab">{tr("Cancel", "रद्द करें")}</Link>
           </Button>
           <Button
             type="submit"
@@ -516,7 +518,7 @@ export function SubmitSampleContent() {
             className="gap-2 font-semibold shadow-xs"
           >
             <FlaskConical className="h-4 w-4" />
-            <span>{isSubmitting ? "Submitting Sample..." : "Submit Sample & Initiate Test"}</span>
+            <span>{isSubmitting ? tr("Submitting Sample...", "नमूना सबमिट हो रहा है...") : tr("Submit Sample & Initiate Test", "नमूना सबमिट करें और परीक्षण शुरू करें")}</span>
           </Button>
         </div>
       </form>
@@ -525,11 +527,20 @@ export function SubmitSampleContent() {
 }
 
 export default function SubmitSamplePage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard>
-      <AppShell>
+      <AppShell
+        breadcrumbs={[
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Laboratory Testing", "प्रयोगशाला परीक्षण"), href: "/lab" },
+          { label: tr("Submit Sample for Testing", "परीक्षण के लिए नमूना जमा करें"), active: true },
+        ]}
+        defaultNavId="lab"
+      >
         <SubmitSampleContent />
       </AppShell>
     </AuthGuard>
   );
 }
+

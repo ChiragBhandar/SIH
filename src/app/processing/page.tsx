@@ -6,6 +6,7 @@ import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 import {
   Layers,
   Plus,
@@ -42,6 +43,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 export function ProcessingContent() {
   const { processingJobs, getEligibleProcessingBatches, isLoaded } = useTraceability();
   const { selectedOrg } = useAuthSession();
+  const { tr, trStatus } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("all");
@@ -81,7 +83,7 @@ export function ProcessingContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading processing runs and eligible material...
+          {tr("Loading processing runs and eligible material...", "प्रसंस्करण कार्य और पात्र सामग्री लोड हो रही है...")}
         </div>
       </div>
     );
@@ -94,14 +96,17 @@ export function ProcessingContent() {
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Processing & Blending
+              {tr("Processing & Blending", "प्रसंस्करण एवं सम्मिश्रण")}
             </h1>
             <Badge variant="outline" className="font-mono text-xs border-amber-300 text-amber-900 bg-amber-50">
-              Material Transformation
+              {tr("Material Transformation", "सामग्री रूपांतरण")}
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Transform received honey batches while preserving complete input lineage.
+            {tr(
+              "Transform received honey batches while preserving complete input lineage.",
+              "कच्चे शहद के लॉट को पूर्ण वंशावली व ट्रैसेबिलिटी संरक्षित करते हुए संसाधित करें।"
+            )}
           </p>
         </div>
 
@@ -109,7 +114,7 @@ export function ProcessingContent() {
           <Button asChild size="sm">
             <Link href="/processing/new">
               <Plus className="h-4 w-4" />
-              <span>Start Processing</span>
+              <span>{tr("Start Processing", "प्रसंस्करण प्रारंभ करें")}</span>
             </Link>
           </Button>
         </div>
@@ -120,7 +125,9 @@ export function ProcessingContent() {
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Ready for Processing</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {tr("Ready for Processing", "प्रसंस्करण हेतु तैयार")}
+              </span>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
                 <PackageCheck className="h-4 w-4" />
               </div>
@@ -130,14 +137,16 @@ export function ProcessingContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
-            Received raw honey batches
+            {tr("Received raw honey batches", "प्राप्त कच्चे शहद के बैच")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">In Processing</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {tr("In Processing", "प्रसंस्करण में")}
+              </span>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
                 <Clock className="h-4 w-4" />
               </div>
@@ -147,14 +156,16 @@ export function ProcessingContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
-            Active processing runs
+            {tr("Active processing runs", "सक्रिय प्रसंस्करण प्रक्रिया")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Completed Runs</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {tr("Completed Runs", "पूर्ण प्रक्रियाएं")}
+              </span>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-orange-700 border border-orange-200">
                 <CheckCircle2 className="h-4 w-4" />
               </div>
@@ -164,24 +175,26 @@ export function ProcessingContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
-            Verifiable output batches created
+            {tr("Verifiable output batches created", "सत्यापन योग्य आउटपुट बैच तैयार")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Output Volume</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {tr("Output Volume", "उत्पादन मात्रा")}
+              </span>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
                 <Scale className="h-4 w-4" />
               </div>
             </div>
             <CardTitle className="text-2xl font-bold font-mono text-foreground mt-2">
-              {totalOutputVolumeKg.toFixed(1)} <span className="text-xs font-normal text-muted-foreground">kg</span>
+              {totalOutputVolumeKg.toFixed(1)} <span className="text-xs font-normal text-muted-foreground">{tr("kg", "किग्रा")}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 text-[11px] text-muted-foreground">
-            Total processed yield
+            {tr("Total processed yield", "कुल प्रसंस्कृत उत्पादन")}
           </CardContent>
         </Card>
       </div>
@@ -194,16 +207,19 @@ export function ProcessingContent() {
               <div className="flex items-center gap-2">
                 <Wheat className="h-4 w-4 text-primary" />
                 <CardTitle className="text-sm font-bold text-foreground">
-                  Available Input Material ({eligibleInputBatches.length})
+                  {tr("Available Input Material", "उपलब्ध कच्ची सामग्री")} ({eligibleInputBatches.length})
                 </CardTitle>
               </div>
               <CardDescription className="text-xs mt-0.5">
-                Raw material batches accepted into manufacturer custody eligible for processing and blending.
+                {tr(
+                  "Raw material batches accepted into manufacturer custody eligible for processing and blending.",
+                  "निर्माता के पास स्वीकार किए गए कच्चे शहद के बैच जो प्रसंस्करण एवं सम्मिश्रण के योग्य हैं।"
+                )}
               </CardDescription>
             </div>
 
             <Badge variant="outline" className="text-[11px] py-1 font-normal w-fit">
-              Only received batches appear as eligible inputs
+              {tr("Only received batches appear as eligible inputs", "केवल प्राप्त बैच ही प्रसंस्करण के पात्र हैं")}
             </Badge>
           </div>
         </CardHeader>
@@ -211,7 +227,10 @@ export function ProcessingContent() {
         <CardContent className="pt-3">
           {eligibleInputBatches.length === 0 ? (
             <div className="py-6 text-center text-xs text-muted-foreground">
-              No received batches currently available in inventory. Receive inbound consignments in the Receiving module first.
+              {tr(
+                "No received batches currently available in inventory. Receive inbound consignments in the Receiving module first.",
+                "वर्तमान में इन्वेंट्री में कोई प्राप्त बैच उपलब्ध नहीं है। पहले प्राप्ति मॉड्यूल में आवक खेप स्वीकार करें।"
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -231,12 +250,14 @@ export function ProcessingContent() {
                           status={b.status === "Received" ? "success" : "honey"}
                           size="sm"
                         >
-                          {b.status === "Consumed partially for processing" ? "Partial" : "Received"}
+                          {b.status === "Consumed partially for processing"
+                            ? tr("Partial", "आंशिक")
+                            : tr("Received", "प्राप्त")}
                         </StatusBadge>
                       </div>
 
                       <span className="font-mono font-bold text-xs text-primary">
-                        {availableKg.toFixed(1)} kg avl
+                        {availableKg.toFixed(1)} {tr("kg avl", "किग्रा उपलब्ध")}
                       </span>
                     </div>
 
@@ -245,11 +266,11 @@ export function ProcessingContent() {
                         {b.honeyType}
                       </p>
                       <p className="text-[11px] truncate">
-                        Source: <strong>{b.currentCustodyOrgName || b.sourceApiaryName}</strong>
+                        {tr("Source:", "स्रोत:")} <strong>{b.currentCustodyOrgName || b.sourceApiaryName}</strong>
                       </p>
                       <div className="flex items-center justify-between text-[10px] pt-1 font-mono text-muted-foreground">
-                        <span>Ref: {b.containerRef}</span>
-                        <span>Harvest: {b.harvestDate}</span>
+                        <span>{tr("Ref:", "संदर्भ:")} {b.containerRef}</span>
+                        <span>{tr("Harvest:", "कटाई:")} {b.harvestDate}</span>
                       </div>
                     </div>
 
@@ -261,7 +282,7 @@ export function ProcessingContent() {
                         className="h-7 text-[11px] px-2 text-muted-foreground hover:text-foreground"
                       >
                         <Link href={`/batches/${b.id}`}>
-                          <span>View Batch</span>
+                          <span>{tr("View Batch", "बैच देखें")}</span>
                           <ExternalLink className="h-3 w-3 ml-1" />
                         </Link>
                       </Button>
@@ -272,7 +293,7 @@ export function ProcessingContent() {
                         className="h-7 text-[11px] px-2.5 gap-1 font-semibold shadow-xs"
                       >
                         <Link href={`/processing/new?batchId=${b.batchNumber}`}>
-                          <span>Process Batch</span>
+                          <span>{tr("Process Batch", "संसाधित करें")}</span>
                           <ArrowRight className="h-3 w-3" />
                         </Link>
                       </Button>
@@ -291,7 +312,7 @@ export function ProcessingContent() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search by Job ID, batch, facility, operator, output..."
+            placeholder={tr("Search by Job ID, batch, facility, operator, output...", "जॉब आईडी, बैच, संयंत्र, ऑपरेटर से खोजें...")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="h-9 w-full rounded-md border border-input bg-background pl-8 pr-3 text-xs shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -301,20 +322,20 @@ export function ProcessingContent() {
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Filter className="h-3.5 w-3.5" />
-            <span>Process:</span>
+            <span>{tr("Process:", "प्रक्रिया:")}</span>
           </div>
           <select
             value={processTypeFilter}
             onChange={(e) => setProcessTypeFilter(e.target.value)}
             className="h-9 rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
-            <option value="all">All Types</option>
-            <option value="Filtering">Filtering</option>
-            <option value="Settling">Settling</option>
-            <option value="Blending">Blending</option>
-            <option value="Heating">Heating</option>
-            <option value="Filling preparation">Filling preparation</option>
-            <option value="Other">Other</option>
+            <option value="all">{tr("All Types", "सभी प्रकार")}</option>
+            <option value="Filtering">{tr("Filtering", "छानना")}</option>
+            <option value="Settling">{tr("Settling", "स्थिरीकरण")}</option>
+            <option value="Blending">{tr("Blending", "मिश्रण")}</option>
+            <option value="Heating">{tr("Heating", "गरम करना")}</option>
+            <option value="Filling preparation">{tr("Filling preparation", "भरने की तैयारी")}</option>
+            <option value="Other">{tr("Other", "अन्य")}</option>
           </select>
 
           <select
@@ -322,11 +343,11 @@ export function ProcessingContent() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="h-9 rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
-            <option value="all">All Statuses</option>
-            <option value="Completed">Completed</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Ready">Ready</option>
-            <option value="Cancelled">Cancelled</option>
+            <option value="all">{tr("All Statuses", "सभी स्थितियां")}</option>
+            <option value="Completed">{tr("Completed", "पूर्ण")}</option>
+            <option value="In Progress">{tr("In Progress", "प्रगति पर")}</option>
+            <option value="Ready">{tr("Ready", "तैयार")}</option>
+            <option value="Cancelled">{tr("Cancelled", "रद्द")}</option>
           </select>
         </div>
       </div>
@@ -335,11 +356,14 @@ export function ProcessingContent() {
       {filteredJobs.length === 0 ? (
         <EmptyState
           icon={Layers}
-          title="No processing jobs found"
-          description="No processing or blending runs match your filter. Select eligible raw material and start a new processing run."
+          title={tr("No processing jobs found", "कोई प्रसंस्करण कार्य नहीं मिला")}
+          description={tr(
+            "No processing or blending runs match your filter. Select eligible raw material and start a new processing run.",
+            "फ़िल्टर से मेल खाता कोई कार्य नहीं मिला। पात्र कच्चा माल चुनें और नया प्रसंस्करण कार्य शुरू करें।"
+          )}
           action={
             <Button asChild size="sm">
-              <Link href="/processing/new">+ Start Processing Run</Link>
+              <Link href="/processing/new">+ {tr("Start Processing Run", "नया प्रसंस्करण प्रारंभ करें")}</Link>
             </Button>
           }
         />
@@ -348,15 +372,15 @@ export function ProcessingContent() {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40">
-                <TableHead className="w-[150px]">Processing ID</TableHead>
-                <TableHead>Input Batch(es)</TableHead>
-                <TableHead>Process Type</TableHead>
-                <TableHead className="text-right">Input Weight</TableHead>
-                <TableHead className="text-right">Output Weight</TableHead>
-                <TableHead className="text-right">Yield %</TableHead>
-                <TableHead className="hidden md:table-cell">Facility & Line</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead className="w-[150px]">{tr("Processing ID", "प्रसंस्करण आईडी")}</TableHead>
+                <TableHead>{tr("Input Batch(es)", "इनपुट बैच")}</TableHead>
+                <TableHead>{tr("Process Type", "प्रक्रिया प्रकार")}</TableHead>
+                <TableHead className="text-right">{tr("Input Weight", "इनपुट वजन")}</TableHead>
+                <TableHead className="text-right">{tr("Output Weight", "आउटपुट वजन")}</TableHead>
+                <TableHead className="text-right">{tr("Yield %", "उत्पादन दर %")}</TableHead>
+                <TableHead className="hidden md:table-cell">{tr("Facility & Line", "संयंत्र और लाइन")}</TableHead>
+                <TableHead>{tr("Status", "स्थिति")}</TableHead>
+                <TableHead className="text-right">{tr("Action", "कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -372,7 +396,7 @@ export function ProcessingContent() {
                     </Link>
                     {job.processReferenceNumber && (
                       <span className="text-[10px] text-muted-foreground font-sans block">
-                        Ref: {job.processReferenceNumber}
+                        {tr("Ref:", "संदर्भ:")} {job.processReferenceNumber}
                       </span>
                     )}
                   </TableCell>
@@ -388,7 +412,7 @@ export function ProcessingContent() {
                             {inp.batchNumber}
                           </Link>
                           <span className="text-[10px] text-muted-foreground">
-                            ({inp.usedQuantityKg} kg)
+                            ({inp.usedQuantityKg} {tr("kg", "किग्रा")})
                           </span>
                         </div>
                       ))}
@@ -402,13 +426,13 @@ export function ProcessingContent() {
                   </TableCell>
 
                   <TableCell className="text-xs font-mono font-semibold text-foreground text-right whitespace-nowrap">
-                    {job.totalInputQuantityKg.toFixed(1)} kg
+                    {job.totalInputQuantityKg.toFixed(1)} {tr("kg", "किग्रा")}
                   </TableCell>
 
                   <TableCell className="text-xs text-right whitespace-nowrap">
                     <div className="flex flex-col items-end">
                       <span className="font-mono font-bold text-foreground">
-                        {job.outputQuantityKg.toFixed(1)} kg
+                        {job.outputQuantityKg.toFixed(1)} {tr("kg", "किग्रा")}
                       </span>
                       <Link
                         href={`/batches/${job.outputBatchId}`}
@@ -445,7 +469,7 @@ export function ProcessingContent() {
                       }
                       size="sm"
                     >
-                      {job.status}
+                      {trStatus(job.status)}
                     </StatusBadge>
                   </TableCell>
 
@@ -457,7 +481,7 @@ export function ProcessingContent() {
                       className="text-primary hover:text-primary hover:bg-primary/10 font-medium"
                     >
                       <Link href={`/processing/${job.id}`}>
-                        View Details →
+                        {tr("View Details →", "विवरण देखें →")}
                       </Link>
                     </Button>
                   </TableCell>
@@ -472,13 +496,14 @@ export function ProcessingContent() {
 }
 
 export default function ProcessingPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Traceability", href: "#" },
-          { label: "Processing & Blending", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Traceability", "ट्रेसेबिलिटी"), href: "#" },
+          { label: tr("Processing & Blending", "प्रसंस्करण एवं सम्मिश्रण"), active: true },
         ]}
         defaultNavId="processing"
       >

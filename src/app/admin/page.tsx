@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
 import { AdminRoleGuard, EventTypeBadge } from "@/components/admin";
+import { useLanguage } from "@/context/language-context";
 import {
   Building2,
   Users,
@@ -36,6 +37,7 @@ export default function AdminDashboardPage() {
     accessRequests,
     plausibilityAlerts,
   } = useTraceability();
+  const { tr } = useLanguage();
 
   // Metrics calculations
   const totalOrgs = adminOrganisations.length;
@@ -66,18 +68,21 @@ export default function AdminDashboardPage() {
           <div>
             <div className="flex items-center gap-2 mb-1.5">
               <Badge variant="outline" className="font-mono text-xs border-amber-200 text-amber-800 bg-amber-50">
-                Governance & Control Plane
+                {tr("Governance & Control Plane", "शासन एवं नियंत्रण प्रणाली")}
               </Badge>
               <span className="flex items-center gap-1.5 text-xs text-emerald-700 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Ledger Sync: Operational
+                {tr("Ledger Sync: Operational", "खाता बही सिंक: सक्रिय")}
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Administration
+              {tr("Administration", "प्रशासन")}
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-2xl">
-              Govern organisations, permissions, audit records, exceptions, and operational controls.
+              {tr(
+                "Govern organisations, permissions, audit records, exceptions, and operational controls.",
+                "संस्थाओं, अनुमतियों, ऑडिट रिकॉर्ड, विसंगतियों और परिचालन नियंत्रणों का प्रबंधन करें।"
+              )}
             </p>
           </div>
 
@@ -85,13 +90,13 @@ export default function AdminDashboardPage() {
             <Button asChild variant="outline" size="sm" className="gap-2">
               <Link href="/admin/audit">
                 <History className="w-4 h-4 text-amber-600" />
-                <span>View Immutable Audit Log</span>
+                <span>{tr("View Immutable Audit Log", "अपरिवर्तनीय ऑडिट लॉग देखें")}</span>
               </Link>
             </Button>
             <Button asChild size="sm" className="gap-2">
               <Link href="/admin/plausibility">
                 <Activity className="w-4 h-4" />
-                <span>Plausibility Review</span>
+                <span>{tr("Plausibility Review", "सत्यता समीक्षा")}</span>
               </Link>
             </Button>
           </div>
@@ -105,7 +110,7 @@ export default function AdminDashboardPage() {
               <CardContent className="p-4 flex flex-col justify-between h-full">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-                    Organisations
+                    {tr("Organisations", "संस्थाएं")}
                   </span>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200 group-hover:bg-amber-100 transition-colors">
                     <Building2 className="w-4 h-4" />
@@ -117,13 +122,13 @@ export default function AdminDashboardPage() {
                   </div>
                   <div className="flex items-center gap-1.5 text-xs">
                     {pendingOrgs > 0 && (
-                      <span className="text-amber-700 font-semibold">{pendingOrgs} Pending</span>
+                      <span className="text-amber-700 font-semibold">{pendingOrgs} {tr("Pending", "लंबित")}</span>
                     )}
                     {suspendedOrgs > 0 && (
-                      <span className="text-destructive font-semibold">• {suspendedOrgs} Suspended</span>
+                      <span className="text-destructive font-semibold">• {suspendedOrgs} {tr("Suspended", "निलंबित")}</span>
                     )}
                     {pendingOrgs === 0 && suspendedOrgs === 0 && (
-                      <span className="text-emerald-700 font-medium">All Active & Verified</span>
+                      <span className="text-emerald-700 font-medium">{tr("All Active & Verified", "सभी सक्रिय व सत्यापित")}</span>
                     )}
                   </div>
                 </div>
@@ -137,7 +142,7 @@ export default function AdminDashboardPage() {
               <CardContent className="p-4 flex flex-col justify-between h-full">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-                    Users & Roles
+                    {tr("Users & Roles", "उपयोगकर्ता व भूमिकाएं")}
                   </span>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200 group-hover:bg-sky-100 transition-colors">
                     <Users className="w-4 h-4" />
@@ -148,8 +153,8 @@ export default function AdminDashboardPage() {
                     {totalUsers}
                   </div>
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <span className="text-emerald-700 font-semibold">{activeUsers} Active</span>
-                    <span>across 8 entities</span>
+                    <span className="text-emerald-700 font-semibold">{activeUsers} {tr("Active", "सक्रिय")}</span>
+                    <span>{tr("across 8 entities", "8 संस्थाओं में")}</span>
                   </div>
                 </div>
               </CardContent>
@@ -162,7 +167,7 @@ export default function AdminDashboardPage() {
               <CardContent className="p-4 flex flex-col justify-between h-full">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-                    Open Exceptions
+                    {tr("Open Exceptions", "सक्रिय विसंगतियां")}
                   </span>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-700 border border-rose-200 group-hover:bg-rose-100 transition-colors">
                     <AlertTriangle className="w-4 h-4" />
@@ -173,12 +178,12 @@ export default function AdminDashboardPage() {
                     {openExceptions}
                     {criticalExceptions > 0 && (
                       <span className="text-[10px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
-                        {criticalExceptions} Critical
+                        {criticalExceptions} {tr("Critical", "गंभीर")}
                       </span>
                     )}
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    <span>{exceptions.length - openExceptions} Resolved or Dismissed</span>
+                    <span>{exceptions.length - openExceptions} {tr("Resolved or Dismissed", "निराकृत या खारिज")}</span>
                   </div>
                 </div>
               </CardContent>
@@ -191,7 +196,7 @@ export default function AdminDashboardPage() {
               <CardContent className="p-4 flex flex-col justify-between h-full">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-                    Access Requests
+                    {tr("Access Requests", "पहुंच अनुरोध")}
                   </span>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700 border border-purple-200 group-hover:bg-purple-100 transition-colors">
                     <KeyRound className="w-4 h-4" />
@@ -202,12 +207,12 @@ export default function AdminDashboardPage() {
                     {pendingRequests}
                     {pendingRequests > 0 && (
                       <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                        Needs Review
+                        {tr("Needs Review", "समीक्षा आवश्यक")}
                       </span>
                     )}
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    <span>Restricted Data Scopes</span>
+                    <span>{tr("Restricted Data Scopes", "प्रतिबंधित डेटा स्कोप")}</span>
                   </div>
                 </div>
               </CardContent>
@@ -220,7 +225,7 @@ export default function AdminDashboardPage() {
               <CardContent className="p-4 flex flex-col justify-between h-full">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-                    Audit Events
+                    {tr("Audit Events", "ऑडिट घटनाएं")}
                   </span>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 group-hover:bg-emerald-100 transition-colors">
                     <History className="w-4 h-4" />
@@ -232,7 +237,7 @@ export default function AdminDashboardPage() {
                   </div>
                   <div className="text-xs text-emerald-700 flex items-center gap-1 font-medium">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Append-Only Chain</span>
+                    <span>{tr("Append-Only Chain", "अपरिवर्तनीय श्रृंखला")}</span>
                   </div>
                 </div>
               </CardContent>
@@ -244,10 +249,13 @@ export default function AdminDashboardPage() {
         <div className="space-y-4">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-foreground tracking-tight">
-              Operational Governance Modules
+              {tr("Operational Governance Modules", "परिचालन शासन मॉड्यूल")}
             </h2>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Access core administrative consoles and statutory compliance controls.
+              {tr(
+                "Access core administrative consoles and statutory compliance controls.",
+                "मुख्य प्रशासनिक कंसोल और वैधानिक अनुपालन नियंत्रणों तक पहुंचें।"
+              )}
             </p>
           </div>
 
@@ -260,17 +268,20 @@ export default function AdminDashboardPage() {
                     <Building2 className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                    Organisations
+                    {tr("Organisations", "संस्थाएं")}
                   </CardTitle>
                   <CardDescription className="text-xs text-muted-foreground leading-relaxed">
-                    Manage registered beekeeper cooperatives, manufacturers, analytical laboratories, distributors, and regulatory bodies.
+                    {tr(
+                      "Manage registered beekeeper cooperatives, manufacturers, analytical laboratories, distributors, and regulatory bodies.",
+                      "पंजीकृत मधुमक्खी पालक सहकारी समितियों, निर्माताओं, प्रयोगशालाओं और वितरकों का प्रबंधन करें।"
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="flex items-center justify-between pt-3 border-t border-border/60 text-xs font-semibold text-primary">
-                    <span className="text-muted-foreground font-medium">{totalOrgs} Registered Entities</span>
+                    <span className="text-muted-foreground font-medium">{totalOrgs} {tr("Registered Entities", "पंजीकृत संस्थाएं")}</span>
                     <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                      Manage Orgs <ArrowRight className="w-3.5 h-3.5" />
+                      {tr("Manage Orgs", "संस्थाएं प्रबंधित करें")} <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </CardContent>
@@ -285,17 +296,20 @@ export default function AdminDashboardPage() {
                     <Users className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                    Users & Roles
+                    {tr("Users & Roles", "उपयोगकर्ता व भूमिकाएं")}
                   </CardTitle>
                   <CardDescription className="text-xs text-muted-foreground leading-relaxed">
-                    Provision multiple operational and governance roles per account across cooperatives, facilities, and departments.
+                    {tr(
+                      "Provision multiple operational and governance roles per account across cooperatives, facilities, and departments.",
+                      "सहकारी समितियों, संयंत्रों और विभागों में प्रति खाता परिचालन और शासन भूमिकाएं आवंटित करें।"
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="flex items-center justify-between pt-3 border-t border-border/60 text-xs font-semibold text-primary">
-                    <span className="text-muted-foreground font-medium">{totalUsers} Provisioned Accounts</span>
+                    <span className="text-muted-foreground font-medium">{totalUsers} {tr("Provisioned Accounts", "आवंटित खाते")}</span>
                     <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                      Assign Roles <ArrowRight className="w-3.5 h-3.5" />
+                      {tr("Assign Roles", "भूमिकाएं सौंपें")} <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </CardContent>
@@ -310,17 +324,20 @@ export default function AdminDashboardPage() {
                     <History className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                    Complete Audit History
+                    {tr("Complete Audit History", "पूर्ण ऑडिट इतिहास")}
                   </CardTitle>
                   <CardDescription className="text-xs text-muted-foreground leading-relaxed">
-                    Searchable and filterable append-only audit log covering operational, custody, lab certification, and administrative events.
+                    {tr(
+                      "Searchable and filterable append-only audit log covering operational, custody, lab certification, and administrative events.",
+                      "परिचालन, कस्टडी, लैब प्रमाणीकरण और प्रशासनिक घटनाओं को कवर करने वाला अपरिवर्तनीय ऑडिट लॉग।"
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="flex items-center justify-between pt-3 border-t border-border/60 text-xs font-semibold text-primary">
-                    <span className="text-muted-foreground font-medium">{totalAuditLogs} Verified Audit Events</span>
+                    <span className="text-muted-foreground font-medium">{totalAuditLogs} {tr("Verified Audit Events", "सत्यापित ऑडिट घटनाएं")}</span>
                     <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                      Inspect Log <ArrowRight className="w-3.5 h-3.5" />
+                      {tr("Inspect Log", "लॉग निरीक्षण")} <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </CardContent>
@@ -335,17 +352,20 @@ export default function AdminDashboardPage() {
                     <AlertTriangle className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                    Exceptions & Anomalies
+                    {tr("Exceptions & Anomalies", "विसंगतियाँ और अनियमितताएं")}
                   </CardTitle>
                   <CardDescription className="text-xs text-muted-foreground leading-relaxed">
-                    Investigate temperature violations, quality parameter failures, weight mismatches, and traceability gaps with full context.
+                    {tr(
+                      "Investigate temperature violations, quality parameter failures, weight mismatches, and traceability gaps with full context.",
+                      "तापमान उल्लंघन, गुणवत्ता मापदंड विफलता, वजन बेमेल और ट्रैसेबिलिटी अंतराल की जांच करें।"
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="flex items-center justify-between pt-3 border-t border-border/60 text-xs font-semibold text-primary">
-                    <span className="text-muted-foreground font-medium">{openExceptions} Active Cases</span>
+                    <span className="text-muted-foreground font-medium">{openExceptions} {tr("Active Cases", "सक्रिय मामले")}</span>
                     <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                      Triage Cases <ArrowRight className="w-3.5 h-3.5" />
+                      {tr("Triage Cases", "मामले जांचें")} <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </CardContent>
@@ -360,17 +380,20 @@ export default function AdminDashboardPage() {
                     <KeyRound className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                    Access Requests
+                    {tr("Access Requests", "पहुंच अनुरोध")}
                   </CardTitle>
                   <CardDescription className="text-xs text-muted-foreground leading-relaxed">
-                    Review requests for restricted raw spectrometry data, precise GPS geofences, and supply chain telemetry clearance.
+                    {tr(
+                      "Review requests for restricted raw spectrometry data, precise GPS geofences, and supply chain telemetry clearance.",
+                      "प्रतिबंधित कच्चा स्पेक्ट्रोमेट्री डेटा, सटीक जीपीएस जियोफ़ेंस और आपूर्ति श्रृंखला टेलीमेट्री अनुरोधों की समीक्षा करें।"
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="flex items-center justify-between pt-3 border-t border-border/60 text-xs font-semibold text-primary">
-                    <span className="text-muted-foreground font-medium">{pendingRequests} Pending Decisions</span>
+                    <span className="text-muted-foreground font-medium">{pendingRequests} {tr("Pending Decisions", "लंबित निर्णय")}</span>
                     <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                      Review Scopes <ArrowRight className="w-3.5 h-3.5" />
+                      {tr("Review Scopes", "स्कोप की समीक्षा")} <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </CardContent>
@@ -385,17 +408,20 @@ export default function AdminDashboardPage() {
                     <Activity className="w-5 h-5" />
                   </div>
                   <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                    Field vs Sales Plausibility
+                    {tr("Field vs Sales Plausibility", "उत्पादन बनाम बिक्री सत्यता")}
                   </CardTitle>
                   <CardDescription className="text-xs text-muted-foreground leading-relaxed">
-                    Reconcile harvest production vs processing yield vs commercial sales commitments with human review safeguards.
+                    {tr(
+                      "Reconcile harvest production vs processing yield vs commercial sales commitments with human review safeguards.",
+                      "कटाई उत्पादन बनाम प्रसंस्करण उपज बनाम वाणिज्यिक बिक्री प्रतिबद्धताओं का मिलान करें।"
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="flex items-center justify-between pt-3 border-t border-border/60 text-xs font-semibold text-primary">
-                    <span className="text-muted-foreground font-medium">{plausibilityAlerts.length} Plausibility Envelopes</span>
+                    <span className="text-muted-foreground font-medium">{plausibilityAlerts.length} {tr("Plausibility Envelopes", "सत्यता लिफाफे")}</span>
                     <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                      Inspect Envelopes <ArrowRight className="w-3.5 h-3.5" />
+                      {tr("Inspect Envelopes", "लिफाफे जांचें")} <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </CardContent>
@@ -411,19 +437,22 @@ export default function AdminDashboardPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <CardTitle className="text-base font-bold text-foreground">
-                    System Activity
+                    {tr("System Activity", "सिस्टम गतिविधि")}
                   </CardTitle>
                   <Badge variant="outline" className="text-[11px] font-semibold border-emerald-200 text-emerald-800 bg-emerald-50">
-                    Live Feed
+                    {tr("Live Feed", "लाइव फ़ीड")}
                   </Badge>
                 </div>
                 <CardDescription className="text-xs text-muted-foreground mt-0.5">
-                  Chronological stream of verified events across organisations, traceability checkpoints, and governance actions.
+                  {tr(
+                    "Chronological stream of verified events across organisations, traceability checkpoints, and governance actions.",
+                    "संस्थाओं, ट्रैसेबिलिटी चौकियों और शासन कार्रवाइयों में सत्यापित घटनाओं की कालानुक्रमिक धारा।"
+                  )}
                 </CardDescription>
               </div>
               <Button asChild variant="ghost" size="sm" className="text-xs text-primary font-semibold hover:text-primary">
                 <Link href="/admin/audit">
-                  All Events ({totalAuditLogs}) &rarr;
+                  {tr("All Events", "सभी घटनाएं")} ({totalAuditLogs}) &rarr;
                 </Link>
               </Button>
             </div>
@@ -447,11 +476,11 @@ export default function AdminDashboardPage() {
                       </div>
                       <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-muted-foreground mt-1">
                         <span>
-                          Actor: <strong className="text-foreground font-medium">{evt.actor.name}</strong> ({evt.actor.role})
+                          {tr("Actor:", "कर्ता:")} <strong className="text-foreground font-medium">{evt.actor.name}</strong> ({evt.actor.role})
                         </span>
                         <span>•</span>
                         <span>
-                          Org: <strong className="text-foreground font-medium">{evt.organisation.name}</strong>
+                          {tr("Org:", "संस्था:")} <strong className="text-foreground font-medium">{evt.organisation.name}</strong>
                         </span>
                       </div>
                     </div>
@@ -468,7 +497,7 @@ export default function AdminDashboardPage() {
                     </span>
                     <Button asChild variant="outline" size="sm" className="h-7 text-xs gap-1">
                       <Link href={`/admin/audit/${evt.id}`}>
-                        <span>Inspect</span>
+                        <span>{tr("Inspect", "निरीक्षण")}</span>
                         <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
                     </Button>

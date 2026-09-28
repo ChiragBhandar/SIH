@@ -1,6 +1,9 @@
+"use client";
+
 import * as React from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/language-context";
 
 export interface BreadcrumbItem {
   label: string;
@@ -13,6 +16,8 @@ export interface BreadcrumbProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function Breadcrumb({ items, className, ...props }: BreadcrumbProps) {
+  const { trNav, trTerm } = useLanguage();
+
   return (
     <nav
       aria-label="Breadcrumb"
@@ -22,6 +27,9 @@ export function Breadcrumb({ items, className, ...props }: BreadcrumbProps) {
       <ol className="flex items-center space-x-1.5">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
+          const navTranslated = trNav(item.label);
+          const displayLabel = navTranslated !== item.label ? navTranslated : trTerm(item.label);
+
           return (
             <li key={index} className="flex items-center space-x-1.5">
               {index > 0 && (
@@ -32,17 +40,17 @@ export function Breadcrumb({ items, className, ...props }: BreadcrumbProps) {
                   className="font-medium text-foreground truncate max-w-[200px]"
                   aria-current="page"
                 >
-                  {item.label}
+                  {displayLabel}
                 </span>
               ) : item.href ? (
                 <a
                   href={item.href}
                   className="hover:text-foreground transition-colors truncate max-w-[150px]"
                 >
-                  {item.label}
+                  {displayLabel}
                 </a>
               ) : (
-                <span className="truncate max-w-[150px]">{item.label}</span>
+                <span className="truncate max-w-[150px]">{displayLabel}</span>
               )}
             </li>
           );

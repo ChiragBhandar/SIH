@@ -6,11 +6,13 @@ import { Hexagon, Menu, X, ArrowRight, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/language-context";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { VerifyBottleModal } from "@/components/verification";
 
 export function LandingNavbar() {
   const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+  const [verifyModalOpen, setVerifyModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -71,17 +73,15 @@ export function LandingNavbar() {
           {/* Language Selector: Globe + English / हिन्दी */}
           <LanguageSwitcher />
 
-          {/* Subtle Verify Bottle Action - clearly visible */}
+          {/* Interactive Verify Bottle Action - opens modal to enter any bottle code */}
           <Button
             variant="ghost"
             size="sm"
-            asChild
-            className="text-xs text-[#1A221E] hover:text-foreground hover:bg-[#FAF8F5] border border-transparent hover:border-[#E7E3DB] h-9 px-3.5 font-semibold cursor-pointer rounded-lg transition-colors"
+            onClick={() => setVerifyModalOpen(true)}
+            className="text-xs text-[#1A221E] hover:text-foreground hover:bg-[#FAF8F5] border border-[#E7E3DB]/80 hover:border-[#D97706]/40 h-9 px-3.5 font-semibold cursor-pointer rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap shadow-2xs"
           >
-            <Link href="/verify/HC-BTL-2026-00001" className="flex items-center gap-1.5 whitespace-nowrap">
-              <QrCode className="h-3.5 w-3.5 text-[#D97706]" />
-              <span>{t.navbar.verifyBottle}</span>
-            </Link>
+            <QrCode className="h-3.5 w-3.5 text-[#D97706]" />
+            <span>{t.navbar.verifyBottle}</span>
           </Button>
 
           {/* Single Primary Action Button: Sign In */}
@@ -138,13 +138,14 @@ export function LandingNavbar() {
             <Button
               variant="outline"
               size="sm"
-              asChild
-              className="w-full text-xs justify-start h-9 font-medium"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setVerifyModalOpen(true);
+              }}
+              className="w-full text-xs justify-start h-9 font-medium border-[#E7E3DB] hover:bg-[#FAF8F5] cursor-pointer"
             >
-              <Link href="/verify/HC-BTL-2026-00001" onClick={() => setMobileMenuOpen(false)}>
-                <QrCode className="h-3.5 w-3.5 mr-2 text-[#D97706]" />
-                {t.navbar.publicVerification}
-              </Link>
+              <QrCode className="h-3.5 w-3.5 mr-2 text-[#D97706]" />
+              {t.navbar.publicVerification}
             </Button>
             <Button
               size="sm"
@@ -159,6 +160,9 @@ export function LandingNavbar() {
           </div>
         </div>
       )}
+
+      {/* Global Verification Modal */}
+      <VerifyBottleModal open={verifyModalOpen} onOpenChange={setVerifyModalOpen} />
     </header>
   );
 }

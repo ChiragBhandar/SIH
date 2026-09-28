@@ -362,4 +362,77 @@ export interface TranslationDictionary {
       copyright: string;
     };
   };
+  loginPage: {
+    traceabilityPlatform: string;
+    networkActive: string;
+    backToHome: string;
+    title: string;
+    subtitle: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    passwordLabel: string;
+    forgotPassword: string;
+    hidePassword: string;
+    showPassword: string;
+    rememberMe: string;
+    signInBtn: string;
+    signingIn: string;
+    quickCredentials: string;
+    activeSessionDetected: string;
+    continueToSession: string;
+    reauthPrompt: string;
+    forgotPasswordNotice: string;
+    errorDefault: string;
+    errorUnexpected: string;
+    trustHeading: string;
+    trustDescription: string;
+    footerCopyright: string;
+  };
+  selectOrgPage: {
+    headerSubtitle: string;
+    signOut: string;
+    step1: string;
+    step2: string;
+    title: string;
+    subtitle: string;
+    selected: string;
+    clickToSelect: string;
+    registerPrompt: string;
+    continueBtn: string;
+    footerText: string;
+    orgs: Record<
+      string,
+      {
+        name: string;
+        displayType: string;
+        membershipInfo: string;
+      }
+    >;
+  };
+  selectRolePage: {
+    headerSubtitle: string;
+    changeOrg: string;
+    step1: string;
+    step2: string;
+    activeOrgLabel: string;
+    typeLabel: string;
+    switchBtn: string;
+    title: string;
+    subtitle: string;
+    infoTitle: string;
+    infoBody: string;
+    orgRoleBadge: string;
+    capabilitiesLabel: string;
+    backBtn: string;
+    continueBtn: string;
+    footerText: string;
+    roles: Record<
+      string,
+      {
+        name: string;
+        description: string;
+        capabilities: string[];
+      }
+    >;
+  };
 }

@@ -5,19 +5,23 @@ import Link from "next/link";
 import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 import {
-  Building2,
-  Shield,
-  Wheat,
-  Factory,
-  ShoppingBag,
-  User,
-  FlaskConical,
   Boxes,
-  Activity,
+  Wheat,
+  FlaskConical,
+  QrCode,
   ArrowRight,
+  Shield,
+  Activity,
+  Plus,
+  AlertCircle,
+  Building2,
+  Calendar,
+  ArrowUpRight,
+  ChevronRight,
+  Clock,
   Sparkles,
-  Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,277 +33,706 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-const ROLE_ICONS = {
-  wheat: Wheat,
-  factory: Factory,
-  "shopping-bag": ShoppingBag,
-  user: User,
-  flask: FlaskConical,
-  shield: Shield,
-};
+  MOCK_BATCHES,
+  MOCK_APIARIES,
+} from "@/data";
+import {
+  YieldForecastChart,
+  HiveHealthChart,
+  HarvestAnalyticsChart,
+} from "@/components/dashboard";
 
 function DashboardContent() {
   const { user, selectedOrg, selectedRole } = useAuthSession();
-  const [activeDialogWorkflow, setActiveDialogWorkflow] = React.useState<string | null>(null);
+  const { isHindi } = useLanguage();
+  const [showAttention, setShowAttention] = React.useState(true);
 
-  const RoleIcon = selectedRole?.iconName
-    ? ROLE_ICONS[selectedRole.iconName] || Shield
-    : Shield;
+  // Take top 3 recent batches for clear scannable table
+  const recentBatches = React.useMemo(() => {
+    return MOCK_BATCHES.slice(0, 3);
+  }, []);
 
-  const gettingStartedItems = [
-    {
-      id: "register-hive",
-      title: "Register hive / apiary",
-      description:
-        "Establish new apiary coordinates, register physical boxes, and pair NFC/RFID hive identifiers.",
-      icon: Wheat,
-      badge: "Step 4 Ready",
-      actionLabel: "Register Apiary",
-      href: "/hives/new",
-    },
-    {
-      id: "capture-activity",
-      title: "Capture activity",
-      description:
-        "Record beekeeper yard activities, queen status inspections, floral foraging blooms, and pest treatments.",
-      icon: Activity,
-      badge: "Step 4 Ready",
-      actionLabel: "Log Inspection",
-      href: "/activities/new",
-    },
-    {
-      id: "create-batch",
-      title: "Create honey batch",
-      description:
-        "Extract raw honey into bulk containers, generate immutable batch serials, and initiate lab testing pipelines.",
-      icon: Boxes,
-      badge: "Step 4 Ready",
-      actionLabel: "Start Harvest Batch",
-      href: "/batches/new",
-    },
-  ];
+  // Formatted display date
+  const displayDate = React.useMemo(() => {
+    const now = new Date();
+    if (isHindi) {
+      return "सोमवार, 28 सितम्बर 2026";
+    }
+    return now.toLocaleDateString("en-US", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).toUpperCase();
+  }, [isHindi]);
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
-      {/* Page Header */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Operational Dashboard
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
+      {/* ========================================================================= */}
+      {/* LEVEL 1: HEADER & CONTEXT GREETING                                       */}
+      {/* ========================================================================= */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-5">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+              <Calendar className="h-3.5 w-3.5 text-primary" />
+              {displayDate}
+            </span>
+            <span className="text-muted-foreground/40">•</span>
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              {isHindi ? "नेटवर्क समन्वित" : "Consensus Synced"}
+            </span>
+          </div>
+
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+            {isHindi
+              ? `नमस्ते, ${user?.fullName || "ऑपरेटर"}।`
+              : `Namaste, ${user?.fullName || "Operator"}.`}
           </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground">
-            Signed in as <strong className="text-foreground">{user?.fullName || "Operator"}</strong> • Authenticated session connected to Honey Chain network.
+
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl">
+            {isHindi
+              ? `आपकी मधुमक्खी शालाएं और शहद लॉट सामान्य रूप से सक्रिय हैं। 3 बैच और 54 छत्ते ब्लॉकचेन नेटवर्क पर सत्यापित हैं।`
+              : `Your apiary network is stable. 3 harvest batches, 54 hives, and active quality verifications are in sync.`}
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-xs font-mono py-1 px-2.5 gap-1.5 border-primary/30 text-primary">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            Session Verified
-          </Badge>
+        {/* Primary Action Buttons */}
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 text-xs gap-1.5 font-medium cursor-pointer shadow-2xs hover:bg-muted/80"
+            asChild
+          >
+            <Link href="/activities/new">
+              <Activity className="h-3.5 w-3.5 text-primary" />
+              <span>{isHindi ? "निरीक्षण दर्ज करें" : "Log Inspection"}</span>
+            </Link>
+          </Button>
+
+          <Button
+            size="sm"
+            className="h-9 text-xs gap-1.5 font-semibold bg-amber-600 hover:bg-amber-700 text-white shadow-xs cursor-pointer transition-all"
+            asChild
+          >
+            <Link href="/batches/new">
+              <Plus className="h-4 w-4" />
+              <span>{isHindi ? "+ नया बैच बनाएं" : "Record Harvest"}</span>
+            </Link>
+          </Button>
         </div>
       </div>
 
-      {/* Context Proof Section: Organisation & Active Role */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Selected Organisation Card */}
-        <Card className="border-primary/20 bg-card shadow-xs">
-          <CardHeader className="pb-3">
+      {/* ========================================================================= */}
+      {/* LEVEL 2: 4 KEY OVERVIEW KPI CARDS                                        */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Metric 1: Active Hives */}
+        <Link href="/hives" className="group block focus:outline-none">
+          <Card className="p-4 border-border/80 bg-card hover:border-primary/40 hover:shadow-xs transition-all h-full">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {isHindi ? "सक्रिय छत्ते" : "Active Hives"}
+              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 group-hover:scale-105 transition-transform">
+                <Wheat className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                54
+              </span>
+              <Badge variant="success" className="text-[10px] py-0 px-1.5 font-mono">
+                96% {isHindi ? "स्वस्थ" : "Healthy"}
+              </Badge>
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1 truncate">
+              {isHindi ? "3 शालाएं • 42 फ्रेम शहद युक्त" : "Across 3 apiary yards • 42 honey frames"}
+            </p>
+          </Card>
+        </Link>
+
+        {/* Metric 2: Total Harvested */}
+        <Link href="/batches" className="group block focus:outline-none">
+          <Card className="p-4 border-border/80 bg-card hover:border-primary/40 hover:shadow-xs transition-all h-full">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {isHindi ? "कुल शहद उत्पादन" : "Total Harvested"}
+              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 group-hover:scale-105 transition-transform">
+                <Boxes className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                281.1 <span className="text-base font-medium text-muted-foreground">kg</span>
+              </span>
+              <Badge variant="honey" className="text-[10px] py-0 px-1.5 font-mono">
+                +32 kg
+              </Badge>
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1 truncate">
+              {isHindi ? "3 बैच • चमोली एवं कुल्लू उत्पादन" : "3 harvest lots • Chamoli & Kullu origin"}
+            </p>
+          </Card>
+        </Link>
+
+        {/* Metric 3: Lab Certified Purity */}
+        <Link href="/lab" className="group block focus:outline-none">
+          <Card className="p-4 border-border/80 bg-card hover:border-primary/40 hover:shadow-xs transition-all h-full">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {isHindi ? "प्रमाणित शुद्धता" : "Certified Purity"}
+              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 group-hover:scale-105 transition-transform">
+                <FlaskConical className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                100%
+              </span>
+              <Badge variant="success" className="text-[10px] py-0 px-1.5 font-mono">
+                Grade A
+              </Badge>
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1 truncate">
+              {isHindi ? "शून्य मिलावट • NMR एवं FSSAI पास" : "Zero adulteration • NMR & FSSAI verified"}
+            </p>
+          </Card>
+        </Link>
+
+        {/* Metric 4: QR Verified Bottles */}
+        <Link href="/bottles" className="group block focus:outline-none">
+          <Card className="p-4 border-border/80 bg-card hover:border-primary/40 hover:shadow-xs transition-all h-full">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {isHindi ? "सत्यापित बोतलें" : "Traceable Units"}
+              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 group-hover:scale-105 transition-transform">
+                <QrCode className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                100
+              </span>
+              <Badge variant="secondary" className="text-[10px] py-0 px-1.5 font-mono">
+                {isHindi ? "सक्रिय" : "Live"}
+              </Badge>
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1 truncate">
+              {isHindi ? "100% सार्वजनिक क्यूआर सत्यापन" : "100% public anti-counterfeit QR active"}
+            </p>
+          </Card>
+        </Link>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* LEVEL 3: ACTION REQUIRED / REQUIRES ATTENTION                            */}
+      {/* ========================================================================= */}
+      {showAttention && (
+        <div className="rounded-xl border border-amber-300/60 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800/40 p-4 transition-all">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-700 dark:text-amber-400">
+                <AlertCircle className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-bold text-amber-950 dark:text-amber-200">
+                  {isHindi
+                    ? "2 कार्यों पर आपके ध्यान की आवश्यकता है"
+                    : "2 items require your operational attention"}
+                </h4>
+                <p className="text-[11px] sm:text-xs text-amber-800/80 dark:text-amber-300/80">
+                  {isHindi
+                    ? "आवक हस्तांतरण TR-2026-0079 पावती सत्यापन प्रतीक्षा में है • बैच HC-RH-2026-0001 गुणवत्ता प्रमाणन के लिए तैयार है।"
+                    : "Inbound custody transfer TR-2026-0079 awaits receipt confirmation • Raw batch HC-RH-2026-0001 is ready for lab testing."}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0 pl-11 sm:pl-0">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs font-semibold border-amber-300 dark:border-amber-700 bg-white/80 dark:bg-amber-950/40 text-amber-950 dark:text-amber-200 hover:bg-amber-100/70"
+                asChild
+              >
+                <Link href="/receiving">
+                  <span>{isHindi ? "पावती समीक्षा करें" : "Review Transfer"}</span>
+                  <ArrowRight className="h-3 w-3 ml-1" />
+                </Link>
+              </Button>
+              <button
+                type="button"
+                onClick={() => setShowAttention(false)}
+                className="text-[11px] text-amber-800/70 hover:text-amber-950 dark:hover:text-amber-200 px-2 py-1 cursor-pointer font-medium"
+              >
+                {isHindi ? "हटाएं" : "Dismiss"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* LEVEL 3.5: REAL-TIME TELEMETRY & YIELD INTELLIGENCE (CHARTS)              */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-7 flex flex-col">
+          <YieldForecastChart />
+        </div>
+        <div className="lg:col-span-5 flex flex-col">
+          <HiveHealthChart />
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* LEVEL 4: TASK-ORIENTED 2-COLUMN MAIN OPERATIONAL GRID                    */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* ======================================================================= */}
+        {/* LEFT COLUMN (7 COLS): RECENT BATCHES & APIARY OVERVIEW                  */}
+        {/* ======================================================================= */}
+        <div className="lg:col-span-7 space-y-6">
+          {/* Card: Harvest Velocity & Floral Diversity Analytics */}
+          <HarvestAnalyticsChart />
+
+          {/* Card: Recent Honey Batches Table */}
+          <Card className="border-border/80 shadow-xs">
+            <CardHeader className="p-4 sm:p-5 pb-3 border-b border-border/40 flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="text-base font-bold text-foreground">
+                  {isHindi ? "हाल के शहद बैच" : "Recent Honey Batches"}
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  {isHindi
+                    ? "आपकी मधुमक्खी शालाओं से सत्यापित उत्पादन लॉट"
+                    : "Cryptographically recorded harvest lots across your network"}
+                </CardDescription>
+              </div>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs text-primary font-medium hover:bg-primary/5 h-8 gap-1 cursor-pointer"
+                asChild
+              >
+                <Link href="/batches">
+                  <span>{isHindi ? "सभी देखें" : "View All"}</span>
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
+              </Button>
+            </CardHeader>
+
+            <CardContent className="p-0">
+              <div className="divide-y divide-border/50">
+                {recentBatches.map((batch) => (
+                  <div
+                    key={batch.id}
+                    className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-muted/30 transition-colors"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-bold text-foreground">
+                          {batch.batchNumber}
+                        </span>
+                        <Badge
+                          variant={batch.batchType === "Raw Honey" ? "honey" : "secondary"}
+                          className="text-[10px] py-0 px-1.5"
+                        >
+                          {batch.batchType}
+                        </Badge>
+                      </div>
+                      <p className="text-xs font-medium text-foreground">
+                        {batch.honeyType}
+                      </p>
+                      <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                        <Wheat className="h-3 w-3 text-primary/70 shrink-0" />
+                        <span>{batch.sourceApiaryName}</span>
+                        <span>•</span>
+                        <span>{batch.harvestDate}</span>
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t border-border/30 sm:border-0">
+                      <div className="text-left sm:text-right">
+                        <span className="text-sm font-extrabold text-foreground block">
+                          {batch.weightKg} kg
+                        </span>
+                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                          ✓ Verified Yield
+                        </span>
+                      </div>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs font-medium gap-1 cursor-pointer shadow-2xs"
+                        asChild
+                      >
+                        <Link href={`/batches/${batch.id}`}>
+                          <span>{isHindi ? "विवरण" : "View"}</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Card: Apiary Yard Snapshot */}
+          <Card className="border-border/80 shadow-xs">
+            <CardHeader className="p-4 sm:p-5 pb-3 border-b border-border/40 flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="text-base font-bold text-foreground">
+                  {isHindi ? "मधुमक्खी शाला स्थिति" : "Apiaries & Yard Health"}
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  {isHindi
+                    ? "भौगोलिक स्थिति एवं सक्रिय कॉलोनियों का अवलोकन"
+                    : "Real-time colony vitality and seasonal floral forage"}
+                </CardDescription>
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs font-medium h-8 gap-1.5 cursor-pointer"
+                asChild
+              >
+                <Link href="/hives/new">
+                  <Plus className="h-3 w-3" />
+                  <span>{isHindi ? "नया छत्ता" : "Add Hive"}</span>
+                </Link>
+              </Button>
+            </CardHeader>
+
+            <CardContent className="p-4 sm:p-5 space-y-3.5">
+              {MOCK_APIARIES.map((apiary) => {
+                const isQuarantine = apiary.status === "quarantine";
+                const healthPercentage = isQuarantine ? 85 : 100;
+
+                return (
+                  <div
+                    key={apiary.id}
+                    className="p-3.5 rounded-lg border border-border/60 bg-muted/20 hover:bg-muted/40 transition-colors space-y-2.5"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-xs sm:text-sm font-bold text-foreground">
+                            {apiary.name}
+                          </h4>
+                          <Badge
+                            variant={isQuarantine ? "warning" : "success"}
+                            className="text-[10px] py-0 px-1.5"
+                          >
+                            {isQuarantine
+                              ? isHindi
+                                ? "निगरानी में"
+                                : "Observation"
+                              : isHindi
+                              ? "उत्कृष्ट"
+                              : "Optimal"}
+                          </Badge>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground">
+                          {apiary.location} • {apiary.dominantFlora}
+                        </p>
+                      </div>
+
+                      <div className="text-left sm:text-right shrink-0">
+                        <span className="text-xs font-bold text-foreground">
+                          {apiary.hiveCount} {isHindi ? "छत्ते" : "Hives"}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground block">
+                          {isHindi ? "अंतिम जांच" : "Inspected"}: {apiary.lastInspectionDate}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Simple Health Vitality Progress Bar */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-[10px] text-muted-foreground font-medium">
+                        <span>{isHindi ? "कॉलोनी स्वास्थ्य दर" : "Colony Health Index"}</span>
+                        <span className="font-mono text-foreground font-semibold">
+                          {healthPercentage}%
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 rounded-full bg-border/60 overflow-hidden">
+                        <div
+                          className={`h-full rounded-full ${
+                            isQuarantine ? "bg-amber-500" : "bg-emerald-500"
+                          }`}
+                          style={{ width: `${healthPercentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* ======================================================================= */}
+        {/* RIGHT COLUMN (5 COLS): QUICK ACTIONS, RECENT ACTIVITY & CONTEXT         */}
+        {/* ======================================================================= */}
+        <div className="lg:col-span-5 space-y-6">
+          {/* Card: Quick Actions */}
+          <Card className="border-border/80 shadow-xs">
+            <CardHeader className="p-4 sm:p-5 pb-3 border-b border-border/40">
+              <CardTitle className="text-base font-bold text-foreground">
+                {isHindi ? "त्वरित कार्य" : "Quick Actions"}
+              </CardTitle>
+              <CardDescription className="text-xs">
+                {isHindi
+                  ? "दैनिक संचालन के लिए मुख्य प्रवेश बिंदु"
+                  : "Common tasks and operational entries"}
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="p-3 sm:p-4 space-y-2">
+              <Link
+                href="/batches/new"
+                className="group flex items-center justify-between p-2.5 rounded-lg border border-border/60 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                    <Boxes className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors block">
+                      {isHindi ? "शहद फसल बैच दर्ज करें" : "Start Harvest Batch"}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {isHindi ? "कच्चे शहद के ड्रम पंजीकृत करें" : "Register extraction drum & origins"}
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-transform group-hover:translate-x-0.5" />
+              </Link>
+
+              <Link
+                href="/activities/new"
+                className="group flex items-center justify-between p-2.5 rounded-lg border border-border/60 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                    <Activity className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors block">
+                      {isHindi ? "छत्ता निरीक्षण दर्ज करें" : "Log Hive Inspection"}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {isHindi ? "रानी स्थिति, पराग एवं कीट उपचार" : "Queen health, pests & forage flow"}
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-transform group-hover:translate-x-0.5" />
+              </Link>
+
+              <Link
+                href="/bottles"
+                className="group flex items-center justify-between p-2.5 rounded-lg border border-border/60 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 group-hover:bg-sky-500 group-hover:text-white transition-colors">
+                    <QrCode className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors block">
+                      {isHindi ? "क्यूआर बोतल सत्यापन" : "Verify QR Bottles"}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {isHindi ? "उपभोक्ता विश्वास सील जांचें" : "Inspect anti-tamper retail units"}
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-transform group-hover:translate-x-0.5" />
+              </Link>
+
+              <Link
+                href="/lab"
+                className="group flex items-center justify-between p-2.5 rounded-lg border border-border/60 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-600 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                    <FlaskConical className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors block">
+                      {isHindi ? "प्रयोगशाला गुणवत्ता पोर्टल" : "Laboratory Testing"}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {isHindi ? "नमी, HMF एवं NMR परीक्षण समीक्षा" : "Inspect C4, moisture & purity seals"}
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Card: Recent Activity (Scan-Friendly Chronological Feed) */}
+          <Card className="border-border/80 shadow-xs">
+            <CardHeader className="p-4 sm:p-5 pb-3 border-b border-border/40 flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="text-base font-bold text-foreground">
+                  {isHindi ? "हालिया गतिविधियां" : "Recent Activity"}
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  {isHindi
+                    ? "सत्यापित ऑडिट इतिहास एवं घटनाएं"
+                    : "Live cryptographic event updates"}
+                </CardDescription>
+              </div>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs text-primary font-medium hover:bg-primary/5 h-8 gap-1 cursor-pointer"
+                asChild
+              >
+                <Link href="/admin/audit">
+                  <span>{isHindi ? "ऑडिट देखें" : "Audit Log"}</span>
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
+              </Button>
+            </CardHeader>
+
+            <CardContent className="p-4 sm:p-5 space-y-4">
+              <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-border/60">
+                {/* Event 1 */}
+                <div className="relative">
+                  <div className="absolute -left-6 top-1 h-3.5 w-3.5 rounded-full border-2 border-background bg-amber-500" />
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-bold text-foreground block">
+                      {isHindi ? "कच्चा शहद लॉट पंजीकृत" : "Harvest Lot Weighed & Sealed"}
+                    </span>
+                    <p className="text-[11px] text-muted-foreground">
+                      Batch <strong className="text-foreground">HC-RH-2026-0001</strong> (185.5 kg) • Highland North Apiary
+                    </p>
+                    <span className="text-[10px] text-muted-foreground/80 flex items-center gap-1 font-mono">
+                      <Clock className="h-2.5 w-2.5" /> 2 hours ago
+                    </span>
+                  </div>
+                </div>
+
+                {/* Event 2 */}
+                <div className="relative">
+                  <div className="absolute -left-6 top-1 h-3.5 w-3.5 rounded-full border-2 border-background bg-blue-500" />
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-bold text-foreground block">
+                      {isHindi ? "कस्टडी हस्तांतरण प्रेषित" : "Custody Handover Dispatched"}
+                    </span>
+                    <p className="text-[11px] text-muted-foreground">
+                      Transfer <strong className="text-foreground">TR-2026-0079</strong> sent to Golden Hive Foods
+                    </p>
+                    <span className="text-[10px] text-muted-foreground/80 flex items-center gap-1 font-mono">
+                      <Clock className="h-2.5 w-2.5" /> 5 hours ago
+                    </span>
+                  </div>
+                </div>
+
+                {/* Event 3 */}
+                <div className="relative">
+                  <div className="absolute -left-6 top-1 h-3.5 w-3.5 rounded-full border-2 border-background bg-emerald-500" />
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-bold text-foreground block">
+                      {isHindi ? "प्रयोगशाला शुद्धता प्रमाणन जारी" : "Purity Grade A Certificate Issued"}
+                    </span>
+                    <p className="text-[11px] text-muted-foreground">
+                      PureTrace Labs verified 100% genuine Himalayan multifloral origin
+                    </p>
+                    <span className="text-[10px] text-muted-foreground/80 flex items-center gap-1 font-mono">
+                      <Clock className="h-2.5 w-2.5" /> Yesterday
+                    </span>
+                  </div>
+                </div>
+
+                {/* Event 4 */}
+                <div className="relative">
+                  <div className="absolute -left-6 top-1 h-3.5 w-3.5 rounded-full border-2 border-background bg-purple-500" />
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-bold text-foreground block">
+                      {isHindi ? "100 खुदरा बोतलें प्रकाशित" : "100 Retail QR Bottles Published"}
+                    </span>
+                    <p className="text-[11px] text-muted-foreground">
+                      Public tamper-proof ledger activated for batch HC-PB-2026-0001
+                    </p>
+                    <span className="text-[10px] text-muted-foreground/80 flex items-center gap-1 font-mono">
+                      <Clock className="h-2.5 w-2.5" /> 2 days ago
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Compact Workspace Context (Replaces old massive duplicate cards) */}
+          <div className="rounded-xl border border-border/70 bg-card p-4 space-y-3 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
                 <Building2 className="h-3.5 w-3.5 text-primary" />
-                Active Organisation
+                {isHindi ? "सक्रिय कार्यक्षेत्र" : "Session Context"}
               </span>
-              <Link
-                href="/select-organisation"
-                className="text-xs text-primary font-medium hover:underline"
-              >
-                Switch Entity
-              </Link>
+              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
+                ● Connected
+              </span>
             </div>
-            <CardTitle className="text-lg font-bold text-foreground mt-1">
-              {selectedOrg?.name || "Highland Apiaries Cooperative"}
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Entity Type: <span className="font-medium text-foreground">{selectedOrg?.displayType || "Beekeeper Cooperative"}</span>
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 pt-0 text-xs">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="font-mono text-[11px]">
-                ID: {selectedOrg?.shortIdentifier || "ORG-HAC-01"}
-              </Badge>
-              <Badge variant="outline" className="text-[11px]">
-                {selectedOrg?.membershipInfo || "Active Member"}
-              </Badge>
-            </div>
-            <p className="text-muted-foreground text-[11px] leading-relaxed">
-              All batch creations, custody transfers, and certification requests logged in this session are digitally bound to this organisation.
-            </p>
-          </CardContent>
-        </Card>
 
-        {/* Selected Active Role Card */}
-        <Card className="border-primary/20 bg-card shadow-xs">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-foreground truncate">
+                  {selectedOrg?.name || "Highland Apiaries Cooperative"}
+                </span>
+                <Link
+                  href="/select-organisation"
+                  className="text-[11px] text-primary hover:underline font-medium shrink-0 ml-2"
+                >
+                  {isHindi ? "बदलें" : "Switch"}
+                </Link>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                {selectedOrg?.displayType || "Beekeeper Cooperative"} • ID: {selectedOrg?.shortIdentifier || "ORG-HAC-01"}
+              </p>
+            </div>
+
+            <div className="border-t border-border/40 pt-2 flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-xs text-foreground font-medium">
                 <Shield className="h-3.5 w-3.5 text-primary" />
-                Active Session Role
-              </span>
+                <span>{selectedRole?.name || "Beekeeper"}</span>
+              </div>
               <Link
                 href="/select-role"
-                className="text-xs text-primary font-medium hover:underline"
+                className="text-[11px] text-primary hover:underline font-medium"
               >
-                Change Role
+                {isHindi ? "भूमिका बदलें" : "Change Role"}
               </Link>
             </div>
-            <div className="flex items-center gap-2 mt-1">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/10 text-primary">
-                <RoleIcon className="h-4 w-4" />
-              </div>
-              <CardTitle className="text-lg font-bold text-foreground">
-                {selectedRole?.name || "Beekeeper"}
-              </CardTitle>
-            </div>
-            <CardDescription className="text-xs">
-              {selectedRole?.description || "Manage apiaries, record floral origins, and register harvest batches."}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2 pt-0 text-xs">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground block">
-              Active Session Capabilities:
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {selectedRole?.capabilities.map((cap, i) => (
-                <Badge key={i} variant="outline" className="text-[10px] py-0 font-normal">
-                  ✓ {cap}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Getting Started Section */}
-      <div className="space-y-3 pt-2">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-base sm:text-lg font-bold tracking-tight text-foreground">
-              Getting Started
-            </h2>
-            <p className="text-xs text-muted-foreground">
-              Primary entry points for operational traceability workflows
-            </p>
           </div>
-          <span className="text-[11px] text-muted-foreground hidden sm:inline">
-            Frontend placeholders for upcoming modules
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {gettingStartedItems.map((item) => {
-            const ItemIcon = item.icon;
-            return (
-              <Card
-                key={item.id}
-                className="flex flex-col justify-between border-border bg-card/60 hover:bg-card hover:border-input transition-colors shadow-xs"
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <ItemIcon className="h-4 w-4" />
-                    </div>
-                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                      {item.badge}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-sm font-semibold text-foreground">
-                    {item.title}
-                  </CardTitle>
-                  <CardDescription className="text-xs leading-relaxed">
-                    {item.description}
-                  </CardDescription>
-                </CardHeader>
-
-                <CardContent className="pt-0">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full text-xs gap-1.5 h-8 font-medium cursor-pointer"
-                    asChild
-                  >
-                    <Link href={item.href}>
-                      <span>{item.actionLabel}</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
         </div>
       </div>
-
-      {/* Security & Traceability Trust Info */}
-      <div className="rounded-lg border border-border/70 bg-muted/20 p-4 flex items-center gap-2.5 text-xs text-muted-foreground">
-        <Info className="h-4 w-4 text-primary shrink-0" />
-        <span>
-          Operating in <strong className="font-medium text-foreground">{selectedOrg?.name}</strong> as <strong className="font-medium text-foreground">{selectedRole?.name}</strong>. Data writes simulate cryptographic consensus.
-        </span>
-      </div>
-
-      {/* Modal Dialog for Placeholder Workflow notice */}
-      <Dialog
-        open={!!activeDialogWorkflow}
-        onOpenChange={(open) => !open && setActiveDialogWorkflow(null)}
-      >
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <DialogTitle className="text-center text-base">
-              {activeDialogWorkflow}
-            </DialogTitle>
-            <DialogDescription className="text-center text-xs space-y-2 pt-2">
-              <p>
-                This entry point connects directly to the upcoming workflow module.
-              </p>
-              <p className="text-muted-foreground text-[11px]">
-                In Step 3, authentication, organisation scoping, and active session roles are fully established and bound to this view. Detailed hive registrations and batch tracking will follow in subsequent steps.
-              </p>
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-center pt-2">
-            <Button
-              size="sm"
-              onClick={() => setActiveDialogWorkflow(null)}
-              className="text-xs px-6"
-            >
-              Understood
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
 
 export default function DashboardPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Operational Dashboard", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Dashboard", "डैशबोर्ड"), active: true },
         ]}
         defaultNavId="dashboard"
       >
@@ -308,3 +741,4 @@ export default function DashboardPage() {
     </AuthGuard>
   );
 }
+

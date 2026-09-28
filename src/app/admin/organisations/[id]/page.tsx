@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import { AdminRoleGuard, StatusBadge, EventTypeBadge, ConfirmationModal } from "@/components/admin";
 import { AdminOrgStatus } from "@/types/admin";
 import {
@@ -41,6 +42,7 @@ import {
 export default function OrganisationDetailPage() {
   const params = useParams();
   const orgId = typeof params?.id === "string" ? params.id : "";
+  const { tr, trOrgType, trRole, trStatus } = useLanguage();
 
   const {
     getAdminOrganisation,
@@ -60,13 +62,18 @@ export default function OrganisationDetailPage() {
       <AdminRoleGuard>
         <div className="min-h-[50vh] flex flex-col items-center justify-center text-center p-6">
           <Building2 className="w-12 h-12 text-muted-foreground/50 mb-3" />
-          <h2 className="text-xl font-bold text-foreground">Organisation Not Found</h2>
+          <h2 className="text-xl font-bold text-foreground">
+            {tr("Organisation Not Found", "संगठन नहीं मिला")}
+          </h2>
           <p className="text-muted-foreground text-xs sm:text-sm mt-1 mb-4">
-            The requested organisation identifier ({orgId}) does not exist in the registry.
+            {tr(
+              `The requested organisation identifier (${orgId}) does not exist in the registry.`,
+              `अनुरोधित संगठन पहचानकर्ता (${orgId}) रजिस्ट्री में मौजूद नहीं है।`
+            )}
           </p>
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/organisations">
-              &larr; Back to Organisations Directory
+              &larr; {tr("Back to Organisations Directory", "संगठन निर्देशिका पर वापस जाएं")}
             </Link>
           </Button>
         </div>
@@ -91,11 +98,11 @@ export default function OrganisationDetailPage() {
           <div>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
               <Link href="/admin" className="hover:text-foreground transition-colors">
-                Administration
+                {tr("Administration", "प्रशासन")}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
               <Link href="/admin/organisations" className="hover:text-foreground transition-colors">
-                Organisations
+                {tr("Organisations", "संगठन")}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
               <span className="text-foreground font-mono font-semibold">{org.code}</span>
@@ -105,7 +112,7 @@ export default function OrganisationDetailPage() {
               <StatusBadge status={org.status} variant="org" size="md" />
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-              Registered Identifier: <span className="font-mono text-amber-800 font-semibold">{org.id}</span> • Reg No: <span className="font-mono text-foreground font-medium">{org.registrationNumber}</span>
+              {tr("Registered Identifier:", "पंजीकृत पहचानकर्ता:")} <span className="font-mono text-amber-800 font-semibold">{org.id}</span> • {tr("Reg No:", "पंजीकरण संख्या:")} <span className="font-mono text-foreground font-medium">{org.registrationNumber}</span>
             </p>
           </div>
 
@@ -113,7 +120,7 @@ export default function OrganisationDetailPage() {
             <Button asChild variant="outline" size="sm" className="gap-1.5">
               <Link href="/admin/organisations">
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>All Organisations</span>
+                <span>{tr("All Organisations", "सभी संगठन")}</span>
               </Link>
             </Button>
 
@@ -126,7 +133,7 @@ export default function OrganisationDetailPage() {
                 className="gap-1.5"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                Approve Organisation
+                {tr("Approve Organisation", "संगठन स्वीकृत करें")}
               </Button>
             )}
 
@@ -138,7 +145,7 @@ export default function OrganisationDetailPage() {
                 className="gap-1.5"
               >
                 <RotateCcw className="w-4 h-4" />
-                Restore Operational Status
+                {tr("Restore Operational Status", "परिचालन स्थिति बहाल करें")}
               </Button>
             )}
 
@@ -151,7 +158,7 @@ export default function OrganisationDetailPage() {
                 className="gap-1.5"
               >
                 <Ban className="w-4 h-4" />
-                Suspend Organisation
+                {tr("Suspend Organisation", "संगठन निलंबित करें")}
               </Button>
             )}
           </div>
@@ -163,21 +170,21 @@ export default function OrganisationDetailPage() {
           <Card className="border-border/80 bg-card shadow-xs">
             <CardHeader className="pb-3 border-b border-border/60">
               <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Organisation Profile
+                {tr("Organisation Profile", "संगठन प्रोफ़ाइल")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
               <div className="space-y-2.5 text-xs">
                 <div className="flex justify-between py-1 border-b border-border/50">
-                  <span className="text-muted-foreground">Category / Type:</span>
-                  <span className="font-semibold text-foreground">{org.type}</span>
+                  <span className="text-muted-foreground">{tr("Category / Type:", "श्रेणी / प्रकार:")}</span>
+                  <span className="font-semibold text-foreground">{trOrgType(org.type)}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-border/50">
-                  <span className="text-muted-foreground">Compliance Rating:</span>
-                  <span className="font-bold text-emerald-700">{org.complianceRating}% Verified</span>
+                  <span className="text-muted-foreground">{tr("Compliance Rating:", "अनुपालन रेटिंग:")}</span>
+                  <span className="font-bold text-emerald-700">{org.complianceRating}% {tr("Verified", "सत्यापित")}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-border/50">
-                  <span className="text-muted-foreground">Last External Audit:</span>
+                  <span className="text-muted-foreground">{tr("Last External Audit:", "अंतिम बाहरी ऑडिट:")}</span>
                   <span className="font-mono text-foreground">
                     {new Date(org.lastAuditDate).toLocaleDateString("en-GB", {
                       day: "2-digit",
@@ -187,7 +194,7 @@ export default function OrganisationDetailPage() {
                   </span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-border/50">
-                  <span className="text-muted-foreground">Registry Date:</span>
+                  <span className="text-muted-foreground">{tr("Registry Date:", "पंजीकरण तिथि:")}</span>
                   <span className="font-mono text-foreground">
                     {new Date(org.createdAt).toLocaleDateString("en-GB", {
                       day: "2-digit",
@@ -201,7 +208,7 @@ export default function OrganisationDetailPage() {
               {org.notes && (
                 <div className="pt-2">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-                    Governance Notes:
+                    {tr("Governance Notes:", "प्रशासन टिप्पणी:")}
                   </span>
                   <p className="text-xs text-foreground/80 mt-1 leading-relaxed bg-muted/40 p-2.5 rounded-lg border border-border">
                     {org.notes}
@@ -215,14 +222,14 @@ export default function OrganisationDetailPage() {
           <Card className="border-border/80 bg-card shadow-xs">
             <CardHeader className="pb-3 border-b border-border/60">
               <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Contact & Headquarters
+                {tr("Contact & Headquarters", "संपर्क एवं मुख्यालय")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-3.5 text-xs">
               <div className="flex items-start gap-2.5 text-foreground">
                 <MapPin className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-muted-foreground text-[11px] block">Headquarters:</span>
+                  <span className="text-muted-foreground text-[11px] block">{tr("Headquarters:", "मुख्यालय:")}</span>
                   <span className="font-medium text-foreground">{org.headquarters}</span>
                 </div>
               </div>
@@ -230,7 +237,7 @@ export default function OrganisationDetailPage() {
               <div className="flex items-center gap-2.5 text-foreground">
                 <Mail className="w-4 h-4 text-amber-600 shrink-0" />
                 <div>
-                  <span className="text-muted-foreground text-[11px] block">Official Email:</span>
+                  <span className="text-muted-foreground text-[11px] block">{tr("Official Email:", "आधिकारिक ईमेल:")}</span>
                   <span className="font-mono text-foreground">{org.contactEmail}</span>
                 </div>
               </div>
@@ -238,14 +245,14 @@ export default function OrganisationDetailPage() {
               <div className="flex items-center gap-2.5 text-foreground">
                 <Phone className="w-4 h-4 text-amber-600 shrink-0" />
                 <div>
-                  <span className="text-muted-foreground text-[11px] block">Registry Phone:</span>
+                  <span className="text-muted-foreground text-[11px] block">{tr("Registry Phone:", "पंजीकृत फोन:")}</span>
                   <span className="font-mono text-foreground">{org.contactPhone}</span>
                 </div>
               </div>
 
               <div className="pt-1">
                 <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">
-                  Assigned Operational Roles:
+                  {tr("Assigned Operational Roles:", "सौंपी गई परिचालन भूमिकाएं:")}
                 </span>
                 <div className="flex flex-wrap gap-1">
                   {org.assignedRoles.map((role, idx) => (
@@ -254,7 +261,7 @@ export default function OrganisationDetailPage() {
                       variant="outline"
                       className="text-[11px] font-medium capitalize py-0.5"
                     >
-                      {role.replace("_", " ")}
+                      {trRole(role.replace("_", " "))}
                     </Badge>
                   ))}
                 </div>
@@ -267,7 +274,7 @@ export default function OrganisationDetailPage() {
             <CardHeader className="pb-3 border-b border-border/60">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Associated Facilities ({org.facilities.length})
+                  {tr("Associated Facilities", "संबद्ध सुविधाएं")} ({org.facilities.length})
                 </CardTitle>
                 <Layers className="w-4 h-4 text-muted-foreground" />
               </div>
@@ -287,7 +294,7 @@ export default function OrganisationDetailPage() {
                           : "bg-amber-50 text-amber-800 border-amber-200"
                       }`}
                     >
-                      {fac.status}
+                      {trStatus(fac.status)}
                     </span>
                   </div>
                   <div className="text-[11px] text-muted-foreground flex items-center justify-between">
@@ -296,7 +303,7 @@ export default function OrganisationDetailPage() {
                   </div>
                   {fac.capacity && (
                     <div className="text-[10px] text-muted-foreground font-mono">
-                      Capacity: {fac.capacity}
+                      {tr("Capacity:", "क्षमता:")} {fac.capacity}
                     </div>
                   )}
                 </div>
@@ -309,10 +316,13 @@ export default function OrganisationDetailPage() {
         <Card className="border-border/80 bg-card shadow-xs overflow-hidden">
           <CardHeader className="pb-3 border-b border-border/60">
             <CardTitle className="text-sm sm:text-base font-bold text-foreground">
-              Registered Members & Key Personnel ({org.members.length})
+              {tr("Registered Members & Key Personnel", "पंजीकृत सदस्य एवं प्रमुख कार्मिक")} ({org.members.length})
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
-              Personnel authorized to sign field activities, custody transfers, and lab certifications for this organisation.
+              {tr(
+                "Personnel authorized to sign field activities, custody transfers, and lab certifications for this organisation.",
+                "इस संगठन के लिए फील्ड गतिविधियों, कस्टडी ट्रांसफर और लैब प्रमाणपत्रों पर हस्ताक्षर करने के लिए अधिकृत कर्मी।"
+              )}
             </CardDescription>
           </CardHeader>
 
@@ -320,10 +330,10 @@ export default function OrganisationDetailPage() {
             <Table>
               <TableHeader className="bg-muted/50">
                 <TableRow>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Member Name</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Official Email</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Assigned Roles</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Last Active</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Member Name", "सदस्य का नाम")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Official Email", "आधिकारिक ईमेल")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Assigned Roles", "सौंपी गई भूमिकाएं")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Last Active", "अंतिम सक्रियता")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="text-xs">
@@ -344,7 +354,7 @@ export default function OrganisationDetailPage() {
                             variant="secondary"
                             className="text-[10px] font-medium py-0 px-1.5"
                           >
-                            {r}
+                            {trRole(r)}
                           </Badge>
                         ))}
                       </div>
@@ -363,11 +373,14 @@ export default function OrganisationDetailPage() {
             <div className="flex items-center gap-2">
               <History className="w-4 h-4 text-amber-600" />
               <CardTitle className="text-sm sm:text-base font-bold text-foreground">
-                Immutable Audit History for {org.name}
+                {tr("Immutable Audit History for", "के लिए अपरिवर्तनीय ऑडिट इतिहास")} {org.name}
               </CardTitle>
             </div>
             <CardDescription className="text-xs text-muted-foreground">
-              Every administrative status change, role update, and custody event is permanently linked to the Honey Chain ledger.
+              {tr(
+                "Every administrative status change, role update, and custody event is permanently linked to the Honey Chain ledger.",
+                "प्रत्येक प्रशासनिक स्थिति परिवर्तन, भूमिका अद्यतन और कस्टडी घटना स्थायी रूप से हनी चेन लेजर से जुड़ी हुई है।"
+              )}
             </CardDescription>
           </CardHeader>
 
@@ -375,7 +388,7 @@ export default function OrganisationDetailPage() {
             <div className="divide-y divide-border/60">
               {orgAuditEvents.length === 0 ? (
                 <div className="py-6 text-center text-muted-foreground text-xs">
-                  No audit events recorded for this organisation yet.
+                  {tr("No audit events recorded for this organisation yet.", "इस संगठन के लिए अभी तक कोई ऑडिट इवेंट दर्ज नहीं है।")}
                 </div>
               ) : (
                 orgAuditEvents.map((evt) => (
@@ -390,7 +403,7 @@ export default function OrganisationDetailPage() {
                       <div>
                         <div className="font-semibold text-foreground">{evt.action}</div>
                         <div className="text-muted-foreground mt-0.5 text-[11px]">
-                          Actor: <strong className="text-foreground">{evt.actor.name}</strong> ({evt.actor.role}) • Source: {evt.source}
+                          {tr("Actor:", "कर्ता:")} <strong className="text-foreground">{evt.actor.name}</strong> ({trRole(evt.actor.role)}) • {tr("Source:", "स्रोत:")} {evt.source}
                         </div>
                       </div>
                     </div>
@@ -406,7 +419,7 @@ export default function OrganisationDetailPage() {
                       </span>
                       <Button asChild variant="outline" size="sm" className="h-7 text-xs">
                         <Link href={`/admin/audit/${evt.id}`}>
-                          Inspect &rarr;
+                          {tr("Inspect", "निरीक्षण करें")} &rarr;
                         </Link>
                       </Button>
                     </div>
@@ -424,17 +437,23 @@ export default function OrganisationDetailPage() {
           onConfirm={handleConfirmAction}
           title={
             targetAction === "Active"
-              ? `Restore/Approve "${org.name}"?`
-              : `Suspend "${org.name}"?`
+              ? tr(`Restore/Approve "${org.name}"?`, `"${org.name}" को बहाल/स्वीकृत करें?`)
+              : tr(`Suspend "${org.name}"?`, `"${org.name}" को निलंबित करें?`)
           }
           description={
             targetAction === "Active"
-              ? "This administrative approval will be cryptographically logged to the audit ledger and restore active participation."
-              : "Suspending will freeze all active batch operations while maintaining immutable history."
+              ? tr(
+                  "This administrative approval will be cryptographically logged to the audit ledger and restore active participation.",
+                  "यह प्रशासनिक स्वीकृति क्रिप्टोग्राफिक रूप से ऑडिट लेजर में दर्ज की जाएगी और सक्रिय भागीदारी को बहाल करेगी।"
+                )
+              : tr(
+                  "Suspending will freeze all active batch operations while maintaining immutable history.",
+                  "निलंबन से अपरिवर्तनीय इतिहास को बनाए रखते हुए सभी सक्रिय बैच संचालन रुक जाएंगे।"
+                )
           }
-          confirmText={targetAction === "Active" ? "Approve Organisation" : "Suspend Organisation"}
+          confirmText={targetAction === "Active" ? tr("Approve Organisation", "संगठन स्वीकृत करें") : tr("Suspend Organisation", "संगठन निलंबित करें")}
           variant={targetAction === "Active" ? "success" : "danger"}
-          reasonPlaceholder="Enter reason for this administrative decision..."
+          reasonPlaceholder={tr("Enter reason for this administrative decision...", "इस प्रशासनिक निर्णय का कारण दर्ज करें...")}
         />
       </div>
     </AdminRoleGuard>

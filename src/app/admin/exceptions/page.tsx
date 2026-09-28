@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import { AdminRoleGuard, StatusBadge } from "@/components/admin";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,7 @@ import {
 
 export default function ExceptionsListPage() {
   const { exceptions } = useTraceability();
+  const { tr, trTerm, trStatus } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedType, setSelectedType] = React.useState<string>("all");
@@ -41,6 +43,27 @@ export default function ExceptionsListPage() {
   const criticalCount = exceptions.filter(
     (e) => (e.status === "open" || e.status === "investigating") && e.severity === "critical"
   ).length;
+
+  const translateExceptionType = (t: string) => {
+    switch (t) {
+      case "Receiving Rejection":
+        return tr("Receiving Rejection", "आवक अस्वीकृति");
+      case "Quality Rejection":
+        return tr("Quality Rejection", "गुणवत्ता अस्वीकृति");
+      case "Quantity Mismatch":
+        return tr("Quantity Mismatch", "मात्रा बेमेल");
+      case "Missing Traceability Link":
+        return tr("Missing Traceability Link", "लापता ट्रेसेबिलिटी लिंक");
+      case "Suspicious Yield":
+        return tr("Suspicious Yield", "संदिग्ध उपज");
+      case "Access Issue":
+        return tr("Access Issue", "पहुंच समस्या");
+      case "Other":
+        return tr("Other", "अन्य");
+      default:
+        return t;
+    }
+  };
 
   const filteredExceptions = React.useMemo(() => {
     return exceptions.filter((exc) => {
@@ -70,20 +93,25 @@ export default function ExceptionsListPage() {
           <div>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
               <Link href="/admin" className="hover:text-primary transition-colors">
-                Administration
+                {tr("Administration", "प्रशासन")}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
-              <span className="text-foreground font-semibold">Exceptions</span>
+              <span className="text-foreground font-semibold">{tr("Exceptions", "अपवाद")}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Exceptions</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+              {tr("Exceptions", "अपवाद")}
+            </h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-              Investigate operational anomalies, rejected records, and traceability issues.
+              {tr(
+                "Investigate operational anomalies, rejected records, and traceability issues.",
+                "परिचालन विसंगतियों, अस्वीकृत रिकॉर्ड और ट्रेसेबिलिटी समस्याओं की जांच करें।"
+              )}
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <Badge variant="outline" className="px-3 py-1 font-mono text-xs font-normal">
-              Total Logged: {exceptions.length} Cases
+              {tr("Total Logged:", "कुल दर्ज:")} {exceptions.length} {tr("Cases", "मामले")}
             </Badge>
           </div>
         </div>
@@ -95,7 +123,7 @@ export default function ExceptionsListPage() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Open Cases
+                  {tr("Open Cases", "सक्रिय मामले")}
                 </span>
                 <div className="w-7 h-7 rounded-md bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
                   <AlertTriangle className="w-3.5 h-3.5" />
@@ -104,7 +132,9 @@ export default function ExceptionsListPage() {
               <div className="text-2xl font-bold text-foreground tracking-tight">
                 {openCount}
               </div>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Awaiting triage & response</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                {tr("Awaiting triage & response", "समीक्षा एवं प्रतिक्रिया की प्रतीक्षा")}
+              </p>
             </CardContent>
           </Card>
 
@@ -113,7 +143,7 @@ export default function ExceptionsListPage() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Investigating
+                  {tr("Investigating", "जांच जारी")}
                 </span>
                 <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                   <Activity className="w-3.5 h-3.5" />
@@ -122,7 +152,9 @@ export default function ExceptionsListPage() {
               <div className="text-2xl font-bold text-foreground tracking-tight">
                 {investigatingCount}
               </div>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Active root-cause trace in progress</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                {tr("Active root-cause trace in progress", "सक्रिय मूल-कारण ट्रेसिंग प्रगति पर")}
+              </p>
             </CardContent>
           </Card>
 
@@ -131,7 +163,7 @@ export default function ExceptionsListPage() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Resolved
+                  {tr("Resolved", "समाधानित")}
                 </span>
                 <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
                   <CheckCircle2 className="w-3.5 h-3.5" />
@@ -140,7 +172,9 @@ export default function ExceptionsListPage() {
               <div className="text-2xl font-bold text-foreground tracking-tight">
                 {resolvedCount}
               </div>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Corrective actions completed</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                {tr("Corrective actions completed", "सुधारात्मक कार्रवाई पूर्ण")}
+              </p>
             </CardContent>
           </Card>
 
@@ -149,7 +183,7 @@ export default function ExceptionsListPage() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold text-rose-700 uppercase tracking-wider">
-                  Critical Severity
+                  {tr("Critical Severity", "अति गंभीर")}
                 </span>
                 <div className="w-7 h-7 rounded-md bg-rose-100 border border-rose-300 flex items-center justify-center text-rose-700">
                   <AlertOctagon className="w-3.5 h-3.5 animate-pulse" />
@@ -158,7 +192,9 @@ export default function ExceptionsListPage() {
               <div className="text-2xl font-bold text-rose-700 tracking-tight">
                 {criticalCount}
               </div>
-              <p className="text-[11px] text-rose-600/90 mt-0.5">Immediate quarantine priority</p>
+              <p className="text-[11px] text-rose-600/90 mt-0.5">
+                {tr("Immediate quarantine priority", "तत्काल क्वारंटाइन प्राथमिकता")}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -170,7 +206,7 @@ export default function ExceptionsListPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search exception ID, type, batch, actor..."
+                placeholder={tr("Search exception ID, type, batch, actor...", "अपवाद आईडी, प्रकार, बैच, कर्ता से खोजें...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-background border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -181,52 +217,52 @@ export default function ExceptionsListPage() {
               {/* Type */}
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Filter className="w-3.5 h-3.5" />
-                <span>Type:</span>
+                <span>{tr("Type:", "प्रकार:")}</span>
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
                   className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                 >
-                  <option value="all">All Types</option>
-                  <option value="Receiving Rejection">Receiving Rejection</option>
-                  <option value="Quality Rejection">Quality Rejection</option>
-                  <option value="Quantity Mismatch">Quantity Mismatch</option>
-                  <option value="Missing Traceability Link">Missing Traceability Link</option>
-                  <option value="Suspicious Yield">Suspicious Yield</option>
-                  <option value="Access Issue">Access Issue</option>
-                  <option value="Other">Other</option>
+                  <option value="all">{tr("All Types", "सभी प्रकार")}</option>
+                  <option value="Receiving Rejection">{translateExceptionType("Receiving Rejection")}</option>
+                  <option value="Quality Rejection">{translateExceptionType("Quality Rejection")}</option>
+                  <option value="Quantity Mismatch">{translateExceptionType("Quantity Mismatch")}</option>
+                  <option value="Missing Traceability Link">{translateExceptionType("Missing Traceability Link")}</option>
+                  <option value="Suspicious Yield">{translateExceptionType("Suspicious Yield")}</option>
+                  <option value="Access Issue">{translateExceptionType("Access Issue")}</option>
+                  <option value="Other">{translateExceptionType("Other")}</option>
                 </select>
               </div>
 
               {/* Severity */}
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <span>Severity:</span>
+                <span>{tr("Severity:", "गंभीरता:")}</span>
                 <select
                   value={selectedSeverity}
                   onChange={(e) => setSelectedSeverity(e.target.value)}
                   className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                 >
-                  <option value="all">All Severities</option>
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                  <option value="critical">Critical</option>
+                  <option value="all">{tr("All Severities", "सभी गंभीरता स्तर")}</option>
+                  <option value="low">{tr("Low", "निम्न")}</option>
+                  <option value="medium">{tr("Medium", "मध्यम")}</option>
+                  <option value="high">{tr("High", "उच्च")}</option>
+                  <option value="critical">{tr("Critical", "गंभीर")}</option>
                 </select>
               </div>
 
               {/* Status */}
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <span>Status:</span>
+                <span>{tr("Status:", "स्थिति:")}</span>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                 >
-                  <option value="all">All Statuses</option>
-                  <option value="open">Open</option>
-                  <option value="investigating">Investigating</option>
-                  <option value="resolved">Resolved</option>
-                  <option value="dismissed">Dismissed</option>
+                  <option value="all">{tr("All Statuses", "सभी स्थितियां")}</option>
+                  <option value="open">{trStatus("Open")}</option>
+                  <option value="investigating">{trStatus("Investigating")}</option>
+                  <option value="resolved">{trStatus("Resolved")}</option>
+                  <option value="dismissed">{trStatus("Dismissed")}</option>
                 </select>
               </div>
             </div>
@@ -238,21 +274,21 @@ export default function ExceptionsListPage() {
           <Table>
             <TableHeader className="bg-muted/50">
               <TableRow>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Exception ID</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Type</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Related Entity</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Reported By</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Created Date</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Severity</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Status</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider text-right">Action</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Exception ID", "अपवाद आईडी")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Type", "प्रकार")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Related Entity", "संबंधित इकाई")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Reported By", "रिपोर्टकर्ता")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Created Date", "दर्ज तिथि")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Severity", "गंभीरता")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Status", "स्थिति")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider text-right">{tr("Action", "कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="text-xs">
               {filteredExceptions.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="py-12 text-center text-muted-foreground">
-                    No compliance exceptions match your filter criteria.
+                    {tr("No compliance exceptions match your filter criteria.", "कोई अनुपालन अपवाद आपके फ़िल्टर मानदंड से मेल नहीं खाता।")}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -267,7 +303,7 @@ export default function ExceptionsListPage() {
 
                     {/* Type */}
                     <TableCell className="font-medium text-foreground">
-                      {exc.type}
+                      {translateExceptionType(exc.type)}
                     </TableCell>
 
                     {/* Related Entity */}
@@ -325,7 +361,7 @@ export default function ExceptionsListPage() {
                       >
                         <Link href={`/admin/exceptions/${exc.id}`}>
                           <Eye className="w-3.5 h-3.5 text-primary" />
-                          <span>Investigate</span>
+                          <span>{tr("Investigate", "जांच करें")}</span>
                         </Link>
                       </Button>
                     </TableCell>

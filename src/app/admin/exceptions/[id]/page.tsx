@@ -24,7 +24,10 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+import { useLanguage } from "@/context/language-context";
+
 export default function ExceptionDetailPage() {
+  const { tr, trStatus } = useLanguage();
   const params = useParams();
   const excId = typeof params?.id === "string" ? params.id : "";
 
@@ -45,13 +48,18 @@ export default function ExceptionDetailPage() {
       <AdminRoleGuard>
         <Card className="border-border/80 bg-card shadow-xs min-h-[40vh] flex flex-col items-center justify-center text-center p-8">
           <AlertTriangle className="w-10 h-10 text-muted-foreground mb-3" />
-          <h2 className="text-lg font-bold text-foreground">Exception Not Found</h2>
+          <h2 className="text-lg font-bold text-foreground">
+            {tr("Exception Not Found", "अपवाद नहीं मिला")}
+          </h2>
           <p className="text-muted-foreground text-xs mt-1 mb-4">
-            The exception case ({excId}) was not found in the compliance ledger.
+            {tr(
+              `The exception case (${excId}) was not found in the compliance ledger.`,
+              `अनुपालन बहीखाते में अपवाद मामला (${excId}) नहीं मिला।`
+            )}
           </p>
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/exceptions">
-              <ArrowLeft className="w-3.5 h-3.5 mr-1.5" /> Back to Exceptions List
+              <ArrowLeft className="w-3.5 h-3.5 mr-1.5" /> {tr("Back to Exceptions List", "अपवाद सूची पर वापस")}
             </Link>
           </Button>
         </Card>
@@ -86,11 +94,21 @@ export default function ExceptionDetailPage() {
   const handleConfirmResolve = (e: React.FormEvent) => {
     e.preventDefault();
     if (!resolveReason.trim()) {
-      setResolveError("A verified root-cause resolution explanation is mandatory.");
+      setResolveError(
+        tr(
+          "A verified root-cause resolution explanation is mandatory.",
+          "सत्यापित मूल कारण समाधान स्पष्टीकरण अनिवार्य है।"
+        )
+      );
       return;
     }
     if (!correctiveAction.trim()) {
-      setResolveError("Documented corrective action is required.");
+      setResolveError(
+        tr(
+          "Documented corrective action is required.",
+          "दस्तावेजी सुधारात्मक कार्रवाई आवश्यक है।"
+        )
+      );
       return;
     }
 
@@ -112,11 +130,11 @@ export default function ExceptionDetailPage() {
           <div>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
               <Link href="/admin" className="hover:text-primary transition-colors">
-                Administration
+                {tr("Administration", "प्रशासन")}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
               <Link href="/admin/exceptions" className="hover:text-primary transition-colors">
-                Exceptions
+                {tr("Exceptions", "अपवाद")}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
               <span className="text-foreground font-mono font-semibold">{exc.id}</span>
@@ -125,12 +143,14 @@ export default function ExceptionDetailPage() {
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight font-mono">
                 {exc.id}
               </h1>
-              <span className="text-base font-semibold text-muted-foreground">• {exc.type}</span>
+              <span className="text-base font-semibold text-muted-foreground">
+                • {tr(exc.type, exc.type)}
+              </span>
               <StatusBadge status={exc.severity} variant="severity" size="sm" />
               <StatusBadge status={exc.status} variant="exceptionStatus" size="sm" />
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Logged on{" "}
+              {tr("Logged on", "दर्ज किया गया")}{" "}
               <span className="font-mono text-foreground font-medium">
                 {new Date(exc.createdDate).toLocaleDateString("en-GB", {
                   day: "2-digit",
@@ -140,7 +160,8 @@ export default function ExceptionDetailPage() {
                   minute: "2-digit",
                 })}
               </span>{" "}
-              by <strong className="text-foreground">{exc.reportedBy.name}</strong> (
+              {tr("by", "द्वारा")}{" "}
+              <strong className="text-foreground">{exc.reportedBy.name}</strong> (
               {exc.reportedBy.organisation})
             </p>
           </div>
@@ -154,7 +175,7 @@ export default function ExceptionDetailPage() {
             >
               <Link href="/admin/exceptions">
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>All Exceptions</span>
+                <span>{tr("All Exceptions", "सभी अपवाद")}</span>
               </Link>
             </Button>
 
@@ -167,7 +188,7 @@ export default function ExceptionDetailPage() {
                 className="text-xs font-semibold gap-1.5 bg-amber-500 hover:bg-amber-600 text-amber-950 shadow-xs"
               >
                 <Activity className="w-3.5 h-3.5" />
-                Start Investigation
+                {tr("Start Investigation", "जांच शुरू करें")}
               </Button>
             )}
 
@@ -180,7 +201,7 @@ export default function ExceptionDetailPage() {
                   className="text-xs font-semibold gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  Resolve Exception
+                  {tr("Resolve Exception", "अपवाद हल करें")}
                 </Button>
 
                 <Button
@@ -191,7 +212,7 @@ export default function ExceptionDetailPage() {
                   className="text-xs font-medium gap-1.5"
                 >
                   <XCircle className="w-3.5 h-3.5 text-muted-foreground" />
-                  Dismiss
+                  {tr("Dismiss", "खारिज करें")}
                 </Button>
               </>
             )}
@@ -205,7 +226,7 @@ export default function ExceptionDetailPage() {
             <CardContent className="p-5 space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                 <FileText className="w-4 h-4 text-rose-600" />
-                Incident Description & Anomalous Observation
+                {tr("Incident Description & Anomalous Observation", "घटना विवरण एवं असामान्य अवलोकन")}
               </h3>
               <p className="text-xs sm:text-sm text-foreground leading-relaxed bg-muted/40 p-3.5 rounded-lg border border-border/60">
                 {exc.description}
@@ -214,7 +235,7 @@ export default function ExceptionDetailPage() {
               {exc.investigationNotes && (
                 <div className="space-y-1.5">
                   <span className="text-xs font-semibold uppercase tracking-wider text-amber-700 block">
-                    Ongoing Investigation Notes:
+                    {tr("Ongoing Investigation Notes:", "चल रही जांच की टिप्पणियां:")}
                   </span>
                   <p className="text-xs text-foreground leading-relaxed bg-amber-50/50 p-3 rounded-lg border border-amber-200/60">
                     {exc.investigationNotes}
@@ -226,15 +247,24 @@ export default function ExceptionDetailPage() {
                 <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-3.5 space-y-2">
                   <div className="flex items-center gap-2 text-emerald-700 font-semibold text-xs">
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Case Formally Resolved by {exc.resolution.resolvedBy}</span>
+                    <span>
+                      {tr(
+                        `Case Formally Resolved by ${exc.resolution.resolvedBy}`,
+                        `मामला आधिकारिक रूप से ${exc.resolution.resolvedBy} द्वारा हल किया गया`
+                      )}
+                    </span>
                   </div>
                   <div className="text-xs text-muted-foreground space-y-1">
                     <p>
-                      <strong className="text-foreground">Root-Cause Conclusion:</strong>{" "}
+                      <strong className="text-foreground">
+                        {tr("Root-Cause Conclusion:", "मूल कारण निष्कर्ष:")}
+                      </strong>{" "}
                       {exc.resolution.reason}
                     </p>
                     <p>
-                      <strong className="text-foreground">Corrective Measure:</strong>{" "}
+                      <strong className="text-foreground">
+                        {tr("Corrective Measure:", "सुधारात्मक उपाय:")}
+                      </strong>{" "}
                       {exc.resolution.correctiveAction}
                     </p>
                   </div>
@@ -247,13 +277,13 @@ export default function ExceptionDetailPage() {
           <Card className="border-border/80 bg-card shadow-xs">
             <CardContent className="p-5 space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Impacted Record / Entity
+                {tr("Impacted Record / Entity", "प्रभावित रिकॉर्ड / निकाय")}
               </h3>
 
               <div className="bg-muted/30 p-3.5 rounded-lg border border-border/60 space-y-3">
                 <div>
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                    Entity Classification:
+                    {tr("Entity Classification:", "इकाई वर्गीकरण:")}
                   </span>
                   <span className="font-semibold text-foreground text-xs uppercase">
                     {exc.relatedEntity.type}
@@ -262,7 +292,7 @@ export default function ExceptionDetailPage() {
 
                 <div>
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                    Identifier:
+                    {tr("Identifier:", "पहचानकर्ता:")}
                   </span>
                   <span className="font-mono text-amber-700 text-xs font-bold">
                     {exc.relatedEntity.id}
@@ -271,7 +301,7 @@ export default function ExceptionDetailPage() {
 
                 <div>
                   <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                    Entity Label:
+                    {tr("Entity Label:", "इकाई लेबल:")}
                   </span>
                   <span className="text-foreground text-xs font-medium">
                     {exc.relatedEntity.title}
@@ -287,7 +317,7 @@ export default function ExceptionDetailPage() {
                       className="text-xs gap-1.5 h-7"
                     >
                       <Link href={exc.relatedEntity.href}>
-                        <span>View Record</span>
+                        <span>{tr("View Record", "रिकॉर्ड देखें")}</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </Link>
                     </Button>
@@ -315,10 +345,13 @@ export default function ExceptionDetailPage() {
                 </div>
                 <div>
                   <h3 className="text-base font-semibold text-foreground">
-                    Resolve Exception {exc.id}
+                    {tr(`Resolve Exception ${exc.id}`, `अपवाद ${exc.id} हल करें`)}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Provide verified justification and corrective actions for the immutable ledger.
+                    {tr(
+                      "Provide verified justification and corrective actions for the immutable ledger.",
+                      "अपरिवर्तनीय लेज़र के लिए सत्यापित औचित्य और सुधारात्मक कार्रवाइयां प्रदान करें।"
+                    )}
                   </p>
                 </div>
               </div>
@@ -326,7 +359,8 @@ export default function ExceptionDetailPage() {
               <form onSubmit={handleConfirmResolve} className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-foreground mb-1.5">
-                    Root Cause Finding / Justification <span className="text-rose-500">*</span>
+                    {tr("Root Cause Finding / Justification", "मूल कारण निष्कर्ष / औचित्य")}{" "}
+                    <span className="text-rose-500">*</span>
                   </label>
                   <textarea
                     value={resolveReason}
@@ -335,14 +369,18 @@ export default function ExceptionDetailPage() {
                       if (resolveError) setResolveError("");
                     }}
                     rows={3}
-                    placeholder="E.g. Sample re-tested with HPLC confirmative protocol; temperature spike was brief and enzyme degradation remained below 10 mg/kg..."
+                    placeholder={tr(
+                      "E.g. Sample re-tested with HPLC confirmative protocol; temperature spike was brief and enzyme degradation remained below 10 mg/kg...",
+                      "उदाहरण: एचपीएलसी पुष्टिकरण प्रोटोकॉल के साथ नमूने का पुन: परीक्षण किया गया; तापमान में वृद्धि संक्षिप्त थी..."
+                    )}
                     className="w-full px-3 py-2 rounded-lg bg-background border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-foreground mb-1.5">
-                    Corrective Measure Taken <span className="text-rose-500">*</span>
+                    {tr("Corrective Measure Taken", "की गई सुधारात्मक कार्रवाई")}{" "}
+                    <span className="text-rose-500">*</span>
                   </label>
                   <textarea
                     value={correctiveAction}
@@ -351,7 +389,10 @@ export default function ExceptionDetailPage() {
                       if (resolveError) setResolveError("");
                     }}
                     rows={2}
-                    placeholder="E.g. Cold storage logger replaced; receiving manifest updated to reflect calibrated net weight..."
+                    placeholder={tr(
+                      "E.g. Cold storage logger replaced; receiving manifest updated to reflect calibrated net weight...",
+                      "उदाहरण: कोल्ड स्टोरेज लॉगर को बदला गया; सही शुद्ध वजन दर्शाने के लिए पावती विवरण अद्यतन किया गया..."
+                    )}
                     className="w-full px-3 py-2 rounded-lg bg-background border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                   />
                 </div>
@@ -368,14 +409,14 @@ export default function ExceptionDetailPage() {
                     onClick={() => setResolveDialogOpen(false)}
                     className="text-xs"
                   >
-                    Cancel
+                    {tr("Cancel", "रद्द करें")}
                   </Button>
                   <Button
                     type="submit"
                     size="sm"
                     className="text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
-                    Resolve & Log Event
+                    {tr("Resolve & Log Event", "हल करें एवं इवेंट दर्ज करें")}
                   </Button>
                 </div>
               </form>
@@ -388,11 +429,17 @@ export default function ExceptionDetailPage() {
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
           onConfirm={handleConfirmDismiss}
-          title={`Dismiss Exception ${exc.id}?`}
-          description="Dismissing will close this exception case without sanction. The dismissal rationale will be permanently recorded to the audit log."
-          confirmText="Dismiss Exception"
+          title={tr(`Dismiss Exception ${exc.id}?`, `अपवाद ${exc.id} खारिज करें?`)}
+          description={tr(
+            "Dismissing will close this exception case without sanction. The dismissal rationale will be permanently recorded to the audit log.",
+            "खारिज करने पर यह अपवाद मामला बिना किसी दंड के बंद हो जाएगा। बर्खास्तगी का कारण ऑडिट लॉग में स्थायी रूप से दर्ज किया जाएगा।"
+          )}
+          confirmText={tr("Dismiss Exception", "अपवाद खारिज करें")}
           variant="warning"
-          reasonPlaceholder="Enter rationale for dismissing this exception (e.g. false positive sensor spike)..."
+          reasonPlaceholder={tr(
+            "Enter rationale for dismissing this exception (e.g. false positive sensor spike)...",
+            "इस अपवाद को खारिज करने का कारण दर्ज करें (उदा. गलत सेंसर रीडिंग)..."
+          )}
         />
       </div>
     </AdminRoleGuard>

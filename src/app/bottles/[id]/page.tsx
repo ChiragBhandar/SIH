@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import {
   QrCode,
   ArrowLeft,
@@ -653,13 +654,14 @@ export function BottleDetailContent() {
 }
 
 export default function BottleDetailPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Product & Market", href: "/bottles" },
-          { label: "Bottle Detail", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Product & Market", "उत्पाद एवं बाजार"), href: "/bottles" },
+          { label: tr("Bottle Detail", "बोतल विवरण"), active: true },
         ]}
         defaultNavId="bottles"
       >

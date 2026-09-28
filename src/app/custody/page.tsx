@@ -57,9 +57,12 @@ function getStatusBadgeVariant(
   }
 }
 
+import { useLanguage } from "@/context/language-context";
+
 function CustodyTransfersContent() {
   const { custodyTransfers, isLoaded } = useTraceability();
   const { selectedOrg } = useAuthSession();
+  const { isHindi, tr } = useLanguage();
   const [searchTerm, setSearchTerm] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
 
@@ -110,11 +113,14 @@ function CustodyTransfersContent() {
               <ArrowLeftRight className="h-4 w-4" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Custody Transfers
+              {tr("Custody Transfers", "कस्टडी ट्रांसफर")}
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Track and verify physical handovers between beekeepers and manufacturers while preserving batch provenance.
+            {tr(
+              "Track and verify physical handovers between beekeepers and manufacturers while preserving batch provenance.",
+              "बैच स्रोत को सुरक्षित रखते हुए मधुमक्खी पालकों और निर्माताओं के बीच भौतिक हैंडओवर को ट्रैक और सत्यापित करें।"
+            )}
           </p>
         </div>
 
@@ -122,7 +128,7 @@ function CustodyTransfersContent() {
           <Button asChild size="sm" className="gap-1.5 shadow-xs font-medium">
             <Link href="/custody/new">
               <Plus className="h-4 w-4" />
-              <span>Create Custody Transfer</span>
+              <span>{tr("Create Custody Transfer", "कस्टडी ट्रांसफर बनाएं")}</span>
             </Link>
           </Button>
         </div>
@@ -133,7 +139,7 @@ function CustodyTransfersContent() {
         <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="p-4 pb-1">
             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
-              <span>Total Transfers</span>
+              <span>{tr("Total Transfers", "कुल ट्रांसफर")}</span>
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
                 <ArrowLeftRight className="h-3.5 w-3.5" />
               </div>
@@ -143,15 +149,15 @@ function CustodyTransfersContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
-            All registered chain transfers
+            {tr("All registered chain transfers", "सभी पंजीकृत श्रृंखला ट्रांसफर")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="p-4 pb-1">
             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
-              <span>Pending Acceptance</span>
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-amber-50 text-amber-700 border border-amber-200">
+              <span>{tr("Pending Acceptance", "स्वीकृति प्रतीक्षित")}</span>
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
                 <Clock className="h-3.5 w-3.5" />
               </div>
             </div>
@@ -160,14 +166,14 @@ function CustodyTransfersContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
-            Awaiting manufacturer receiving
+            {tr("Awaiting manufacturer receiving", "निर्माता की आवक रसीद प्रतीक्षित")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="p-4 pb-1">
             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
-              <span>Accepted Transfers</span>
+              <span>{tr("Accepted Transfers", "स्वीकृत ट्रांसफर")}</span>
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
                 <CheckCircle2 className="h-3.5 w-3.5" />
               </div>
@@ -177,14 +183,14 @@ function CustodyTransfersContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
-            Intake verified & received
+            {tr("Intake verified & received", "आवक सत्यापित और प्राप्त")}
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card shadow-2xs">
           <CardHeader className="p-4 pb-1">
             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
-              <span>Volume In Transit</span>
+              <span>{tr("Volume In Transit", "परिवहन में कुल मात्रा")}</span>
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-50 text-sky-700 border border-sky-200">
                 <Truck className="h-3.5 w-3.5" />
               </div>
@@ -194,7 +200,7 @@ function CustodyTransfersContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-1 text-[11px] text-muted-foreground">
-            Physical raw honey in flow
+            {tr("Physical raw honey in flow", "परिवहन में भौतिक कच्चा शहद")}
           </CardContent>
         </Card>
       </div>
@@ -204,7 +210,7 @@ function CustodyTransfersContent() {
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search transfer ID, batch, org..."
+            placeholder={tr("Search transfer ID, batch, org...", "ट्रांसफर आईडी, बैच, संगठन खोजें...")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-9"
@@ -212,12 +218,12 @@ function CustodyTransfersContent() {
         </div>
         <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
           {[
-            { id: "all", label: "All Transfers" },
-            { id: "Pending", label: "Pending" },
-            { id: "In Transit", label: "In Transit" },
-            { id: "Completed", label: "Completed" },
-            { id: "Rejected", label: "Rejected" },
-            { id: "Draft", label: "Draft" },
+            { id: "all", label: tr("All Transfers", "सभी ट्रांसफर") },
+            { id: "Pending", label: tr("Pending", "लंबित") },
+            { id: "In Transit", label: tr("In Transit", "परिवहन में") },
+            { id: "Completed", label: tr("Completed", "पूर्ण") },
+            { id: "Rejected", label: tr("Rejected", "अस्वीकृत") },
+            { id: "Draft", label: tr("Draft", "प्रारूप") },
           ].map((f) => (
             <button
               key={f.id}
@@ -241,15 +247,15 @@ function CustodyTransfersContent() {
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Transfer ID</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Batch ID</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">From Organisation</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">To Organisation</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold text-right">Quantity</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Transfer Date</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Status</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">Created By</TableHead>
-                <TableHead className="text-[11px] uppercase tracking-wider font-semibold text-right">Actions</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Transfer ID", "ट्रांसफर आईडी")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Batch ID", "बैच आईडी")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("From Organisation", "प्रेषक संगठन")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("To Organisation", "प्राप्तकर्ता संगठन")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold text-right">{tr("Quantity", "मात्रा")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Transfer Date", "हस्तांतरण दिनांक")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Status", "स्थिति")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold">{tr("Created By", "द्वारा निर्मित")}</TableHead>
+                <TableHead className="text-[11px] uppercase tracking-wider font-semibold text-right">{tr("Actions", "कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -370,12 +376,13 @@ function CustodyTransfersContent() {
 }
 
 export default function CustodyTransfersPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Custody Transfers", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Custody Transfers", "कस्टडी ट्रांसफर"), active: true },
         ]}
         defaultNavId="custody"
       >

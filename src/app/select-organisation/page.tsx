@@ -12,6 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { Organization } from "@/types/auth";
 import { cn } from "@/lib/utils";
@@ -25,6 +27,7 @@ function SelectOrganisationContent() {
     selectOrganisation,
     logout,
   } = useAuthSession();
+  const { t } = useLanguage();
 
   const [chosenOrgId, setChosenOrgId] = React.useState<string>(
     selectedOrg?.id || allOrganisations[0]?.id || ""
@@ -44,20 +47,21 @@ function SelectOrganisationContent() {
   return (
     <div className="flex min-h-screen flex-col bg-muted/20">
       {/* Top minimal header */}
-      <header className="flex h-16 w-full items-center justify-between px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
+      <header className="flex h-16 w-full items-center justify-between px-4 sm:px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
             <Hexagon className="h-4 w-4 fill-current stroke-[2.5]" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-foreground">Honey Chain</span>
+            <span className="text-sm font-bold tracking-tight text-foreground">{t.common.honeyChain}</span>
             <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
-              Onboarding & Session Setup
+              {t.selectOrgPage.headerSubtitle}
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitcher />
           <div className="hidden sm:flex flex-col text-right">
             <span className="text-xs font-semibold text-foreground">{user?.fullName}</span>
             <span className="text-[10px] text-muted-foreground">{user?.email}</span>
@@ -66,10 +70,10 @@ function SelectOrganisationContent() {
             variant="ghost"
             size="sm"
             onClick={handleSignOut}
-            className="text-xs text-muted-foreground hover:text-foreground h-8 gap-1.5"
+            className="text-xs text-muted-foreground hover:text-foreground h-8 gap-1.5 cursor-pointer"
           >
             <LogOut className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Sign out</span>
+            <span className="hidden sm:inline">{t.selectOrgPage.signOut}</span>
           </Button>
         </div>
       </header>
@@ -83,14 +87,14 @@ function SelectOrganisationContent() {
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
                 1
               </span>
-              <span className="text-xs font-semibold text-foreground">Organisation</span>
+              <span className="text-xs font-semibold text-foreground">{t.selectOrgPage.step1}</span>
             </div>
             <div className="h-0.5 w-8 bg-border" />
             <div className="flex items-center gap-2 text-muted-foreground">
               <span className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card text-[11px] font-medium">
                 2
               </span>
-              <span className="text-xs font-medium">Active Role</span>
+              <span className="text-xs font-medium">{t.selectOrgPage.step2}</span>
             </div>
           </div>
 
@@ -98,10 +102,10 @@ function SelectOrganisationContent() {
           <div className="rounded-xl border border-border bg-card p-6 sm:p-8 shadow-xs space-y-6">
             <div className="space-y-1 text-center sm:text-left">
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                Choose your organisation
+                {t.selectOrgPage.title}
               </h1>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Select the registered enterprise or cooperative entity you are operating on behalf of for this session.
+                {t.selectOrgPage.subtitle}
               </p>
             </div>
 
@@ -109,6 +113,10 @@ function SelectOrganisationContent() {
             <div className="space-y-3">
               {allOrganisations.map((org: Organization) => {
                 const isSelected = chosenOrgId === org.id;
+                const orgTrans = t.selectOrgPage.orgs[org.id];
+                const orgName = orgTrans?.name || org.name;
+                const orgDisplayType = orgTrans?.displayType || org.displayType;
+                const orgMembership = orgTrans?.membershipInfo || org.membershipInfo;
 
                 return (
                   <div
@@ -136,7 +144,7 @@ function SelectOrganisationContent() {
                       <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <h2 className="text-sm font-semibold text-foreground">
-                            {org.name}
+                            {orgName}
                           </h2>
                           <Badge variant="outline" className="font-mono text-[10px] px-1.5 py-0">
                             {org.shortIdentifier}
@@ -144,10 +152,10 @@ function SelectOrganisationContent() {
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                           <span className="font-medium text-foreground/80">
-                            {org.displayType}
+                            {orgDisplayType}
                           </span>
                           <span>•</span>
-                          <span>{org.membershipInfo}</span>
+                          <span>{orgMembership}</span>
                         </div>
                       </div>
                     </div>
@@ -156,11 +164,11 @@ function SelectOrganisationContent() {
                       {isSelected ? (
                         <div className="flex items-center gap-1.5 text-xs font-semibold text-primary">
                           <CheckCircle2 className="h-4 w-4 fill-primary text-primary-foreground" />
-                          <span>Selected</span>
+                          <span>{t.selectOrgPage.selected}</span>
                         </div>
                       ) : (
                         <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
-                          Click to select
+                          {t.selectOrgPage.clickToSelect}
                         </span>
                       )}
                     </div>
@@ -172,15 +180,15 @@ function SelectOrganisationContent() {
             {/* Actions */}
             <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-2 border-t border-border">
               <span className="text-[11px] text-muted-foreground text-center sm:text-left">
-                Need to register a new organisation? Contact platform administration.
+                {t.selectOrgPage.registerPrompt}
               </span>
 
               <Button
                 onClick={handleContinue}
                 disabled={!chosenOrgId}
-                className="h-10 px-6 gap-2 text-xs font-semibold shrink-0"
+                className="h-10 px-6 gap-2 text-xs font-semibold shrink-0 cursor-pointer"
               >
-                <span>Continue</span>
+                <span>{t.selectOrgPage.continueBtn}</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
@@ -189,7 +197,7 @@ function SelectOrganisationContent() {
       </main>
 
       <footer className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
-        <span>Honey Chain Trust Network • Organisation Registry Context</span>
+        <span>{t.selectOrgPage.footerText}</span>
       </footer>
     </div>
   );

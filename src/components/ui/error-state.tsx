@@ -1,7 +1,10 @@
+"use client";
+
 import * as React from "react";
 import { AlertCircle, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/language-context";
 
 export interface ErrorStateProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -11,13 +14,16 @@ export interface ErrorStateProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function ErrorState({
-  title = "Something went wrong",
+  title,
   message,
   onRetry,
   compact = false,
   className,
   ...props
 }: ErrorStateProps) {
+  const { tr } = useLanguage();
+  const effectiveTitle = title || tr("Something went wrong", "कुछ गलत हो गया");
+
   if (compact) {
     return (
       <div
@@ -38,7 +44,7 @@ export function ErrorState({
             onClick={onRetry}
             className="h-6 px-2 text-xs text-rose-900 hover:bg-rose-100"
           >
-            Retry
+            {tr("Retry", "पुनः प्रयास करें")}
           </Button>
         )}
       </div>
@@ -57,7 +63,7 @@ export function ErrorState({
         <AlertCircle className="h-5 w-5" />
       </div>
       <h4 className="mt-3 text-sm font-semibold text-rose-900">
-        {title}
+        {effectiveTitle}
       </h4>
       <p className="mt-1 max-w-sm text-xs text-rose-700/90">
         {message}
@@ -70,9 +76,10 @@ export function ErrorState({
           className="mt-4 gap-1.5 border-rose-200 text-rose-900 hover:bg-rose-100"
         >
           <RotateCcw className="h-3.5 w-3.5" />
-          Try Again
+          {tr("Try Again", "पुनः प्रयास करें")}
         </Button>
       )}
     </div>
   );
 }
+

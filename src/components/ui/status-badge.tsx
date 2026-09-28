@@ -1,6 +1,9 @@
+"use client";
+
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/language-context";
 
 const statusBadgeVariants = cva(
   "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-semibold border transition-colors select-none tracking-tight",
@@ -181,6 +184,7 @@ export function StatusBadge({
   className,
   ...props
 }: StatusBadgeProps) {
+  const { trStatus } = useLanguage();
   const resolvedStatus: SemanticStatus = (
     [
       "success",
@@ -199,6 +203,7 @@ export function StatusBadge({
   ) as SemanticStatus;
 
   const dotColorClass = dotColors[resolvedStatus] || dotColors.neutral;
+  const displayLabel = typeof children === "string" ? trStatus(children) : children;
 
   return (
     <div
@@ -223,7 +228,7 @@ export function StatusBadge({
           />
         </span>
       )}
-      <span className="truncate">{children}</span>
+      <span className="truncate">{displayLabel}</span>
     </div>
   );
 }

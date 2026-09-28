@@ -23,6 +23,8 @@ import {
 import { UserRole } from "@/lib/constants";
 import { useAuthSession } from "@/context/auth-session-context";
 import { useRouter } from "next/navigation";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { useLanguage } from "@/context/language-context";
 
 export interface HeaderProps {
   onMenuToggle: () => void;
@@ -52,6 +54,8 @@ export function Header({
 }: HeaderProps) {
   const router = useRouter();
   const session = useAuthSession();
+
+  const { isHindi, trRole, trOrgType } = useLanguage();
 
   const activeOrgName = propOrg || session.selectedOrg?.name || "Highland Apiaries Cooperative";
   const activeOrgType = propOrgType || session.selectedOrg?.displayType || "Beekeeper Cooperative";
@@ -101,6 +105,9 @@ export function Header({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Language Switcher */}
+        <LanguageSwitcher />
+
         {/* Organisation Switcher */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -113,7 +120,7 @@ export function Header({
               <div className="flex items-center gap-1.5 truncate">
                 <span className="truncate font-medium">{activeOrgName}</span>
                 <span className="hidden lg:inline text-[10px] text-muted-foreground">
-                  ({activeOrgType})
+                  ({isHindi ? trOrgType(activeOrgType) : activeOrgType})
                 </span>
               </div>
               <ChevronsUpDown className="h-3 w-3 text-muted-foreground ml-0.5 shrink-0" />
@@ -121,12 +128,12 @@ export function Header({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-72">
             <DropdownMenuLabel className="flex items-center justify-between text-xs">
-              <span>Active Organisation</span>
+              <span>{isHindi ? "सक्रिय संगठन" : "Active Organisation"}</span>
               <button
                 onClick={() => router.push("/select-organisation")}
                 className="text-[10px] text-primary hover:underline font-normal cursor-pointer"
               >
-                Change...
+                {isHindi ? "बदलें..." : "Change..."}
               </button>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -141,7 +148,7 @@ export function Header({
                   <div className="flex flex-col overflow-hidden mr-2">
                     <span className="font-medium text-foreground truncate">{org.name}</span>
                     <span className="text-[11px] text-muted-foreground">
-                      {org.displayType} • {org.shortIdentifier}
+                      {isHindi ? trOrgType(org.displayType) : org.displayType} • {org.shortIdentifier}
                     </span>
                   </div>
                   {isSelected && <Check className="h-3.5 w-3.5 text-primary shrink-0" />}
@@ -176,21 +183,23 @@ export function Header({
             <DropdownMenuSeparator />
             <div className="px-2 py-1.5">
               <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Active Session Role:
+                {isHindi ? "सक्रिय सत्र भूमिका:" : "Active Session Role:"}
               </span>
               <div className="flex items-center justify-between mt-1 rounded-md bg-primary/10 border border-primary/20 px-2 py-1">
-                <span className="text-xs font-semibold text-primary">{activeRoleName}</span>
+                <span className="text-xs font-semibold text-primary">
+                  {isHindi ? trRole(activeRoleName) : activeRoleName}
+                </span>
                 <button
                   onClick={() => router.push("/select-role")}
                   className="text-[10px] text-primary hover:underline font-normal cursor-pointer"
                 >
-                  Change
+                  {isHindi ? "बदलें" : "Change"}
                 </button>
               </div>
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="text-[11px] font-normal text-muted-foreground">
-              Switch Active Role:
+              {isHindi ? "सक्रिय भूमिका बदलें:" : "Switch Active Role:"}
             </DropdownMenuLabel>
             {session.allRoles.map((r) => {
               const isSelected = r.id === session.selectedRole?.id;
@@ -202,7 +211,7 @@ export function Header({
                 >
                   <span className="flex items-center gap-1.5">
                     <Shield className="h-3.5 w-3.5 text-primary" />
-                    {r.name}
+                    {isHindi ? trRole(r.name) : r.name}
                   </span>
                   {isSelected && <Check className="h-3 w-3 text-primary" />}
                 </DropdownMenuItem>
@@ -214,7 +223,7 @@ export function Header({
               className="text-xs text-rose-600 focus:text-rose-600 cursor-pointer"
             >
               <LogOut className="h-3.5 w-3.5 mr-2" />
-              Sign out
+              {isHindi ? "साइन आउट" : "Sign out"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

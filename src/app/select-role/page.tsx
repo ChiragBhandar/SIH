@@ -20,6 +20,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { ActiveRole } from "@/types/auth";
 import { cn } from "@/lib/utils";
@@ -42,6 +44,7 @@ function SelectRoleContent() {
     selectedRole,
     selectRole,
   } = useAuthSession();
+  const { t } = useLanguage();
 
   // Find suitable default role based on org available roles if possible
   const defaultRoleId = React.useMemo(() => {
@@ -60,23 +63,26 @@ function SelectRoleContent() {
     router.push("/dashboard");
   };
 
+  const selectedOrgTrans = selectedOrg ? t.selectOrgPage.orgs[selectedOrg.id] : null;
+
   return (
     <div className="flex min-h-screen flex-col bg-muted/20">
       {/* Header */}
-      <header className="flex h-16 w-full items-center justify-between px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
+      <header className="flex h-16 w-full items-center justify-between px-4 sm:px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
             <Hexagon className="h-4 w-4 fill-current stroke-[2.5]" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-foreground">Honey Chain</span>
+            <span className="text-sm font-bold tracking-tight text-foreground">{t.common.honeyChain}</span>
             <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
-              Session Capability Assignment
+              {t.selectRolePage.headerSubtitle}
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitcher />
           <div className="hidden sm:flex flex-col text-right mr-2">
             <span className="text-xs font-semibold text-foreground">{user?.fullName}</span>
             <span className="text-[10px] text-muted-foreground">{user?.email}</span>
@@ -86,7 +92,7 @@ function SelectRoleContent() {
             className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Change Organisation</span>
+            <span className="hidden sm:inline">{t.selectRolePage.changeOrg}</span>
           </Link>
         </div>
       </header>
@@ -100,14 +106,14 @@ function SelectRoleContent() {
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold border border-emerald-200">
                 ✓
               </span>
-              <span className="text-xs font-medium">Organisation</span>
+              <span className="text-xs font-medium">{t.selectRolePage.step1}</span>
             </div>
             <div className="h-0.5 w-8 bg-primary" />
             <div className="flex items-center gap-2">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
                 2
               </span>
-              <span className="text-xs font-semibold text-foreground">Active Role</span>
+              <span className="text-xs font-semibold text-foreground">{t.selectRolePage.step2}</span>
             </div>
           </div>
 
@@ -120,14 +126,16 @@ function SelectRoleContent() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground">Active Organisation:</span>
-                    <span className="font-semibold text-foreground">{selectedOrg.name}</span>
+                    <span className="text-muted-foreground">{t.selectRolePage.activeOrgLabel}</span>
+                    <span className="font-semibold text-foreground">
+                      {selectedOrgTrans?.name || selectedOrg.name}
+                    </span>
                     <Badge variant="outline" className="font-mono text-[10px] px-1.5 py-0">
                       {selectedOrg.shortIdentifier}
                     </Badge>
                   </div>
                   <span className="text-[11px] text-muted-foreground">
-                    Type: {selectedOrg.displayType}
+                    {t.selectRolePage.typeLabel} {selectedOrgTrans?.displayType || selectedOrg.displayType}
                   </span>
                 </div>
               </div>
@@ -136,7 +144,7 @@ function SelectRoleContent() {
                 href="/select-organisation"
                 className="text-xs text-primary font-medium hover:underline hidden sm:inline"
               >
-                Switch
+                {t.selectRolePage.switchBtn}
               </Link>
             </div>
           )}
@@ -145,10 +153,10 @@ function SelectRoleContent() {
           <div className="rounded-xl border border-border bg-card p-6 sm:p-8 shadow-xs space-y-6">
             <div className="space-y-2 text-center sm:text-left">
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                Choose your active role
+                {t.selectRolePage.title}
               </h1>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Select the operational role you want to exercise during this session.
+                {t.selectRolePage.subtitle}
               </p>
             </div>
 
@@ -156,7 +164,8 @@ function SelectRoleContent() {
             <div className="flex items-start gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-muted-foreground">
               <Info className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
               <p className="leading-relaxed">
-                <strong className="font-medium text-foreground">Session-based role activation:</strong> Honey Chain accounts support multiple operational roles across supply chains. You are choosing your active role for this session, not registering a separate user account.
+                <strong className="font-medium text-foreground">{t.selectRolePage.infoTitle}</strong>{" "}
+                {t.selectRolePage.infoBody}
               </p>
             </div>
 
@@ -166,6 +175,10 @@ function SelectRoleContent() {
                 const IconComponent = ROLE_ICONS[role.iconName] || Shield;
                 const isSelected = chosenRoleId === role.id;
                 const isOrgRecommended = selectedOrg?.availableRoleIds?.includes(role.id);
+                const roleTrans = t.selectRolePage.roles[role.id];
+                const roleName = roleTrans?.name || role.name;
+                const roleDesc = roleTrans?.description || role.description;
+                const roleCapabilities = roleTrans?.capabilities || role.capabilities;
 
                 return (
                   <div
@@ -195,7 +208,7 @@ function SelectRoleContent() {
                         <div className="flex items-center gap-1.5">
                           {isOrgRecommended && (
                             <Badge variant="secondary" className="text-[10px] px-1.5 py-0 font-normal">
-                              Org Role
+                              {t.selectRolePage.orgRoleBadge}
                             </Badge>
                           )}
                           {isSelected && (
@@ -208,20 +221,20 @@ function SelectRoleContent() {
 
                       {/* Name & description */}
                       <h2 className="text-sm font-bold text-foreground mb-1">
-                        {role.name}
+                        {roleName}
                       </h2>
                       <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-                        {role.description}
+                        {roleDesc}
                       </p>
                     </div>
 
                     {/* Relevant capabilities */}
                     <div className="border-t border-border/60 pt-3 space-y-1.5">
                       <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block">
-                        Capabilities
+                        {t.selectRolePage.capabilitiesLabel}
                       </span>
                       <ul className="space-y-1">
-                        {role.capabilities.map((cap, i) => (
+                        {roleCapabilities.map((cap, i) => (
                           <li
                             key={i}
                             className="flex items-center gap-1.5 text-[11px] text-muted-foreground"
@@ -242,18 +255,18 @@ function SelectRoleContent() {
               <Button
                 variant="outline"
                 onClick={() => router.push("/select-organisation")}
-                className="h-10 px-4 text-xs gap-1.5"
+                className="h-10 px-4 text-xs gap-1.5 cursor-pointer"
               >
                 <ArrowLeft className="h-3.5 w-3.5" />
-                <span>Back to Organisation</span>
+                <span>{t.selectRolePage.backBtn}</span>
               </Button>
 
               <Button
                 onClick={handleContinue}
                 disabled={!chosenRoleId}
-                className="h-10 px-6 gap-2 text-xs font-semibold"
+                className="h-10 px-6 gap-2 text-xs font-semibold cursor-pointer"
               >
-                <span>Continue to Application</span>
+                <span>{t.selectRolePage.continueBtn}</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
@@ -262,7 +275,7 @@ function SelectRoleContent() {
       </main>
 
       <footer className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
-        <span>Honey Chain Trust Network • Active Role Assignment</span>
+        <span>{t.selectRolePage.footerText}</span>
       </footer>
     </div>
   );

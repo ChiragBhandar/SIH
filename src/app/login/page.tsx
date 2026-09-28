@@ -8,10 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login, isAuthenticated, hasSelectedOrg, hasSelectedRole, user } = useAuthSession();
+  const { t } = useLanguage();
 
   const [email, setEmail] = React.useState("operator@honeychain.io");
   const [password, setPassword] = React.useState("password123");
@@ -32,10 +35,10 @@ export default function LoginPage() {
         // Successfully authenticated, route to organisation selection step
         router.push("/select-organisation");
       } else {
-        setErrorMessage(result.error || "Authentication failed. Please check your credentials.");
+        setErrorMessage(result.error || t.loginPage.errorDefault);
       }
     } catch {
-      setErrorMessage("An unexpected error occurred. Please try again.");
+      setErrorMessage(t.loginPage.errorUnexpected);
     } finally {
       setIsLoading(false);
     }
@@ -50,23 +53,24 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col bg-muted/20">
       {/* Top minimal navigation */}
-      <header className="flex h-16 w-full items-center justify-between px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
+      <header className="flex h-16 w-full items-center justify-between px-4 sm:px-6 border-b border-border/60 bg-background/80 backdrop-blur-xs">
         <Link href="/" className="flex items-center gap-2.5 group transition-opacity hover:opacity-90">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs group-hover:scale-105 transition-transform">
             <Hexagon className="h-4 w-4 fill-current stroke-[2.5]" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-foreground">Honey Chain</span>
+            <span className="text-sm font-bold tracking-tight text-foreground">{t.common.honeyChain}</span>
             <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-mono">
-              Traceability Platform
+              {t.loginPage.traceabilityPlatform}
             </span>
           </div>
         </Link>
 
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 font-mono text-[11px] text-emerald-700 border border-emerald-200">
+        <div className="flex items-center gap-2 sm:gap-3 text-xs text-muted-foreground">
+          <LanguageSwitcher />
+          <span className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 font-mono text-[11px] text-emerald-700 border border-emerald-200">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Network Active
+            {t.loginPage.networkActive}
           </span>
           <Button
             variant="outline"
@@ -76,7 +80,8 @@ export default function LoginPage() {
           >
             <Link href="/">
               <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Back to Home</span>
+              <span className="hidden xs:inline sm:inline">{t.loginPage.backToHome}</span>
+              <span className="xs:hidden sm:hidden">Home</span>
             </Link>
           </Button>
         </div>
@@ -93,10 +98,10 @@ export default function LoginPage() {
                 <Hexagon className="h-6 w-6 fill-primary/20 stroke-[2]" />
               </div>
               <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-                Sign in to Honey Chain
+                {t.loginPage.title}
               </h1>
               <p className="text-xs text-muted-foreground">
-                Enter your credentials to access the honey supply chain registry
+                {t.loginPage.subtitle}
               </p>
             </div>
 
@@ -112,21 +117,23 @@ export default function LoginPage() {
             {forgotPasswordNotice && (
               <div className="mb-4 flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
                 <ShieldCheck className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>Password recovery link has been simulated. In production, an email with a reset token is dispatched.</span>
+                <span>{t.loginPage.forgotPasswordNotice}</span>
               </div>
             )}
 
             {/* Active session reminder banner if already signed in */}
             {isAuthenticated && user && (
               <div className="mb-4 rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs">
-                <p className="font-medium text-foreground">Active session detected: {user.email}</p>
+                <p className="font-medium text-foreground">
+                  {t.loginPage.activeSessionDetected} {user.email}
+                </p>
                 <p className="text-muted-foreground text-[11px] mt-0.5">
-                  You can re-authenticate below or{" "}
+                  {t.loginPage.reauthPrompt}{" "}
                   <Link
                     href={hasSelectedOrg && hasSelectedRole ? "/dashboard" : "/select-organisation"}
                     className="text-primary font-semibold underline hover:opacity-80"
                   >
-                    continue to session →
+                    {t.loginPage.continueToSession}
                   </Link>
                 </p>
               </div>
@@ -139,12 +146,12 @@ export default function LoginPage() {
                   htmlFor="email"
                   className="text-xs font-medium text-foreground block"
                 >
-                  Email address
+                  {t.loginPage.emailLabel}
                 </label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="operator@honeychain.io"
+                  placeholder={t.loginPage.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -159,14 +166,14 @@ export default function LoginPage() {
                     htmlFor="password"
                     className="text-xs font-medium text-foreground"
                   >
-                    Password
+                    {t.loginPage.passwordLabel}
                   </label>
                   <button
                     type="button"
                     onClick={() => setForgotPasswordNotice(true)}
                     className="text-xs text-primary hover:underline transition-colors"
                   >
-                    Forgot password?
+                    {t.loginPage.forgotPassword}
                   </button>
                 </div>
                 <div className="relative">
@@ -184,7 +191,7 @@ export default function LoginPage() {
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={showPassword ? t.loginPage.hidePassword : t.loginPage.showPassword}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -205,20 +212,20 @@ export default function LoginPage() {
                   htmlFor="remember"
                   className="text-xs text-muted-foreground cursor-pointer select-none"
                 >
-                  Remember this device for 30 days
+                  {t.loginPage.rememberMe}
                 </label>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-10 gap-2 text-xs font-semibold"
+                className="w-full h-10 gap-2 text-xs font-semibold cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <span>Signing in...</span>
+                  <span>{t.loginPage.signingIn}</span>
                 ) : (
                   <>
-                    <span>Sign In</span>
+                    <span>{t.loginPage.signInBtn}</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </>
                 )}
@@ -228,20 +235,20 @@ export default function LoginPage() {
             {/* Quick Demo Pre-fills */}
             <div className="mt-5 border-t border-border pt-4">
               <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider block mb-2">
-                Quick Test Credentials:
+                {t.loginPage.quickCredentials}
               </span>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => handleDemoFill("operator@honeychain.io")}
-                  className="flex items-center justify-between rounded-md border border-input bg-muted/30 px-2.5 py-1.5 text-[11px] text-foreground hover:bg-muted transition-colors text-left"
+                  className="flex items-center justify-between rounded-md border border-input bg-muted/30 px-2.5 py-1.5 text-[11px] text-foreground hover:bg-muted transition-colors text-left cursor-pointer"
                 >
                   <span className="truncate">operator@honeychain.io</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDemoFill("beekeeper@highland.org")}
-                  className="flex items-center justify-between rounded-md border border-input bg-muted/30 px-2.5 py-1.5 text-[11px] text-foreground hover:bg-muted transition-colors text-left"
+                  className="flex items-center justify-between rounded-md border border-input bg-muted/30 px-2.5 py-1.5 text-[11px] text-foreground hover:bg-muted transition-colors text-left cursor-pointer"
                 >
                   <span className="truncate">beekeeper@highland.org</span>
                 </button>
@@ -253,10 +260,10 @@ export default function LoginPage() {
           <div className="rounded-xl border border-border/80 bg-background/50 p-4 text-center space-y-2">
             <div className="flex items-center justify-center gap-1.5 text-xs font-medium text-foreground">
               <Lock className="h-3.5 w-3.5 text-primary" />
-              <span>Enterprise Supply Chain Verification</span>
+              <span>{t.loginPage.trustHeading}</span>
             </div>
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              Honey Chain delivers immutable batch provenance, accredited laboratory purity certification, and tamper-evident custody verification from hive to retail shelf.
+              {t.loginPage.trustDescription}
             </p>
           </div>
         </div>
@@ -264,7 +271,7 @@ export default function LoginPage() {
 
       {/* Minimal Footer */}
       <footer className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
-        <span>© 2026 Honey Chain Trust Platform • Internal B2B Traceability</span>
+        <span>{t.loginPage.footerCopyright}</span>
       </footer>
     </div>
   );

@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import { AdminRoleGuard, StatusBadge, EventTypeBadge } from "@/components/admin";
 import { AuditEventType } from "@/types/admin";
 import {
@@ -54,6 +55,7 @@ const EVENT_TYPE_OPTIONS: AuditEventType[] = [
 
 export default function CompleteAuditHistoryPage() {
   const { auditEvents, adminOrganisations } = useTraceability();
+  const { tr, trRole, trEventType, trStatus, trTerm } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedType, setSelectedType] = React.useState<string>("all");
@@ -79,6 +81,21 @@ export default function CompleteAuditHistoryPage() {
     });
   }, [auditEvents, searchQuery, selectedType, selectedOrg, selectedStatus]);
 
+  const translateSource = (source: string) => {
+    switch (source) {
+      case "Admin Console":
+        return tr("Admin Console", "प्रशासन कंसोल");
+      case "System Engine":
+        return tr("System Engine", "सिस्टम इंजन");
+      case "IoT Device":
+        return tr("IoT Device", "IoT उपकरण");
+      case "Manual Entry":
+        return tr("Manual Entry", "मैन्युअल प्रविष्टि");
+      default:
+        return source;
+    }
+  };
+
   return (
     <AdminRoleGuard>
       <div className="space-y-6 max-w-7xl mx-auto pb-12">
@@ -87,29 +104,32 @@ export default function CompleteAuditHistoryPage() {
           <div>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
               <Link href="/admin" className="hover:text-foreground transition-colors">
-                Administration
+                {tr("Administration", "प्रशासन")}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
-              <span className="text-foreground font-semibold">Audit History</span>
+              <span className="text-foreground font-semibold">{tr("Audit History", "ऑडिट इतिहास")}</span>
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
-                Complete Audit History
+                {tr("Complete Audit History", "सम्पूर्ण ऑडिट इतिहास")}
               </h1>
               <Badge variant="outline" className="text-xs font-semibold border-emerald-200 text-emerald-800 bg-emerald-50 gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                Append-Only Verified
+                {tr("Append-Only Verified", "केवल-जोड़ने योग्य सत्यापित")}
               </Badge>
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 max-w-2xl">
-              Append-only record of operational, custody, quality, commercial, and administrative events.
+              {tr(
+                "Append-only record of operational, custody, quality, commercial, and administrative events.",
+                "परिचालन, कस्टडी, गुणवत्ता, वाणिज्यिक और प्रशासनिक घटनाओं का केवल-जोड़ने योग्य रिकॉर्ड।"
+              )}
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="font-mono text-xs py-1 px-2.5 bg-card flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5 text-amber-600" />
-              <span><strong className="text-foreground">{auditEvents.length}</strong> Cryptographic Blocks</span>
+              <span><strong className="text-foreground">{auditEvents.length}</strong> {tr("Cryptographic Blocks", "क्रिप्टोग्राफिक ब्लॉक")}</span>
             </Badge>
           </div>
         </div>
@@ -121,7 +141,7 @@ export default function CompleteAuditHistoryPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search event ID, action, actor, entity..."
+                placeholder={tr("Search event ID, action, actor, entity...", "इवेंट आईडी, कार्रवाई, कर्ता, इकाई से खोजें...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-background border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -132,16 +152,16 @@ export default function CompleteAuditHistoryPage() {
               {/* Event Type Filter */}
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Filter className="w-3.5 h-3.5" />
-                <span>Type:</span>
+                <span>{tr("Type:", "प्रकार:")}</span>
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
                   className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 >
-                  <option value="all">All Types ({EVENT_TYPE_OPTIONS.length})</option>
+                  <option value="all">{tr("All Types", "सभी प्रकार")} ({EVENT_TYPE_OPTIONS.length})</option>
                   {EVENT_TYPE_OPTIONS.map((opt) => (
                     <option key={opt} value={opt}>
-                      {opt}
+                      {trEventType(opt)}
                     </option>
                   ))}
                 </select>
@@ -149,13 +169,13 @@ export default function CompleteAuditHistoryPage() {
 
               {/* Organisation Filter */}
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>Org:</span>
+                <span>{tr("Org:", "संगठन:")}</span>
                 <select
                   value={selectedOrg}
                   onChange={(e) => setSelectedOrg(e.target.value)}
                   className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 >
-                  <option value="all">All Organisations</option>
+                  <option value="all">{tr("All Organisations", "सभी संगठन")}</option>
                   {adminOrganisations.map((o) => (
                     <option key={o.id} value={o.id}>
                       {o.name}
@@ -166,16 +186,16 @@ export default function CompleteAuditHistoryPage() {
 
               {/* Status Filter */}
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>Status:</span>
+                <span>{tr("Status:", "स्थिति:")}</span>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 >
-                  <option value="all">All Statuses</option>
-                  <option value="verified">Verified</option>
-                  <option value="flagged">Flagged</option>
-                  <option value="corrected">Corrected</option>
+                  <option value="all">{tr("All Statuses", "सभी स्थितियां")}</option>
+                  <option value="verified">{trStatus("Verified")}</option>
+                  <option value="flagged">{trStatus("Flagged")}</option>
+                  <option value="corrected">{trStatus("Corrected")}</option>
                 </select>
               </div>
             </div>
@@ -188,22 +208,22 @@ export default function CompleteAuditHistoryPage() {
             <Table>
               <TableHeader className="bg-muted/50">
                 <TableRow>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Event ID</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Event Type</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Actor</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Organisation</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Entity</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Timestamp</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Source</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">Status</TableHead>
-                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground text-right">Action</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Event ID", "इवेंट आईडी")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Event Type", "इवेंट प्रकार")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Actor", "कर्ता")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Organisation", "संगठन")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Entity", "इकाई")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Timestamp", "समय")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Source", "स्रोत")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground">{tr("Status", "स्थिति")}</TableHead>
+                  <TableHead className="text-[11px] uppercase font-semibold text-muted-foreground text-right">{tr("Action", "कार्रवाई")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="text-xs">
                 {filteredEvents.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={9} className="py-12 text-center text-muted-foreground">
-                      No audit events match your selected criteria.
+                      {tr("No audit events match your selected criteria.", "कोई ऑडिट इवेंट आपके चयनित मानदंड से मेल नहीं खाता।")}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -234,7 +254,7 @@ export default function CompleteAuditHistoryPage() {
                             {evt.actor.name}
                           </span>
                           <span className="text-[11px] text-muted-foreground">
-                            {evt.actor.role}
+                            {trRole(evt.actor.role)}
                           </span>
                         </div>
                       </TableCell>
@@ -272,7 +292,7 @@ export default function CompleteAuditHistoryPage() {
                       {/* Source */}
                       <TableCell>
                         <Badge variant="outline" className="text-[10px] font-normal py-0 px-1.5">
-                          {evt.source}
+                          {translateSource(evt.source)}
                         </Badge>
                       </TableCell>
 
@@ -285,7 +305,7 @@ export default function CompleteAuditHistoryPage() {
                       <TableCell className="text-right">
                         <Button asChild variant="outline" size="sm" className="h-7 text-xs gap-1">
                           <Link href={`/admin/audit/${evt.id}`}>
-                            <span>Inspect</span>
+                            <span>{tr("Inspect", "निरीक्षण करें")}</span>
                             <ArrowRight className="w-3 h-3 text-amber-600" />
                           </Link>
                         </Button>

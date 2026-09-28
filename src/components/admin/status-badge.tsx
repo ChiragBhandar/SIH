@@ -18,6 +18,7 @@ import {
   AlertOctagon,
   Sparkles,
 } from "lucide-react";
+import { useLanguage } from "@/context/language-context";
 
 interface StatusBadgeProps {
   status?: AdminOrgStatus | ExceptionStatus | AccessRequestStatus | "verified" | "flagged" | "corrected" | "pending_review" | "Active" | "Disabled" | "Pending" | string;
@@ -32,6 +33,7 @@ export function StatusBadge({
   className = "",
   size = "md",
 }: StatusBadgeProps) {
+  const { trStatus, trTerm } = useLanguage();
   if (!status) return null;
 
   const sizeClasses = {
@@ -47,27 +49,27 @@ export function StatusBadge({
         return (
           <span className={`inline-flex items-center rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200/90 ${sizeClasses} ${className}`}>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Active
+            {trStatus("Active")}
           </span>
         );
       case "Pending":
         return (
           <span className={`inline-flex items-center rounded-md bg-amber-50 text-amber-900 border border-amber-200/90 ${sizeClasses} ${className}`}>
             <Clock className="w-3 h-3 text-amber-600" />
-            Pending
+            {trStatus("Pending")}
           </span>
         );
       case "Suspended":
         return (
           <span className={`inline-flex items-center rounded-md bg-rose-50 text-rose-800 border border-rose-200/90 ${sizeClasses} ${className}`}>
             <Ban className="w-3 h-3 text-rose-600" />
-            Suspended
+            {trStatus("Suspended")}
           </span>
         );
       default:
         return (
           <span className={`inline-flex items-center rounded-md bg-slate-100/80 text-slate-700 border border-slate-200 ${sizeClasses} ${className}`}>
-            {status}
+            {trStatus(status)}
           </span>
         );
     }
@@ -80,34 +82,34 @@ export function StatusBadge({
         return (
           <span className={`inline-flex items-center rounded-md bg-sky-50 text-sky-800 border border-sky-200/90 ${sizeClasses} ${className}`}>
             <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
-            Low Severity
+            {trStatus("Low Severity")}
           </span>
         );
       case "medium":
         return (
           <span className={`inline-flex items-center rounded-md bg-amber-50 text-amber-900 border border-amber-200/90 ${sizeClasses} ${className}`}>
             <AlertTriangle className="w-3 h-3 text-amber-600" />
-            Medium
+            {trStatus("Medium")}
           </span>
         );
       case "high":
         return (
           <span className={`inline-flex items-center rounded-md bg-orange-50 text-orange-900 border border-orange-200/90 ${sizeClasses} ${className}`}>
             <AlertOctagon className="w-3 h-3 text-orange-600" />
-            High Severity
+            {trStatus("High Severity")}
           </span>
         );
       case "critical":
         return (
           <span className={`inline-flex items-center rounded-md bg-rose-50 text-rose-800 border border-rose-200/90 font-bold ${sizeClasses} ${className}`}>
             <AlertOctagon className="w-3.5 h-3.5 text-rose-600 animate-pulse" />
-            CRITICAL
+            {trStatus("CRITICAL")}
           </span>
         );
       default:
         return (
           <span className={`inline-flex items-center rounded-md bg-slate-100/80 text-slate-700 border border-slate-200 ${sizeClasses} ${className}`}>
-            {status}
+            {trStatus(status)}
           </span>
         );
     }
@@ -120,28 +122,28 @@ export function StatusBadge({
         return (
           <span className={`inline-flex items-center rounded-md bg-rose-50 text-rose-800 border border-rose-200/90 ${sizeClasses} ${className}`}>
             <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
-            Open
+            {trStatus("Open")}
           </span>
         );
       case "investigating":
         return (
           <span className={`inline-flex items-center rounded-md bg-amber-50 text-amber-900 border border-amber-200/90 ${sizeClasses} ${className}`}>
             <Activity className="w-3 h-3 text-amber-600 animate-spin" />
-            Investigating
+            {trStatus("Investigating")}
           </span>
         );
       case "resolved":
         return (
           <span className={`inline-flex items-center rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200/90 ${sizeClasses} ${className}`}>
             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-            Resolved
+            {trStatus("Resolved")}
           </span>
         );
       case "dismissed":
         return (
           <span className={`inline-flex items-center rounded-md bg-slate-100/80 text-slate-700 border border-slate-200 ${sizeClasses} ${className}`}>
             <XCircle className="w-3 h-3" />
-            Dismissed
+            {trStatus("Dismissed")}
           </span>
         );
     }
@@ -154,28 +156,28 @@ export function StatusBadge({
         return (
           <span className={`inline-flex items-center rounded-md bg-amber-50 text-amber-900 border border-amber-200/90 ${sizeClasses} ${className}`}>
             <Clock className="w-3 h-3 text-amber-600" />
-            Pending Review
+            {trStatus("Pending Review")}
           </span>
         );
       case "approved":
         return (
           <span className={`inline-flex items-center rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200/90 ${sizeClasses} ${className}`}>
             <ShieldCheck className="w-3 h-3 text-emerald-600" />
-            Approved
+            {trStatus("Approved")}
           </span>
         );
       case "denied":
         return (
           <span className={`inline-flex items-center rounded-md bg-rose-50 text-rose-800 border border-rose-200/90 ${sizeClasses} ${className}`}>
             <XCircle className="w-3 h-3 text-rose-600" />
-            Denied
+            {trStatus("Denied") || trTerm("Denied")}
           </span>
         );
       case "expired":
         return (
           <span className={`inline-flex items-center rounded-md bg-slate-100/80 text-slate-700 border border-slate-200 ${sizeClasses} ${className}`}>
             <Clock className="w-3 h-3" />
-            Expired
+            {trStatus("Expired")}
           </span>
         );
     }
@@ -188,21 +190,21 @@ export function StatusBadge({
         return (
           <span className={`inline-flex items-center rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200/90 ${sizeClasses} ${className}`}>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            Active
+            {trStatus("Active")}
           </span>
         );
       case "Disabled":
         return (
           <span className={`inline-flex items-center rounded-md bg-rose-50 text-rose-800 border border-rose-200/90 ${sizeClasses} ${className}`}>
             <Ban className="w-3 h-3 text-rose-600" />
-            Disabled
+            {trStatus("Disabled")}
           </span>
         );
       case "Pending":
         return (
           <span className={`inline-flex items-center rounded-md bg-amber-50 text-amber-900 border border-amber-200/90 ${sizeClasses} ${className}`}>
             <Clock className="w-3 h-3 text-amber-600" />
-            Pending
+            {trStatus("Pending")}
           </span>
         );
     }
@@ -215,28 +217,28 @@ export function StatusBadge({
         return (
           <span className={`inline-flex items-center rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200/90 ${sizeClasses} ${className}`}>
             <ShieldCheck className="w-3 h-3 text-emerald-600" />
-            Verified
+            {trStatus("Verified")}
           </span>
         );
       case "flagged":
         return (
           <span className={`inline-flex items-center rounded-md bg-amber-50 text-amber-900 border border-amber-200/90 ${sizeClasses} ${className}`}>
             <AlertTriangle className="w-3 h-3 text-amber-600" />
-            Flagged
+            {trStatus("Flagged")}
           </span>
         );
       case "corrected":
         return (
           <span className={`inline-flex items-center rounded-md bg-sky-50 text-sky-800 border border-sky-200/90 ${sizeClasses} ${className}`}>
             <Sparkles className="w-3 h-3 text-sky-600" />
-            Correction Event
+            {trTerm("Correction Event")}
           </span>
         );
       case "pending_review":
         return (
           <span className={`inline-flex items-center rounded-md bg-slate-100/80 text-slate-700 border border-slate-200 ${sizeClasses} ${className}`}>
             <Clock className="w-3 h-3" />
-            Pending Review
+            {trStatus("Pending Review")}
           </span>
         );
     }
@@ -244,12 +246,13 @@ export function StatusBadge({
 
   return (
     <span className={`inline-flex items-center rounded-md bg-slate-100/80 text-slate-700 border border-slate-200 ${sizeClasses} ${className}`}>
-      {status}
+      {trStatus(status)}
     </span>
   );
 }
 
 export function EventTypeBadge({ type }: { type: AuditEventType | string }) {
+  const { trEventType } = useLanguage();
   const getStyle = (t: string) => {
     if (t.includes("Harvest") || t.includes("Batch") || t.includes("Apiary") || t.includes("Hive")) {
       return "bg-amber-50 text-amber-900 border-amber-200/90";
@@ -280,7 +283,7 @@ export function EventTypeBadge({ type }: { type: AuditEventType | string }) {
 
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border ${getStyle(type)}`}>
-      {type}
+      {trEventType(type)}
     </span>
   );
 }

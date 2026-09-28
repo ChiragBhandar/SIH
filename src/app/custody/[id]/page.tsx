@@ -34,6 +34,8 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { CustodyStatus } from "@/types/custody";
 
+import { useLanguage } from "@/context/language-context";
+
 function getStatusBadgeVariant(
   status: CustodyStatus
 ): "success" | "warning" | "error" | "info" | "neutral" | "honey" {
@@ -52,6 +54,7 @@ function getStatusBadgeVariant(
 }
 
 function CustodyDetailContent() {
+  const { tr, trStatus } = useLanguage();
   const params = useParams();
   const transferId = params?.id as string;
 
@@ -65,7 +68,7 @@ function CustodyDetailContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading custody record...
+          {tr("Loading custody record...", "कस्टडी रिकॉर्ड लोड हो रहा है...")}
         </div>
       </div>
     );
@@ -76,11 +79,14 @@ function CustodyDetailContent() {
       <div className="max-w-xl mx-auto py-12">
         <EmptyState
           icon={ArrowLeftRight}
-          title="Custody transfer not found"
-          description={`No custody transfer record found matching ID "${transferId}".`}
+          title={tr("Custody transfer not found", "कस्टडी ट्रांसफर नहीं मिला")}
+          description={tr(
+            `No custody transfer record found matching ID "${transferId}".`,
+            `"${transferId}" आईडी से मेल खाता कोई कस्टडी ट्रांसफर रिकॉर्ड नहीं मिला।`
+          )}
           action={
             <Button asChild size="sm">
-              <Link href="/custody">Back to Custody Transfers</Link>
+              <Link href="/custody">{tr("Back to Custody Transfers", "कस्टडी ट्रांसफर पर वापस")}</Link>
             </Button>
           }
         />
@@ -103,7 +109,7 @@ function CustodyDetailContent() {
         >
           <Link href="/custody">
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Custody Transfers</span>
+            <span>{tr("Back to Custody Transfers", "कस्टडी ट्रांसफर पर वापस")}</span>
           </Link>
         </Button>
       </div>
@@ -117,11 +123,14 @@ function CustodyDetailContent() {
                 {transfer.id}
               </h1>
               <StatusBadge status={getStatusBadgeVariant(transfer.status)} size="sm">
-                {transfer.status}
+                {trStatus(transfer.status)}
               </StatusBadge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Inter-Organisation Custody Handover Document • Preserves Batch Provenance
+              {tr(
+                "Inter-Organisation Custody Handover Document • Preserves Batch Provenance",
+                "अंतर-संगठन कस्टडी हस्तांतरण दस्तावेज • बैच उत्पत्ति संरक्षित रखता है"
+              )}
             </p>
           </div>
 
@@ -130,7 +139,7 @@ function CustodyDetailContent() {
               <Button asChild size="sm" className="gap-1.5 shadow-xs font-semibold">
                 <Link href={`/receiving/${transfer.id}`}>
                   <PackageCheck className="h-4 w-4" />
-                  <span>Review & Receive Intake</span>
+                  <span>{tr("Review & Receive Intake", "समीक्षा करें एवं आवक प्राप्त करें")}</span>
                 </Link>
               </Button>
             )}
@@ -138,7 +147,7 @@ function CustodyDetailContent() {
             <Button variant="outline" size="sm" asChild className="text-xs h-8 gap-1.5">
               <Link href={`/batches/${transfer.batchId}`}>
                 <Boxes className="h-3.5 w-3.5 text-primary" />
-                <span>View Batch Provenance</span>
+                <span>{tr("View Batch Provenance", "बैच उत्पत्ति देखें")}</span>
               </Link>
             </Button>
           </div>
@@ -149,32 +158,32 @@ function CustodyDetailContent() {
           <div className="p-3 rounded-lg bg-muted/20 border border-border/60 space-y-1">
             <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
               <Building className="h-3 w-3 text-muted-foreground" />
-              Source Organisation
+              {tr("Source Organisation", "स्रोत संगठन")}
             </span>
             <p className="text-xs font-bold text-foreground">
               {transfer.sourceOrgName}
             </p>
             <p className="text-[11px] text-muted-foreground">
-              Origin: {transfer.sourceApiaryName}
+              {tr("Origin:", "उत्पत्ति:")} {transfer.sourceApiaryName}
             </p>
           </div>
 
           <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 space-y-1 flex flex-col justify-center text-center">
             <span className="text-[10px] uppercase font-bold text-primary">
-              Consignment Quantity
+              {tr("Consignment Quantity", "खेप की मात्रा")}
             </span>
             <p className="text-base font-mono font-bold text-foreground">
-              {transfer.quantityKg.toFixed(1)} kg
+              {transfer.quantityKg.toFixed(1)} {tr("kg", "किग्रा")}
             </p>
             <span className="text-[10px] font-mono text-muted-foreground">
-              Ref: {transfer.transportRef}
+              {tr("Ref:", "संदर्भ:")} {transfer.transportRef}
             </span>
           </div>
 
           <div className="p-3 rounded-lg bg-muted/20 border border-border/60 space-y-1">
             <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
               <Building className="h-3 w-3 text-primary" />
-              Destination Organisation
+              {tr("Destination Organisation", "गंतव्य संगठन")}
             </span>
             <p className="text-xs font-bold text-foreground">
               {transfer.destinationOrgName}
@@ -192,7 +201,7 @@ function CustodyDetailContent() {
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-bold text-foreground flex items-center gap-2">
               <Boxes className="h-4 w-4 text-primary" />
-              <span>Immutable Batch Provenance Reference</span>
+              <span>{tr("Immutable Batch Provenance Reference", "अपरिवर्तनीय बैच उत्पत्ति संदर्भ")}</span>
             </CardTitle>
             <Button
               variant="ghost"
@@ -201,7 +210,7 @@ function CustodyDetailContent() {
               className="h-7 text-xs text-primary hover:underline hover:bg-transparent"
             >
               <Link href={`/batches/${transfer.batchId}`}>
-                Open Batch Record →
+                {tr("Open Batch Record →", "बैच रिकॉर्ड खोलें →")}
               </Link>
             </Button>
           </div>
@@ -210,7 +219,7 @@ function CustodyDetailContent() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div>
               <span className="text-[10px] uppercase text-muted-foreground block">
-                Batch ID
+                {tr("Batch ID", "बैच आईडी")}
               </span>
               <span className="font-mono font-bold text-foreground">
                 {transfer.batchId}
@@ -218,7 +227,7 @@ function CustodyDetailContent() {
             </div>
             <div>
               <span className="text-[10px] uppercase text-muted-foreground block">
-                Honey Variety
+                {tr("Honey Variety", "शहद की किस्म")}
               </span>
               <span className="font-medium text-foreground">
                 {transfer.honeyType}
@@ -226,7 +235,7 @@ function CustodyDetailContent() {
             </div>
             <div>
               <span className="text-[10px] uppercase text-muted-foreground block">
-                Harvest Date
+                {tr("Harvest Date", "कटाई तिथि")}
               </span>
               <span className="font-medium text-foreground">
                 {transfer.harvestDate}
@@ -234,7 +243,7 @@ function CustodyDetailContent() {
             </div>
             <div>
               <span className="text-[10px] uppercase text-muted-foreground block">
-                Source Apiary
+                {tr("Source Apiary", "स्रोत मधुमक्खी फार्म")}
               </span>
               <span className="font-medium text-foreground truncate block">
                 {transfer.sourceApiaryName}
@@ -251,10 +260,13 @@ function CustodyDetailContent() {
             <ShieldCheck className="h-5 w-5 text-primary" />
             <div>
               <CardTitle className="text-base font-bold text-foreground">
-                Custody Transfer Timeline
+                {tr("Custody Transfer Timeline", "कस्टडी ट्रांसफर समयरेखा")}
               </CardTitle>
               <CardDescription className="text-xs mt-0.5">
-                Verifiable progression of physical custody from dispatch to manufacturer receipt.
+                {tr(
+                  "Verifiable progression of physical custody from dispatch to manufacturer receipt.",
+                  "प्रेषण से लेकर निर्माता पावती तक भौतिक कस्टडी की सत्यापन योग्य प्रगति।"
+                )}
               </CardDescription>
             </div>
           </div>
@@ -329,11 +341,11 @@ function CustodyDetailContent() {
 
                     <div className="text-[10px] text-muted-foreground mt-2 pt-1.5 border-t border-border/50 flex flex-wrap items-center justify-between gap-2">
                       <span>
-                        Actor: <strong className="text-foreground">{event.actor}</strong>
+                        {tr("Actor:", "कर्ता:")} <strong className="text-foreground">{event.actor}</strong>
                       </span>
                       {event.orgName && (
                         <span>
-                          Organisation: <strong className="text-foreground">{event.orgName}</strong>
+                          {tr("Organisation:", "संगठन:")} <strong className="text-foreground">{event.orgName}</strong>
                         </span>
                       )}
                     </div>
@@ -351,13 +363,13 @@ function CustodyDetailContent() {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold text-foreground flex items-center gap-1.5">
               <Truck className="h-4 w-4 text-primary" />
-              <span>Logistics & Transport Verification</span>
+              <span>{tr("Logistics & Transport Verification", "रसद एवं परिवहन सत्यापन")}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2.5 pt-0 text-xs">
             <div className="p-2.5 rounded-md bg-muted/20 border border-border/60 space-y-1">
               <span className="text-[10px] uppercase text-muted-foreground block">
-                Carrier Reference / Docket Number
+                {tr("Carrier Reference / Docket Number", "कैरियर संदर्भ / डॉकेट नंबर")}
               </span>
               <span className="font-mono font-bold text-foreground text-xs">
                 {transfer.transportRef}
@@ -367,7 +379,7 @@ function CustodyDetailContent() {
             <div className="grid grid-cols-2 gap-2 text-[11px]">
               <div>
                 <span className="text-[10px] uppercase text-muted-foreground block">
-                  Dispatched Date
+                  {tr("Dispatched Date", "प्रेषण तिथि")}
                 </span>
                 <span className="font-mono text-foreground font-medium">
                   {transfer.transferDate}
@@ -375,7 +387,7 @@ function CustodyDetailContent() {
               </div>
               <div>
                 <span className="text-[10px] uppercase text-muted-foreground block">
-                  Expected Arrival
+                  {tr("Expected Arrival", "अपेक्षित आगमन")}
                 </span>
                 <span className="font-mono text-foreground font-medium">
                   {transfer.expectedArrivalDate}
@@ -386,7 +398,7 @@ function CustodyDetailContent() {
             {transfer.notes && (
               <div>
                 <span className="text-[10px] uppercase text-muted-foreground block">
-                  Handling Notes
+                  {tr("Handling Notes", "हैंडलिंग नोट्स")}
                 </span>
                 <p className="text-muted-foreground text-[11px] leading-relaxed mt-0.5">
                   {transfer.notes}
@@ -401,7 +413,7 @@ function CustodyDetailContent() {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold text-foreground flex items-center gap-1.5">
               <FileCheck className="h-4 w-4 text-emerald-600" />
-              <span>Receiving Intake Summary</span>
+              <span>{tr("Receiving Intake Summary", "आवक प्राप्ति सारांश")}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2.5 pt-0 text-xs">
@@ -412,22 +424,22 @@ function CustodyDetailContent() {
                     {receivingRecord.id}
                   </span>
                   <StatusBadge status="success" size="sm">
-                    {receivingRecord.decision}
+                    {trStatus(receivingRecord.decision)}
                   </StatusBadge>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
                   <div>
                     <span className="text-[10px] uppercase text-muted-foreground block">
-                      Received Weight
+                      {tr("Received Weight", "प्राप्त वजन")}
                     </span>
                     <span className="font-mono font-bold text-foreground">
-                      {receivingRecord.receivedQuantityKg.toFixed(1)} kg
+                      {receivingRecord.receivedQuantityKg.toFixed(1)} {tr("kg", "किग्रा")}
                     </span>
                   </div>
                   <div>
                     <span className="text-[10px] uppercase text-muted-foreground block">
-                      Condition
+                      {tr("Condition", "स्थिति")}
                     </span>
                     <span className="font-medium text-foreground">
                       {receivingRecord.condition}
@@ -436,7 +448,7 @@ function CustodyDetailContent() {
                 </div>
 
                 <div className="text-[11px] text-muted-foreground border-t border-border/50 pt-1.5">
-                  Received by: <strong>{receivingRecord.receivedBy}</strong> on{" "}
+                  {tr("Received by:", "द्वारा प्राप्त:")} <strong>{receivingRecord.receivedBy}</strong> {tr("on", "को")}{" "}
                   <span className="font-mono">{receivingRecord.receivedDate}</span>
                 </div>
               </div>
@@ -444,12 +456,15 @@ function CustodyDetailContent() {
               <div className="p-4 text-center rounded-lg border border-dashed border-border/70 bg-muted/10 space-y-2">
                 <Clock className="h-6 w-6 text-muted-foreground/60 mx-auto" />
                 <p className="text-xs text-muted-foreground">
-                  No receiving record logged yet. Consignment is currently in transit or awaiting intake inspection.
+                  {tr(
+                    "No receiving record logged yet. Consignment is currently in transit or awaiting intake inspection.",
+                    "अभी तक कोई पावती रिकॉर्ड दर्ज नहीं किया गया है। खेप वर्तमान में पारगमन में है या आवक निरीक्षण की प्रतीक्षा कर रही है।"
+                  )}
                 </p>
                 {isPending && isCurrentOrgRecipient && (
                   <Button asChild size="sm" className="mt-2 text-xs">
                     <Link href={`/receiving/${transfer.id}`}>
-                      Proceed to Intake Receiving
+                      {tr("Proceed to Intake Receiving", "आवक प्राप्ति के लिए आगे बढ़ें")}
                     </Link>
                   </Button>
                 )}
@@ -463,13 +478,14 @@ function CustodyDetailContent() {
 }
 
 export default function CustodyDetailPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Custody Transfers", href: "/custody" },
-          { label: "Transfer Detail", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Custody Transfers", "कस्टडी ट्रांसफर"), href: "/custody" },
+          { label: tr("Transfer Detail", "ट्रांसफर विवरण"), active: true },
         ]}
         defaultNavId="custody"
       >

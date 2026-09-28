@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import {
   Layers,
   ArrowLeft,
@@ -495,13 +496,14 @@ export function ProcessingDetailContent() {
 }
 
 export default function ProcessingDetailPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Processing & Blending", href: "/processing" },
-          { label: "Processing Detail", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Processing & Blending", "प्रसंस्करण एवं सम्मिश्रण"), href: "/processing" },
+          { label: tr("Processing Detail", "प्रसंस्करण विवरण"), active: true },
         ]}
         defaultNavId="processing"
       >

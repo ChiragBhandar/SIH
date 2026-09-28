@@ -38,7 +38,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+import { useLanguage } from "@/context/language-context";
+
 function CreateBatchContent() {
+  const { tr, trStatus } = useLanguage();
   const { apiaries, hives, batches, addBatch, isLoaded } = useTraceability();
 
   // Generated Batch ID Preview
@@ -105,15 +108,15 @@ function CreateBatchContent() {
 
   const validate = () => {
     const errs: Record<string, string> = {};
-    if (!sourceApiaryId) errs.apiary = "Source Apiary is required.";
-    if (selectedHiveIds.length === 0) errs.hives = "At least one source hive must be selected.";
-    if (!harvestDate) errs.date = "Harvest date is required.";
-    if (!honeyType.trim()) errs.honeyType = "Honey floral type is required.";
+    if (!sourceApiaryId) errs.apiary = tr("Source Apiary is required.", "स्रोत मधुमक्खी फार्म आवश्यक है।");
+    if (selectedHiveIds.length === 0) errs.hives = tr("At least one source hive must be selected.", "कम से कम एक स्रोत छत्ता चुना जाना चाहिए।");
+    if (!harvestDate) errs.date = tr("Harvest date is required.", "कटाई तिथि आवश्यक है।");
+    if (!honeyType.trim()) errs.honeyType = tr("Honey floral type is required.", "शहद का वानस्पतिक प्रकार आवश्यक है।");
     if (!weightKg.trim() || isNaN(Number(weightKg)) || Number(weightKg) <= 0) {
-      errs.weight = "Valid harvest weight (kg) is required.";
+      errs.weight = tr("Valid harvest weight (kg) is required.", "मान्य कटाई वजन (किग्रा) आवश्यक है।");
     }
-    if (!containerRef.trim()) errs.container = "Container/drum reference identifier is required.";
-    if (!storageLocation.trim()) errs.storage = "Storage location is required.";
+    if (!containerRef.trim()) errs.container = tr("Container/drum reference identifier is required.", "कंटेनर/ड्रम संदर्भ पहचानकर्ता आवश्यक है।");
+    if (!storageLocation.trim()) errs.storage = tr("Storage location is required.", "भंडारण स्थान आवश्यक है।");
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -145,7 +148,7 @@ function CreateBatchContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Initializing harvest workflow...
+          {tr("Initializing harvest workflow...", "कटाई कार्यप्रवाह प्रारंभ हो रहा है...")}
         </div>
       </div>
     );
@@ -162,53 +165,56 @@ function CreateBatchContent() {
               <CheckCircle2 className="h-8 w-8" />
             </div>
             <CardTitle className="text-2xl font-bold text-foreground">
-              Harvest Batch Successfully Created
+              {tr("Harvest Batch Successfully Created", "कटाई बैच सफलतापूर्वक बनाया गया")}
             </CardTitle>
             <CardDescription className="text-xs">
-              The raw honey batch has been minted and linked to source colony records.
+              {tr(
+                "The raw honey batch has been minted and linked to source colony records.",
+                "कच्चा शहद बैच तैयार कर लिया गया है और स्रोत कॉलोनी रिकॉर्ड से जोड़ दिया गया है।"
+              )}
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-4 text-xs">
             <div className="rounded-lg border border-border/80 bg-muted/25 p-4 space-y-3">
               <div className="flex items-center justify-between border-b border-border/60 pb-2">
-                <span className="text-muted-foreground font-medium">Batch Identifier</span>
+                <span className="text-muted-foreground font-medium">{tr("Batch Identifier", "बैच पहचानकर्ता")}</span>
                 <span className="font-mono text-sm font-bold text-primary">
                   {createdBatch?.batchNumber || createdBatchId}
                 </span>
               </div>
 
               <div className="flex items-center justify-between border-b border-border/60 pb-2">
-                <span className="text-muted-foreground font-medium">Source Apiary</span>
+                <span className="text-muted-foreground font-medium">{tr("Source Apiary", "स्रोत मधुमक्खी फार्म")}</span>
                 <span className="font-semibold text-foreground">
                   {createdBatch?.sourceApiaryName}
                 </span>
               </div>
 
               <div className="flex items-center justify-between border-b border-border/60 pb-2">
-                <span className="text-muted-foreground font-medium">Linked Source Hives</span>
+                <span className="text-muted-foreground font-medium">{tr("Linked Source Hives", "जुड़े हुए स्रोत छत्ते")}</span>
                 <span className="font-mono text-foreground font-medium">
-                  {createdBatch?.sourceHiveIdentifiers?.join(", ") || "None"}
+                  {createdBatch?.sourceHiveIdentifiers?.join(", ") || tr("None", "कोई नहीं")}
                 </span>
               </div>
 
               <div className="flex items-center justify-between border-b border-border/60 pb-2">
-                <span className="text-muted-foreground font-medium">Harvest Date</span>
+                <span className="text-muted-foreground font-medium">{tr("Harvest Date", "कटाई तिथि")}</span>
                 <span className="text-foreground">{createdBatch?.harvestDate}</span>
               </div>
 
               <div className="flex items-center justify-between border-b border-border/60 pb-2">
-                <span className="text-muted-foreground font-medium">Extracted Weight</span>
+                <span className="text-muted-foreground font-medium">{tr("Extracted Weight", "निकाला गया वजन")}</span>
                 <span className="font-mono font-bold text-foreground">
-                  {createdBatch?.weightKg.toFixed(1)} kg
+                  {createdBatch?.weightKg.toFixed(1)} {tr("kg", "किग्रा")}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground font-medium">Traceability Status</span>
+                <span className="text-muted-foreground font-medium">{tr("Traceability Status", "ट्रेसेबिलिटी स्थिति")}</span>
                 <Badge variant="outline" className="gap-1 text-emerald-700 border-emerald-200 bg-emerald-50 text-[11px] py-0.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  {createdBatch?.traceabilityStatus || "Traceability chain started"}
+                  {createdBatch?.traceabilityStatus || tr("Traceability chain started", "ट्रेसेबिलिटी श्रृंखला प्रारंभ")}
                 </Badge>
               </div>
             </div>
@@ -216,7 +222,10 @@ function CreateBatchContent() {
             <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-[11px] text-muted-foreground flex items-center gap-2">
               <Info className="h-4 w-4 text-primary shrink-0" />
               <span>
-                Immutable origin metadata recorded. All downstream processing, laboratory testing, and bottle certifications will remain cryptographically bound to this root batch.
+                {tr(
+                  "Immutable origin metadata recorded. All downstream processing, laboratory testing, and bottle certifications will remain cryptographically bound to this root batch.",
+                  "अपरिवर्तनीय उत्पत्ति मेटाडेटा दर्ज किया गया। सभी डाउनस्ट्रीम प्रसंस्करण, प्रयोगशाला परीक्षण और बोतल प्रमाणपत्र इस रूट बैच से क्रिप्टोग्राफ़िक रूप से जुड़े रहेंगे।"
+                )}
               </span>
             </div>
           </CardContent>
@@ -228,7 +237,7 @@ function CreateBatchContent() {
               asChild
               className="text-xs w-full sm:w-auto"
             >
-              <Link href="/batches">Back to Batches List</Link>
+              <Link href="/batches">{tr("Back to Batches List", "बैच सूची पर वापस")}</Link>
             </Button>
 
             <Button
@@ -237,7 +246,7 @@ function CreateBatchContent() {
               className="text-xs gap-1.5 w-full sm:w-auto shadow-xs cursor-pointer"
             >
               <Link href={`/batches/${createdBatchId}`}>
-                <span>View Batch Details & Timeline</span>
+                <span>{tr("View Batch Details & Timeline", "बैच विवरण एवं समयरेखा देखें")}</span>
                 <ArrowLeft className="h-3 w-3 rotate-180" />
               </Link>
             </Button>
@@ -259,7 +268,7 @@ function CreateBatchContent() {
         >
           <Link href="/batches">
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Batches</span>
+            <span>{tr("Back to Batches", "बैच सूची पर वापस")}</span>
           </Link>
         </Button>
       </div>
@@ -269,11 +278,14 @@ function CreateBatchContent() {
         <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
         <div className="space-y-1">
           <h4 className="font-bold text-foreground">
-            Traceability Provenance Contract
+            {tr("Traceability Provenance Contract", "ट्रेसेबिलिटी उत्पत्ति अनुबंध")}
           </h4>
           <p className="text-muted-foreground leading-relaxed">
-            <strong>Source information will remain linked to this batch throughout the traceability chain.</strong>{" "}
-            The selected apiary coordinates, botanical flora, and paired hive identifiers will permanently anchor every downstream custody transfer and consumer verification QR code.
+            <strong>{tr("Source information will remain linked to this batch throughout the traceability chain.", "स्रोत जानकारी पूरी ट्रेसेबिलिटी श्रृंखला के दौरान इस बैच से जुड़ी रहेगी।")}</strong>{" "}
+            {tr(
+              "The selected apiary coordinates, botanical flora, and paired hive identifiers will permanently anchor every downstream custody transfer and consumer verification QR code.",
+              "चयनित मधुमक्खी फार्म निर्देशांक, वानस्पतिक वनस्पति और युग्मित छत्ता पहचानकर्ता प्रत्येक डाउनस्ट्रीम कस्टडी हस्तांतरण और उपभोक्ता सत्यापन क्यूआर कोड को स्थायी रूप से जोड़ेंगे।"
+            )}
           </p>
         </div>
       </div>
@@ -288,17 +300,20 @@ function CreateBatchContent() {
               </div>
               <div>
                 <CardTitle className="text-xl font-bold text-foreground">
-                  Create Harvest Batch
+                  {tr("Create Harvest Batch", "कटाई बैच बनाएं")}
                 </CardTitle>
                 <CardDescription className="text-xs mt-0.5">
-                  Register extracted raw bulk honey and establish root origin link.
+                  {tr(
+                    "Register extracted raw bulk honey and establish root origin link.",
+                    "निकाले गए कच्चे थोक शहद को पंजीकृत करें और मूल उत्पत्ति लिंक स्थापित करें।"
+                  )}
                 </CardDescription>
               </div>
             </div>
 
             <div className="flex items-center gap-1.5 bg-muted/40 border border-border px-2.5 py-1 rounded-md">
               <span className="text-[10px] text-muted-foreground uppercase font-semibold">
-                Minting Batch ID:
+                {tr("Minting Batch ID:", "बैच आईडी निर्माण:")}
               </span>
               <span className="font-mono text-xs font-bold text-primary">
                 {nextBatchNumber}
@@ -313,7 +328,7 @@ function CreateBatchContent() {
             <div className="space-y-1.5">
               <label className="font-medium text-foreground flex items-center gap-1">
                 <Wheat className="h-3.5 w-3.5 text-primary" />
-                Source Apiary <span className="text-rose-500">*</span>
+                {tr("Source Apiary", "स्रोत मधुमक्खी फार्म")} <span className="text-rose-500">*</span>
               </label>
               <select
                 value={sourceApiaryId}
@@ -339,19 +354,22 @@ function CreateBatchContent() {
               <div className="flex items-center justify-between">
                 <label className="font-medium text-foreground flex items-center gap-1">
                   <Layers className="h-3.5 w-3.5 text-primary" />
-                  Source Hive(s) Extracted <span className="text-rose-500">*</span>
+                  {tr("Source Hive(s) Extracted", "निकाले गए स्रोत छत्ते")} <span className="text-rose-500">*</span>
                 </label>
                 <span className="text-[11px] text-muted-foreground font-mono">
-                  {selectedHiveIds.length} hive(s) selected
+                  {selectedHiveIds.length} {tr("hive(s) selected", "छत्ता चयनित")}
                 </span>
               </div>
               <p className="text-[11px] text-muted-foreground">
-                Select the specific colony boxes harvested for this raw extraction run.
+                {tr(
+                  "Select the specific colony boxes harvested for this raw extraction run.",
+                  "इस निष्कर्षण के लिए विशिष्ट कॉलोनियों का चयन करें।"
+                )}
               </p>
 
               {availableHives.length === 0 ? (
                 <div className="p-4 rounded-md border border-dashed text-center text-xs text-muted-foreground">
-                  No hives registered for this apiary.
+                  {tr("No hives registered for this apiary.", "इस फार्म के लिए कोई छत्ता पंजीकृत नहीं है।")}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-1 border rounded-md bg-muted/15">
@@ -388,7 +406,7 @@ function CreateBatchContent() {
                           variant="outline"
                           className="text-[10px] py-0 shrink-0 font-mono"
                         >
-                          {h.status}
+                          {trStatus(h.status)}
                         </Badge>
                       </div>
                     );
@@ -405,7 +423,7 @@ function CreateBatchContent() {
               <div className="space-y-1">
                 <label className="font-medium text-foreground flex items-center gap-1">
                   <Calendar className="h-3 w-3 text-muted-foreground" />
-                  Harvest Date <span className="text-rose-500">*</span>
+                  {tr("Harvest Date", "कटाई तिथि")} <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -421,14 +439,14 @@ function CreateBatchContent() {
 
               <div className="space-y-1">
                 <label className="font-medium text-foreground">
-                  Honey Type / Floral Origin <span className="text-rose-500">*</span>
+                  {tr("Honey Type / Floral Origin", "शहद का प्रकार / वानस्पतिक उत्पत्ति")} <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={honeyType}
                   onChange={(e) => setHoneyType(e.target.value)}
-                  placeholder="e.g. Himalayan Wild Multifloral, White Clover & Acacia"
+                  placeholder={tr("e.g. Himalayan Wild Multifloral, White Clover & Acacia", "उदा. हिमालयी जंगली मल्टीफ्लोरल, सफेद तिपतिया घास एवं बबूल")}
                   className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 />
                 {errors.honeyType && (
@@ -442,7 +460,7 @@ function CreateBatchContent() {
               <div className="space-y-1">
                 <label className="font-medium text-foreground flex items-center gap-1">
                   <Scale className="h-3 w-3 text-muted-foreground" />
-                  Raw Honey Weight (kg) <span className="text-rose-500">*</span>
+                  {tr("Raw Honey Weight (kg)", "कच्चे शहद का वजन (किग्रा)")} <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -461,7 +479,7 @@ function CreateBatchContent() {
               <div className="space-y-1">
                 <label className="font-medium text-foreground flex items-center gap-1">
                   <Package className="h-3 w-3 text-muted-foreground" />
-                  Container / Bulk Drum Reference <span className="text-rose-500">*</span>
+                  {tr("Container / Bulk Drum Reference", "कंटेनर / थोक ड्रम संदर्भ")} <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -482,27 +500,27 @@ function CreateBatchContent() {
               <div className="space-y-1 sm:col-span-2">
                 <label className="font-medium text-foreground flex items-center gap-1">
                   <Warehouse className="h-3 w-3 text-muted-foreground" />
-                  Storage Facility / Vault Location <span className="text-rose-500">*</span>
+                  {tr("Storage Facility / Vault Location", "भंडारण सुविधा / वॉल्ट स्थान")} <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={storageLocation}
                   onChange={(e) => setStorageLocation(e.target.value)}
-                  placeholder="e.g. Chamoli Cooperative Secure Storage Unit 1"
+                  placeholder={tr("e.g. Chamoli Cooperative Secure Storage Unit 1", "उदा. चमोली सहकारी सुरक्षित भंडारण इकाई 1")}
                   className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 />
               </div>
 
               <div className="space-y-1 sm:col-span-2">
                 <label className="font-medium text-foreground">
-                  Extraction & Batch Notes
+                  {tr("Extraction & Batch Notes", "निष्कर्षण एवं बैच नोट्स")}
                 </label>
                 <textarea
                   rows={2}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Moisture content field reading, centrifuge speed, visual amber clarity..."
+                  placeholder={tr("Moisture content field reading, centrifuge speed, visual amber clarity...", "नमी की मात्रा फील्ड रीडिंग, सेंट्रीफ्यूज गति, दृश्यमान स्पष्टता...")}
                   className="w-full rounded-md border border-input bg-background p-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 />
               </div>
@@ -517,7 +535,7 @@ function CreateBatchContent() {
               asChild
               className="text-xs"
             >
-              <Link href="/batches">Cancel</Link>
+              <Link href="/batches">{tr("Cancel", "रद्द करें")}</Link>
             </Button>
 
             <Button
@@ -526,7 +544,7 @@ function CreateBatchContent() {
               className="text-xs min-w-[140px] shadow-xs cursor-pointer gap-1.5"
             >
               <Sparkles className="h-3.5 w-3.5" />
-              <span>Review Batch</span>
+              <span>{tr("Review Batch", "बैच की समीक्षा करें")}</span>
             </Button>
           </CardFooter>
         </form>
@@ -537,31 +555,34 @@ function CreateBatchContent() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-base font-bold">
-              Review Harvest Batch Details
+              {tr("Review Harvest Batch Details", "कटाई बैच विवरण की समीक्षा करें")}
             </DialogTitle>
             <DialogDescription className="text-xs">
-              Confirm batch origin parameters before committing to the Honey Chain local registry.
+              {tr(
+                "Confirm batch origin parameters before committing to the Honey Chain local registry.",
+                "हनी चेन स्थानीय रजिस्ट्री में दर्ज करने से पहले बैच उत्पत्ति मापदंडों की पुष्टि करें।"
+              )}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 text-xs pt-1">
             <div className="rounded-md bg-muted/30 border p-3 space-y-2.5">
               <div className="flex items-center justify-between border-b pb-1.5">
-                <span className="text-muted-foreground font-medium">Batch Number</span>
+                <span className="text-muted-foreground font-medium">{tr("Batch Number", "बैच संख्या")}</span>
                 <span className="font-mono font-bold text-primary text-sm">
                   {nextBatchNumber}
                 </span>
               </div>
 
               <div className="flex items-center justify-between border-b pb-1.5">
-                <span className="text-muted-foreground font-medium">Source Apiary</span>
+                <span className="text-muted-foreground font-medium">{tr("Source Apiary", "स्रोत मधुमक्खी फार्म")}</span>
                 <span className="font-medium text-foreground">
                   {selectedApiary?.name}
                 </span>
               </div>
 
               <div className="flex items-center justify-between border-b pb-1.5">
-                <span className="text-muted-foreground font-medium">Extracted Hives</span>
+                <span className="text-muted-foreground font-medium">{tr("Extracted Hives", "निकाले गए छत्ते")}</span>
                 <span className="font-mono text-foreground font-medium">
                   {availableHives
                     .filter((h) => selectedHiveIds.includes(h.id))
@@ -571,24 +592,24 @@ function CreateBatchContent() {
               </div>
 
               <div className="flex items-center justify-between border-b pb-1.5">
-                <span className="text-muted-foreground font-medium">Harvest Date</span>
+                <span className="text-muted-foreground font-medium">{tr("Harvest Date", "कटाई तिथि")}</span>
                 <span className="text-foreground">{harvestDate}</span>
               </div>
 
               <div className="flex items-center justify-between border-b pb-1.5">
-                <span className="text-muted-foreground font-medium">Honey Variety</span>
+                <span className="text-muted-foreground font-medium">{tr("Honey Variety", "शहद की किस्म")}</span>
                 <span className="text-foreground font-medium">{honeyType}</span>
               </div>
 
               <div className="flex items-center justify-between border-b pb-1.5">
-                <span className="text-muted-foreground font-medium">Net Weight & Container</span>
+                <span className="text-muted-foreground font-medium">{tr("Net Weight & Container", "शुद्ध वजन एवं कंटेनर")}</span>
                 <span className="font-mono font-bold text-foreground">
-                  {parseFloat(weightKg || "0").toFixed(1)} kg ({containerRef})
+                  {parseFloat(weightKg || "0").toFixed(1)} {tr("kg", "किग्रा")} ({containerRef})
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground font-medium">Vault Storage</span>
+                <span className="text-muted-foreground font-medium">{tr("Vault Storage", "वॉल्ट भंडारण")}</span>
                 <span className="text-foreground truncate max-w-[220px]">
                   {storageLocation}
                 </span>
@@ -598,7 +619,10 @@ function CreateBatchContent() {
             <div className="rounded-md bg-amber-50 border border-amber-200 p-2.5 text-[11px] text-amber-800 flex items-start gap-2">
               <ShieldCheck className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
               <span>
-                Origin linking is permanent. This batch will initialize the immutable digital ledger timeline.
+                {tr(
+                  "Origin linking is permanent. This batch will initialize the immutable digital ledger timeline.",
+                  "उत्पत्ति लिंकिंग स्थायी है। यह बैच अपरिवर्तनीय डिजिटल लेज़र समयरेखा को प्रारंभ करेगा।"
+                )}
               </span>
             </div>
           </div>
@@ -611,7 +635,7 @@ function CreateBatchContent() {
               onClick={() => setIsPreviewOpen(false)}
               className="text-xs"
             >
-              Edit Details
+              {tr("Edit Details", "विवरण संपादित करें")}
             </Button>
             <Button
               type="button"
@@ -619,7 +643,7 @@ function CreateBatchContent() {
               onClick={handleConfirmCreate}
               className="text-xs min-w-[140px]"
             >
-              Confirm & Create Batch
+              {tr("Confirm & Create Batch", "पुष्टि करें एवं बैच बनाएं")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -629,13 +653,14 @@ function CreateBatchContent() {
 }
 
 export default function CreateBatchPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Honey Batches", href: "/batches" },
-          { label: "Create Harvest Batch", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Honey Batches", "शहद के बैच"), href: "/batches" },
+          { label: tr("Create Harvest Batch", "कटाई बैच बनाएं"), active: true },
         ]}
         defaultNavId="batches"
       >

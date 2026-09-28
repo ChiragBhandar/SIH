@@ -49,10 +49,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { EmptyState } from "@/components/ui/empty-state";
+import { useLanguage } from "@/context/language-context";
 
 function HivesAndApiariesContent() {
   const searchParams = useSearchParams();
   const { apiaries, hives, addHive, isLoaded } = useTraceability();
+  const { isHindi, tr } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
@@ -174,7 +176,7 @@ function HivesAndApiariesContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading apiary registry...
+          {tr("Loading apiary registry...", "मधुमक्खी फार्म रजिस्ट्री लोड हो रही है...")}
         </div>
       </div>
     );
@@ -188,7 +190,8 @@ function HivesAndApiariesContent() {
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="h-4.5 w-4.5 shrink-0 text-emerald-600" />
             <div className="text-xs">
-              <span className="font-semibold">Apiary registration saved.</span> You can now register hives, log field inspections, and link future honey batches.
+              <span className="font-semibold">{tr("Apiary registration saved.", "मधुमक्खी फार्म पंजीकरण सहेजा गया।")}</span>{" "}
+              {tr("You can now register hives, log field inspections, and link future honey batches.", "अब आप छत्ते पंजीकृत कर सकते हैं, क्षेत्रीय निरीक्षण दर्ज कर सकते हैं और भविष्य के शहद बैचों को लिंक कर सकते हैं।")}
             </div>
           </div>
           <Button
@@ -197,7 +200,7 @@ function HivesAndApiariesContent() {
             onClick={() => setDismissedBanner(true)}
             className="h-7 text-xs text-muted-foreground hover:text-foreground"
           >
-            Dismiss
+            {tr("Dismiss", "खारिज करें")}
           </Button>
         </div>
       )}
@@ -226,14 +229,17 @@ function HivesAndApiariesContent() {
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Hives & Apiaries
+              {tr("Hives & Apiaries", "छत्ते और मधुमक्खी फार्म")}
             </h1>
             <Badge variant="outline" className="font-mono text-xs text-muted-foreground border-border">
-              Traceability Layer
+              {tr("Traceability Layer", "ट्रेसेबिलिटी स्तर")}
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Manage registered apiary locations, monitor colony health, and track hive assets.
+            {tr(
+              "Manage registered apiary locations, monitor colony health, and track hive assets.",
+              "पंजीकृत फार्म स्थानों का प्रबंधन करें, कॉलोनी स्वास्थ्य की निगरानी करें और छत्ता संपत्तियों को ट्रैक करें।"
+            )}
           </p>
         </div>
 
@@ -241,7 +247,7 @@ function HivesAndApiariesContent() {
           <Button asChild size="default">
             <Link href="/hives/new">
               <Plus className="h-4 w-4" />
-              <span>Register Apiary</span>
+              <span>{tr("Register Apiary", "फार्म पंजीकृत करें")}</span>
             </Link>
           </Button>
         </div>
@@ -253,13 +259,13 @@ function HivesAndApiariesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Registered Apiaries
+                {tr("Registered Apiaries", "पंजीकृत मधुमक्खी फार्म")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 {totalApiariesCount}
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                Across 2 geographical regions
+                {tr("Across 2 geographical regions", "2 भौगोलिक क्षेत्रों में")}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
@@ -272,13 +278,13 @@ function HivesAndApiariesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Total Monitored Hives
+                {tr("Total Monitored Hives", "कुल प्रबंधित छत्ते")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 {totalHivesCount}
               </h3>
               <p className="text-[11px] text-emerald-700 mt-0.5 font-medium">
-                {healthyHivesCount} verified healthy colonies
+                {isHindi ? `${healthyHivesCount} सत्यापित स्वस्थ कॉलोनियां` : `${healthyHivesCount} verified healthy colonies`}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
@@ -291,13 +297,13 @@ function HivesAndApiariesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                NFC / RFID Tagged
+                {tr("NFC / RFID Tagged", "एनएफसी / आरएफआईडी टैगयुक्त")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 100%
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                Physical sensor hardware paired
+                {tr("Physical sensor hardware paired", "भौतिक सेंसर उपकरण लिंक किए गए")}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
@@ -310,7 +316,7 @@ function HivesAndApiariesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Latest Inspection
+                {tr("Latest Inspection", "नवीनतम निरीक्षण")}
               </p>
               <h3 className="text-lg font-bold tracking-tight text-foreground mt-0.5">
                 12 Sep 2026
@@ -332,7 +338,10 @@ function HivesAndApiariesContent() {
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search apiary by name, region, or flora..."
+            placeholder={tr(
+              "Search apiary by name, region, or flora...",
+              "फार्म के नाम, क्षेत्र या पुष्प स्रोत से खोजें..."
+            )}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="h-9.5 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs"
@@ -342,17 +351,17 @@ function HivesAndApiariesContent() {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <Filter className="h-3.5 w-3.5" />
-            <span>Status:</span>
+            <span>{tr("Status:", "स्थिति:")}</span>
           </div>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="h-9.5 rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs cursor-pointer"
           >
-            <option value="all">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="quarantine">Quarantine</option>
-            <option value="inactive">Inactive</option>
+            <option value="all">{tr("All Statuses", "सभी स्थितियां")}</option>
+            <option value="active">{tr("Active", "सक्रिय")}</option>
+            <option value="quarantine">{tr("Quarantine", "क्वारंटाइन")}</option>
+            <option value="inactive">{tr("Inactive", "निष्क्रिय")}</option>
           </select>
         </div>
       </div>
@@ -363,16 +372,18 @@ function HivesAndApiariesContent() {
         <div className="lg:col-span-4 space-y-3">
           <div className="flex items-center justify-between px-1">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Registered Apiaries ({filteredApiaries.length})
+              {tr("Registered Apiaries", "पंजीकृत फार्म")} ({filteredApiaries.length})
             </h2>
-            <span className="text-[11px] text-muted-foreground">Click to view detail</span>
+            <span className="text-[11px] text-muted-foreground">
+              {tr("Click to view detail", "विवरण देखने के लिए क्लिक करें")}
+            </span>
           </div>
 
           {filteredApiaries.length === 0 ? (
             <EmptyState
               icon={Wheat}
-              title="No apiaries found"
-              description="No apiary locations match your current search and filter criteria."
+              title={tr("No apiaries found", "कोई फार्म नहीं मिला")}
+              description={tr("No apiary locations match your current search and filter criteria.", "कोई भी फार्म आपके वर्तमान खोज मानदंडों से मेल नहीं खाता।")}
               action={
                 <Button
                   variant="outline"
@@ -383,7 +394,7 @@ function HivesAndApiariesContent() {
                     setStatusFilter("all");
                   }}
                 >
-                  Reset Filters
+                  {tr("Reset Filters", "फ़िल्टर रीसेट करें")}
                 </Button>
               }
             />
@@ -428,15 +439,15 @@ function HivesAndApiariesContent() {
                     <div className="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-border/60 text-[11px]">
                       <div>
                         <span className="text-muted-foreground block text-[10px] uppercase">
-                          Hive Count
+                          {tr("Hive Count", "छत्तों की संख्या")}
                         </span>
                         <span className="font-semibold text-foreground">
-                          {apiary.hiveCount} Hives
+                          {isHindi ? `${apiary.hiveCount} छत्ते` : `${apiary.hiveCount} Hives`}
                         </span>
                       </div>
                       <div>
                         <span className="text-muted-foreground block text-[10px] uppercase">
-                          Last Inspection
+                          {tr("Last Inspection", "नवीनतम निरीक्षण")}
                         </span>
                         <span className="font-medium text-foreground">
                           {apiary.lastInspectionDate}
@@ -481,7 +492,7 @@ function HivesAndApiariesContent() {
                         <span>{selectedApiary.location}</span>
                         <span>•</span>
                         <Mountain className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                        <span>Elevation: {selectedApiary.elevation}</span>
+                        <span>{tr("Elevation:", "ऊंचाई:")} {selectedApiary.elevation}</span>
                       </CardDescription>
                     </div>
 
@@ -492,7 +503,7 @@ function HivesAndApiariesContent() {
                         className="text-xs h-8 gap-1.5 cursor-pointer shadow-xs"
                       >
                         <Plus className="h-3.5 w-3.5" />
-                        <span>Register Hive</span>
+                        <span>{tr("Register Hive", "छत्ता पंजीकृत करें")}</span>
                       </Button>
                     </div>
                   </div>
@@ -504,7 +515,7 @@ function HivesAndApiariesContent() {
                     <div className="space-y-1">
                       <span className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground flex items-center gap-1">
                         <Flower2 className="h-3 w-3 text-amber-500" />
-                        Dominant Floral Region
+                        {tr("Dominant Floral Region", "प्रमुख वनस्पति / पुष्प क्षेत्र")}
                       </span>
                       <p className="font-medium text-foreground">
                         {selectedApiary.dominantFlora}
@@ -519,16 +530,16 @@ function HivesAndApiariesContent() {
                     <div className="space-y-1">
                       <span className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground flex items-center gap-1">
                         <ShieldCheck className="h-3 w-3 text-emerald-500" />
-                        Geo-Coordinates & Metadata
+                        {tr("Geo-Coordinates & Metadata", "भू-निर्देशांक एवं मेटाडेटा")}
                       </span>
                       <div className="font-mono text-[11px] text-foreground">
                         Lat: {selectedApiary.latitude.toFixed(4)}° N, Long: {selectedApiary.longitude.toFixed(4)}° E
                       </div>
                       <div className="text-[11px] text-muted-foreground">
-                        Registered by: {selectedApiary.registeredBy}
+                        {tr("Registered by:", "पंजीकृतकर्ता:")} {selectedApiary.registeredBy}
                       </div>
                       <div className="text-[10px] text-muted-foreground font-mono">
-                        ID: {selectedApiary.id} • {selectedApiary.hiveCount} colonies registered
+                        ID: {selectedApiary.id} • {selectedApiary.hiveCount} {isHindi ? "छत्ते पंजीकृत" : "colonies registered"}
                       </div>
                     </div>
                   </div>
@@ -537,10 +548,15 @@ function HivesAndApiariesContent() {
                   <div className="flex items-center justify-between pt-1">
                     <div>
                       <h3 className="text-sm font-semibold text-foreground">
-                        Hives in {selectedApiary.name} ({apiaryHives.length})
+                        {isHindi
+                          ? `${selectedApiary.name} में छत्ते (${apiaryHives.length})`
+                          : `Hives in ${selectedApiary.name} (${apiaryHives.length})`}
                       </h3>
                       <p className="text-[11px] text-muted-foreground">
-                        Colonies registered in this yard with hardware identification and health status.
+                        {tr(
+                          "Colonies registered in this yard with hardware identification and health status.",
+                          "इस फार्म में पंजीकृत कॉलोनियां, हार्डवेयर पहचान और स्वास्थ्य स्थिति के साथ।"
+                        )}
                       </p>
                     </div>
                     <Button
@@ -549,7 +565,7 @@ function HivesAndApiariesContent() {
                       onClick={handleOpenRegisterHive}
                     >
                       <Plus className="h-3 w-3" />
-                      <span>Add Hive</span>
+                      <span>{tr("Add Hive", "छत्ता जोड़ें")}</span>
                     </Button>
                   </div>
 
@@ -557,15 +573,18 @@ function HivesAndApiariesContent() {
                   {apiaryHives.length === 0 ? (
                     <EmptyState
                       icon={Layers}
-                      title="No hives registered yet"
-                      description={`There are currently no hives recorded for ${selectedApiary.name}. Add your first hive to start tracking colony health.`}
+                      title={tr("No hives registered yet", "अभी तक कोई छत्ता पंजीकृत नहीं है")}
+                      description={tr(
+                        `There are currently no hives recorded for ${selectedApiary.name}. Add your first hive to start tracking colony health.`,
+                        `${selectedApiary.name} के लिए अभी कोई छत्ता दर्ज नहीं है। कॉलोनी स्वास्थ्य ट्रैक करने के लिए पहला छत्ता जोड़ें।`
+                      )}
                       action={
                         <Button
                           size="sm"
                           onClick={handleOpenRegisterHive}
                           className="text-xs"
                         >
-                          + Register First Hive
+                          + {tr("Register First Hive", "पहला छत्ता पंजीकृत करें")}
                         </Button>
                       }
                     />
@@ -574,12 +593,12 @@ function HivesAndApiariesContent() {
                       <Table>
                         <TableHeader>
                           <TableRow className="bg-muted/40">
-                            <TableHead className="w-[140px]">Identifier</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Queen Status</TableHead>
-                            <TableHead>Last Inspection</TableHead>
-                            <TableHead className="hidden md:table-cell">Last Activity</TableHead>
-                            <TableHead className="text-right">Action</TableHead>
+                            <TableHead className="w-[140px]">{tr("Identifier", "पहचानकर्ता")}</TableHead>
+                            <TableHead>{tr("Status", "स्थिति")}</TableHead>
+                            <TableHead>{tr("Queen Status", "रानी की स्थिति")}</TableHead>
+                            <TableHead>{tr("Last Inspection", "नवीनतम निरीक्षण")}</TableHead>
+                            <TableHead className="hidden md:table-cell">{tr("Last Activity", "नवीनतम गतिविधि")}</TableHead>
+                            <TableHead className="text-right">{tr("Action", "कार्रवाई")}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -637,7 +656,7 @@ function HivesAndApiariesContent() {
                                   className="text-primary hover:text-primary hover:bg-amber-50 font-medium"
                                 >
                                   <Link href={`/hives/${hive.id}`}>
-                                    View →
+                                    {tr("View →", "देखें →")}
                                   </Link>
                                 </Button>
                               </TableCell>
@@ -653,8 +672,8 @@ function HivesAndApiariesContent() {
           ) : (
             <EmptyState
               icon={Wheat}
-              title="No apiary selected"
-              description="Select an apiary on the left or register a new one."
+              title={tr("No apiary selected", "कोई मधुमक्खी फार्म चयनित नहीं है")}
+              description={tr("Select an apiary on the left or register a new one.", "बाईं ओर से एक मधुमक्खी फार्म चुनें या नया पंजीकृत करें।")}
             />
           )}
         </div>
@@ -665,10 +684,10 @@ function HivesAndApiariesContent() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-base font-bold">
-              Register Hive in {selectedApiary?.name}
+              {tr("Register Hive in", "छत्ता पंजीकृत करें -")} {selectedApiary?.name}
             </DialogTitle>
             <DialogDescription className="text-xs">
-              Bind a physical hive box to this apiary location and register hardware identification.
+              {tr("Bind a physical hive box to this apiary location and register hardware identification.", "इस मधुमक्खी फार्म स्थान पर एक भौतिक छत्ता बॉक्स बाइंड करें और हार्डवेयर पहचान पंजीकृत करें।")}
             </DialogDescription>
           </DialogHeader>
 
@@ -682,7 +701,7 @@ function HivesAndApiariesContent() {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <label className="font-medium text-foreground">
-                  Hive Identifier <span className="text-rose-500">*</span>
+                  {tr("Hive Identifier", "छत्ता पहचानकर्ता")} <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -696,7 +715,7 @@ function HivesAndApiariesContent() {
 
               <div className="space-y-1">
                 <label className="font-medium text-foreground">
-                  Internal Box Code <span className="text-rose-500">*</span>
+                  {tr("Internal Box Code", "आंतरिक बॉक्स कोड")} <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -711,7 +730,7 @@ function HivesAndApiariesContent() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="font-medium text-foreground">Hive Type</label>
+                <label className="font-medium text-foreground">{tr("Hive Type", "छत्ता प्रकार")}</label>
                 <select
                   value={hiveType}
                   onChange={(e) => setHiveType(e.target.value as HiveType)}
@@ -720,29 +739,29 @@ function HivesAndApiariesContent() {
                   <option value="Langstroth">Langstroth</option>
                   <option value="Top-Bar">Top-Bar</option>
                   <option value="Warre">Warre</option>
-                  <option value="Traditional Log">Traditional Log</option>
+                  <option value="Traditional Log">{tr("Traditional Log", "पारंपरिक लट्ठ")}</option>
                 </select>
               </div>
 
               <div className="space-y-1">
-                <label className="font-medium text-foreground">Queen Status</label>
+                <label className="font-medium text-foreground">{tr("Queen Status", "रानी मधुमक्खी स्थिति")}</label>
                 <select
                   value={queenStatus}
                   onChange={(e) => setQueenStatus(e.target.value as QueenStatus)}
                   className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
-                  <option value="Active & Laying">Active & Laying</option>
-                  <option value="Virgin">Virgin</option>
-                  <option value="Supersedure">Supersedure</option>
-                  <option value="Queenless">Queenless</option>
-                  <option value="Requeening Needed">Requeening Needed</option>
+                  <option value="Active & Laying">{tr("Active & Laying", "सक्रिय एवं अंडे दे रही")}</option>
+                  <option value="Virgin">{tr("Virgin", "कुंवारी रानी")}</option>
+                  <option value="Supersedure">{tr("Supersedure", "सुपरसीड्यूर")}</option>
+                  <option value="Queenless">{tr("Queenless", "रानी रहित")}</option>
+                  <option value="Requeening Needed">{tr("Requeening Needed", "नई रानी की आवश्यकता")}</option>
                 </select>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="font-medium text-foreground">Installation Date</label>
+                <label className="font-medium text-foreground">{tr("Installation Date", "स्थापना तिथि")}</label>
                 <input
                   type="date"
                   value={installationDate}
@@ -752,7 +771,7 @@ function HivesAndApiariesContent() {
               </div>
 
               <div className="space-y-1">
-                <label className="font-medium text-foreground">Location in Apiary</label>
+                <label className="font-medium text-foreground">{tr("Location in Apiary", "फार्म में स्थान")}</label>
                 <input
                   type="text"
                   value={locationInApiary}
@@ -765,7 +784,7 @@ function HivesAndApiariesContent() {
 
             <div className="space-y-1">
               <label className="font-medium text-foreground">
-                NFC / RFID Identifier
+                {tr("NFC / RFID Identifier", "एनएफसी / आरएफआईडी पहचानकर्ता")}
               </label>
               <input
                 type="text"
@@ -775,17 +794,17 @@ function HivesAndApiariesContent() {
                 className="h-8 w-full rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               />
               <span className="text-[10px] text-muted-foreground">
-                Scanned from physical hardware tag affixed to the brood chamber.
+                {tr("Scanned from physical hardware tag affixed to the brood chamber.", "ब्रूड कक्ष से जुड़े भौतिक हार्डवेयर टैग से स्कैन किया गया।")}
               </span>
             </div>
 
             <div className="space-y-1">
-              <label className="font-medium text-foreground">Notes / Temperament</label>
+              <label className="font-medium text-foreground">{tr("Notes / Temperament", "टिप्पणियाँ / स्वभाव")}</label>
               <textarea
                 rows={2}
                 value={hiveNotes}
                 onChange={(e) => setHiveNotes(e.target.value)}
-                placeholder="Colony notes, bee lineage, or initial conditions..."
+                placeholder={tr("Colony notes, bee lineage, or initial conditions...", "कॉलोनी टिप्पणियां, मधुमक्खी वंशावली, या प्रारंभिक स्थितियां...")}
                 className="w-full rounded-md border border-input bg-background p-2 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               />
             </div>
@@ -798,10 +817,10 @@ function HivesAndApiariesContent() {
                 onClick={() => setIsRegisterHiveOpen(false)}
                 className="text-xs"
               >
-                Cancel
+                {tr("Cancel", "रद्द करें")}
               </Button>
               <Button type="submit" size="sm" className="text-xs">
-                Save Hive
+                {tr("Save Hive", "छत्ता सहेजें")}
               </Button>
             </DialogFooter>
           </form>
@@ -812,13 +831,14 @@ function HivesAndApiariesContent() {
 }
 
 export default function HivesPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Traceability", href: "#" },
-          { label: "Hives & Apiaries", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Traceability", "ट्रेसेबिलिटी"), href: "#" },
+          { label: tr("Hives & Apiaries", "छत्ते और मधुमक्खी फार्म"), active: true },
         ]}
         defaultNavId="apiary"
       >
@@ -827,3 +847,4 @@ export default function HivesPage() {
     </AuthGuard>
   );
 }
+

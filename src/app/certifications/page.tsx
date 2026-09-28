@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import {
   Award,
   Search,
@@ -33,6 +34,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 
 export function CertificationsListContent() {
   const { certifications, isLoaded } = useTraceability();
+  const { tr, trStatus } = useLanguage();
   const [searchQuery, setSearchQuery] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("all");
 
@@ -56,7 +58,7 @@ export function CertificationsListContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading issued certifications and purity seals...
+          {tr("Loading issued certifications and purity seals...", "जारी किए गए प्रमाणपत्र व शुद्धता सील लोड हो रहे हैं...")}
         </div>
       </div>
     );
@@ -69,14 +71,17 @@ export function CertificationsListContent() {
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Certificates of Analysis
+              {tr("Certificates of Analysis", "विश्लेषण प्रमाणपत्र (CoA)")}
             </h1>
             <Badge variant="outline" className="font-mono text-xs border-emerald-200 text-emerald-800 bg-emerald-50">
-              Quality Approved Records
+              {tr("Quality Approved Records", "गुणवत्ता अनुमोदित रिकॉर्ड")}
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Browse cryptographic digital quality certificates issued by accredited testing laboratories.
+            {tr(
+              "Browse cryptographic digital quality certificates issued by accredited testing laboratories.",
+              "मान्यता प्राप्त परीक्षण प्रयोगशालाओं द्वारा जारी क्रिप्टोग्राफिक डिजिटल गुणवत्ता प्रमाणपत्र देखें।"
+            )}
           </p>
         </div>
 
@@ -84,7 +89,7 @@ export function CertificationsListContent() {
           <Button asChild variant="outline" size="sm" className="gap-2 text-xs">
             <Link href="/lab">
               <ShieldCheck className="h-4 w-4" />
-              <span>Laboratory Testing Queue</span>
+              <span>{tr("Laboratory Testing Queue", "प्रयोगशाला परीक्षण कतार")}</span>
             </Link>
           </Button>
         </div>
@@ -97,10 +102,13 @@ export function CertificationsListContent() {
             <div>
               <CardTitle className="text-base font-bold text-foreground flex items-center gap-2">
                 <Award className="h-4 w-4 text-emerald-600" />
-                <span>Issued Quality Certifications ({certifications.length})</span>
+                <span>{tr("Issued Quality Certifications", "जारी गुणवत्ता प्रमाणपत्र")} ({certifications.length})</span>
               </CardTitle>
               <CardDescription className="text-xs mt-0.5">
-                Each certificate represents a complete, immutable 9-step botanical lineage verification.
+                {tr(
+                  "Each certificate represents a complete, immutable 9-step botanical lineage verification.",
+                  "प्रत्येक प्रमाणपत्र पूर्ण, अपरिवर्तनीय 9-चरणीय वानस्पतिक वंशावली सत्यापन का प्रतिनिधित्व करता है।"
+                )}
               </CardDescription>
             </div>
 
@@ -111,7 +119,7 @@ export function CertificationsListContent() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search Certificate, Batch, or Lab..."
+                  placeholder={tr("Search Certificate, Batch, or Lab...", "प्रमाणपत्र, बैच या लैब खोजें...")}
                   className="w-full rounded-md border border-input bg-background/50 pl-8 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
                 />
               </div>
@@ -120,9 +128,9 @@ export function CertificationsListContent() {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="rounded-md border border-input bg-background/50 px-3 py-1.5 text-xs text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
               >
-                <option value="all">All Statuses</option>
-                <option value="Active">Active Valid</option>
-                <option value="Suspended">Suspended</option>
+                <option value="all">{tr("All Statuses", "सभी स्थितियां")}</option>
+                <option value="Active">{tr("Active Valid", "सक्रिय मान्य")}</option>
+                <option value="Suspended">{tr("Suspended", "निलंबित")}</option>
               </select>
             </div>
           </div>
@@ -133,15 +141,18 @@ export function CertificationsListContent() {
             <div className="py-12">
               <EmptyState
                 icon={Award}
-                title="No certificates found"
+                title={tr("No certificates found", "कोई प्रमाणपत्र नहीं मिला")}
                 description={
                   searchQuery
-                    ? "No certificates matched your search criteria."
-                    : "No lab certificates have been issued yet. Approve a laboratory test to issue the first certificate."
+                    ? tr("No certificates matched your search criteria.", "खोज से मेल खाता कोई प्रमाणपत्र नहीं मिला।")
+                    : tr(
+                        "No lab certificates have been issued yet. Approve a laboratory test to issue the first certificate.",
+                        "अभी तक कोई लैब प्रमाणपत्र जारी नहीं किया गया है। पहला प्रमाणपत्र जारी करने के लिए परीक्षण स्वीकृत करें।"
+                      )
                 }
                 action={
                   <Button asChild size="sm">
-                    <Link href="/lab">Go to Laboratory Testing</Link>
+                    <Link href="/lab">{tr("Go to Laboratory Testing", "प्रयोगशाला परीक्षण पर जाएं")}</Link>
                   </Button>
                 }
               />
@@ -151,14 +162,14 @@ export function CertificationsListContent() {
               <Table>
                 <TableHeader className="bg-muted/30">
                   <TableRow>
-                    <TableHead className="text-xs font-semibold text-foreground">Certificate ID</TableHead>
-                    <TableHead className="text-xs font-semibold text-foreground">Batch ID</TableHead>
-                    <TableHead className="text-xs font-semibold text-foreground">Honey Variety</TableHead>
-                    <TableHead className="text-xs font-semibold text-foreground">Test ID</TableHead>
-                    <TableHead className="text-xs font-semibold text-foreground">Issued Date</TableHead>
-                    <TableHead className="text-xs font-semibold text-foreground">Issuing Laboratory</TableHead>
-                    <TableHead className="text-xs font-semibold text-foreground">Status</TableHead>
-                    <TableHead className="text-xs font-semibold text-foreground text-right">Action</TableHead>
+                    <TableHead className="text-xs font-semibold text-foreground">{tr("Certificate ID", "प्रमाणपत्र आईडी")}</TableHead>
+                    <TableHead className="text-xs font-semibold text-foreground">{tr("Batch ID", "बैच आईडी")}</TableHead>
+                    <TableHead className="text-xs font-semibold text-foreground">{tr("Honey Variety", "शहद किस्म")}</TableHead>
+                    <TableHead className="text-xs font-semibold text-foreground">{tr("Test ID", "परीक्षण आईडी")}</TableHead>
+                    <TableHead className="text-xs font-semibold text-foreground">{tr("Issued Date", "जारी तिथि")}</TableHead>
+                    <TableHead className="text-xs font-semibold text-foreground">{tr("Issuing Laboratory", "जारीकर्ता प्रयोगशाला")}</TableHead>
+                    <TableHead className="text-xs font-semibold text-foreground">{tr("Status", "स्थिति")}</TableHead>
+                    <TableHead className="text-xs font-semibold text-foreground text-right">{tr("Action", "कार्रवाई")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -197,13 +208,13 @@ export function CertificationsListContent() {
                           variant="outline"
                           className="border-emerald-200 text-emerald-800 bg-emerald-50 text-[11px] font-semibold"
                         >
-                          Quality Approved
+                          {tr("Quality Approved", "गुणवत्ता अनुमोदित")}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <Button asChild size="xs" variant="success">
                           <Link href={`/certifications/${cert.id}`}>
-                            <span>View Certificate</span>
+                            <span>{tr("View Certificate", "प्रमाणपत्र देखें")}</span>
                             <ArrowRight className="h-3 w-3" />
                           </Link>
                         </Button>
@@ -221,9 +232,16 @@ export function CertificationsListContent() {
 }
 
 export default function CertificationsPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard>
-      <AppShell>
+      <AppShell
+        breadcrumbs={[
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Certificates of Analysis", "विश्लेषण प्रमाणपत्र"), active: true },
+        ]}
+        defaultNavId="certifications"
+      >
         <CertificationsListContent />
       </AppShell>
     </AuthGuard>

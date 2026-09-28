@@ -3,7 +3,6 @@
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useTraceability } from "@/context/traceability-context";
 import { useLanguage } from "@/context/language-context";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import {
@@ -29,23 +28,99 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import type { PublicConsumerVerification } from "@/types/bottle";
+import { normalizeBottleId, findBottle, buildPublicVerification } from "@/data/mock-bottles";
+import { getVerifyUrl } from "@/lib/constants";
 
 export default function PublicVerifyPage() {
   const params = useParams();
   const router = useRouter();
   const bottleId = (params?.bottleId as string) || "";
 
-  const { getPublicVerification, isLoaded } = useTraceability();
   const { t, isHindi } = useLanguage();
+
+  // Fetch verification data directly from public API — no auth, no context required
+  const [verification, setVerification] = React.useState<PublicConsumerVerification | null>(null);
+  const [isLoaded, setIsLoaded] = React.useState(false);
 
   const [lookupId, setLookupId] = React.useState("");
   const [copied, setCopied] = React.useState(false);
 
-  const verification = React.useMemo(() => {
-    return getPublicVerification(bottleId);
-  }, [bottleId, getPublicVerification]);
+  // Fetch public verification data from API — works without login or context
+  React.useEffect(() => {
+    if (!bottleId) return;
+    const cleanId = normalizeBottleId(bottleId);
+
+    // Signal loading state via Promise microtask to avoid synchronous setState in effect
+    Promise.resolve().then(() => setIsLoaded(false));
+    fetch(`/api/verify/${encodeURIComponent(cleanId || bottleId)}`)
+      .then(async (res) => {
+        const data = await res.json();
+        // If not found in static data, check if bottle was created in active session's localStorage
+        if (data.verificationStatus === "UNKNOWN" && typeof window !== "undefined") {
+          try {
+            const stored = localStorage.getItem("traceability_state_v1");
+            if (stored) {
+              const parsed = JSON.parse(stored);
+              if (Array.isArray(parsed.bottles)) {
+                const localBottle = findBottle(cleanId || bottleId, parsed.bottles);
+                if (localBottle) {
+                  setVerification(buildPublicVerification(localBottle));
+                  return;
+                }
+              }
+            }
+          } catch {
+            // keep standard API response
+          }
+        }
+        setVerification(data);
+      })
+      .catch(() => {
+        // On network failure, check localStorage before falling back to unknown
+        if (typeof window !== "undefined") {
+          try {
+            const stored = localStorage.getItem("traceability_state_v1");
+            if (stored) {
+              const parsed = JSON.parse(stored);
+              if (Array.isArray(parsed.bottles)) {
+                const localBottle = findBottle(cleanId || bottleId, parsed.bottles);
+                if (localBottle) {
+                  setVerification(buildPublicVerification(localBottle));
+                  return;
+                }
+              }
+            }
+          } catch {
+            // continue to error fallback
+          }
+        }
+        setVerification({
+          bottleId: cleanId || bottleId,
+          productName: "Unknown Product",
+          honeyVariety: "Unknown",
+          bottleSize: "500 g",
+          originRegion: "Unknown",
+          harvestPeriod: "Unknown",
+          processingStatus: "Unknown",
+          qualityApprovalStatus: "Unknown",
+          certificationReference: "None",
+          verificationStatus: "UNKNOWN",
+          trustBadges: {
+            originRecorded: false,
+            traceabilityComplete: false,
+            qualityTested: false,
+            certificationVerified: false,
+          },
+          milestones: [],
+          disclaimer: "Could not connect to verification server.",
+        });
+      })
+      .finally(() => setIsLoaded(true));
+  }, [bottleId]);
 
   const localizedMilestones = React.useMemo(() => {
+    if (!verification?.milestones) return [];
     if (!isHindi) return verification.milestones;
     const hindiMilestones = [
       {
@@ -74,11 +149,13 @@ export default function PublicVerifyPage() {
       title: hindiMilestones[idx]?.title || m.title,
       description: hindiMilestones[idx]?.description || m.description,
     }));
-  }, [isHindi, verification.milestones]);
+  }, [isHindi, verification]);
 
   const handleShare = () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
+      // Always share the production Vercel URL, not the local dev server
+      const shareUrl = getVerifyUrl(bottleId);
+      navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -99,11 +176,18 @@ export default function PublicVerifyPage() {
     );
   }
 
-  const { verificationStatus } = verification;
-  const productName = isHindi ? "हाईलैंड वाइल्ड मल्टीफ्लोरल प्राकृतिक कच्चा शहद" : verification.productName;
-  const originRegion = isHindi ? "चमोली, उत्तराखंड" : verification.originRegion;
-  const honeyVariety = isHindi ? "जंगली मल्टीफ्लोरल" : verification.honeyVariety;
-  const harvestPeriod = isHindi ? "सितंबर 2026" : verification.harvestPeriod;
+  // Derive display values — null-safe since verification may not be loaded yet
+  const verificationStatus = verification?.verificationStatus ?? "UNKNOWN";
+  const productName = isHindi && verification?.productName?.includes("Highland")
+    ? "हाईलैंड वाइल्ड मल्टीफ्लोरल प्राकृतिक कच्चा शहद"
+    : (verification?.productName ?? "");
+  const originRegion = isHindi && verification?.originRegion?.includes("Chamoli")
+    ? "चमोली, उत्तराखंड"
+    : (verification?.originRegion ?? "");
+  const honeyVariety = isHindi && verification?.honeyVariety?.includes("Multifloral")
+    ? "जंगली मल्टीफ्लोरल"
+    : (verification?.honeyVariety ?? "");
+  const harvestPeriod = isHindi ? "सितंबर 2026" : (verification?.harvestPeriod ?? "");
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
@@ -204,13 +288,13 @@ export default function PublicVerifyPage() {
               {/* Bottle Key Identifiers Chips */}
               <div className="relative pt-2 flex flex-wrap items-center justify-center gap-2 text-xs">
                 <span className="font-mono font-bold bg-muted/60 px-3 py-1 rounded-lg border border-border text-foreground">
-                  {t.verifyPage.valid.bottleLabel}: {verification.bottleId}
+                  {t.verifyPage.valid.bottleLabel}: {verification?.bottleId}
                 </span>
                 <span className="font-mono font-medium bg-primary/10 px-3 py-1 rounded-lg border border-primary/20 text-primary">
-                  {t.verifyPage.valid.sizeLabel}: {verification.bottleSize}
+                  {t.verifyPage.valid.sizeLabel}: {verification?.bottleSize}
                 </span>
                 <span className="font-mono text-foreground bg-muted/60 px-3 py-1 rounded-lg border border-border">
-                  {t.verifyPage.valid.certLabel}: {verification.certificationReference}
+                  {t.verifyPage.valid.certLabel}: {verification?.certificationReference}
                 </span>
               </div>
             </div>
@@ -345,7 +429,7 @@ export default function PublicVerifyPage() {
                       {t.verifyPage.valid.qualityCertLabel}
                     </span>
                     <p className="font-mono font-bold text-emerald-600 mt-0.5">
-                      {verification.certificationReference}
+                      {verification?.certificationReference}
                     </p>
                   </div>
                 </div>
@@ -356,7 +440,7 @@ export default function PublicVerifyPage() {
                 <span>
                   {isHindi
                     ? "यह उत्पाद आधिकारिक रूप से पंजीकृत है और गुणवत्ता मानकों पर खरा उतरा है।"
-                    : verification.disclaimer}{" "}
+                    : verification?.disclaimer}{" "}
                   {t.verifyPage.valid.disclaimerSuffix}
                 </span>
               </div>
@@ -431,13 +515,43 @@ export default function PublicVerifyPage() {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-muted/40 border border-border max-w-md mx-auto text-left text-xs space-y-2">
+            <div className="p-4 rounded-xl bg-muted/40 border border-border max-w-md mx-auto text-left text-xs space-y-3">
               <span className="font-semibold text-foreground block">{t.verifyPage.unknown.actionsHeading}</span>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 text-[11px]">
                 <li>{t.verifyPage.unknown.action1}</li>
                 <li>{t.verifyPage.unknown.action2}</li>
                 <li>{t.verifyPage.unknown.action3}</li>
               </ul>
+
+              {/* Quick Sample Bottle Helpers */}
+              <div className="pt-2 border-t border-border/80">
+                <span className="text-[10.5px] font-semibold text-foreground/80 block mb-1.5">
+                  {isHindi ? "सत्यापित नमूना बोतलें आज़माएं:" : "Or test with official verified sample bottles:"}
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => router.push("/verify/HC-BTL-2026-00001")}
+                    className="font-mono text-primary hover:bg-primary hover:text-white transition-colors bg-primary/10 px-2 py-1 rounded text-[10.5px] font-semibold cursor-pointer border border-primary/20"
+                  >
+                    HC-BTL-2026-00001
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push("/verify/HC-BTL-2026-00002")}
+                    className="font-mono text-primary hover:bg-primary hover:text-white transition-colors bg-primary/10 px-2 py-1 rounded text-[10.5px] font-semibold cursor-pointer border border-primary/20"
+                  >
+                    HC-BTL-2026-00002
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push("/verify/HC-BTL-2026-00005")}
+                    className="font-mono text-primary hover:bg-primary hover:text-white transition-colors bg-primary/10 px-2 py-1 rounded text-[10.5px] font-semibold cursor-pointer border border-primary/20"
+                  >
+                    HC-BTL-2026-00005
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -494,9 +608,9 @@ export default function PublicVerifyPage() {
               </p>
             </div>
 
-            {verification.suspendedReason && (
+            {verification?.suspendedReason && (
               <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 max-w-md mx-auto text-xs text-destructive">
-                <strong>{t.verifyPage.suspended.reasonPrefix}</strong> {verification.suspendedReason}
+                <strong>{t.verifyPage.suspended.reasonPrefix}</strong> {verification?.suspendedReason}
               </div>
             )}
           </div>
@@ -517,7 +631,8 @@ export default function PublicVerifyPage() {
             onSubmit={(e) => {
               e.preventDefault();
               if (lookupId.trim()) {
-                router.push(`/verify/${lookupId.trim()}`);
+                const targetId = normalizeBottleId(lookupId);
+                router.push(`/verify/${encodeURIComponent(targetId)}`);
               }
             }}
             className="flex gap-2"
@@ -536,6 +651,52 @@ export default function PublicVerifyPage() {
               {t.verifyPage.lookup.submitBtn}
             </Button>
           </form>
+
+          {/* Quick Sample Chips */}
+          <div className="pt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground border-t border-border/60">
+            <span className="text-[10px] uppercase font-semibold text-foreground/70">
+              {isHindi ? "नमूना बोतलें:" : "Samples:"}
+            </span>
+            <button
+              type="button"
+              onClick={() => router.push("/verify/HC-BTL-2026-00001")}
+              className="font-mono text-primary hover:underline cursor-pointer font-semibold text-[10.5px]"
+            >
+              #00001
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => router.push("/verify/HC-BTL-2026-00002")}
+              className="font-mono text-primary hover:underline cursor-pointer font-semibold text-[10.5px]"
+            >
+              #00002
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => router.push("/verify/HC-BTL-2026-00005")}
+              className="font-mono text-primary hover:underline cursor-pointer font-semibold text-[10.5px]"
+            >
+              #00005
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => router.push("/verify/HC-BTL-2026-00003")}
+              className="font-mono text-amber-600 hover:underline cursor-pointer font-semibold text-[10.5px]"
+            >
+              #00003 ({isHindi ? "अप्रकाशित" : "Unpublished"})
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => router.push("/verify/HC-BTL-2026-00004")}
+              className="font-mono text-rose-600 hover:underline cursor-pointer font-semibold text-[10.5px]"
+            >
+              #00004 ({isHindi ? "निलंबित" : "Suspended"})
+            </button>
+          </div>
         </div>
       </main>
 

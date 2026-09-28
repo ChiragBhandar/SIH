@@ -28,9 +28,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
+import { useLanguage } from "@/context/language-context";
 
 function BatchesContent() {
   const { batches, apiaries, isLoaded } = useTraceability();
+  const { isHindi, tr } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("all");
@@ -86,14 +88,17 @@ function BatchesContent() {
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Honey Batches
+              {tr("Honey Batches", "शहद के बैच")}
             </h1>
             <Badge variant="outline" className="font-mono text-xs">
-              Material Registry
+              {tr("Material Registry", "सामग्री रजिस्ट्री")}
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Raw honey batches and processed batch outputs with immutable provenance linkages.
+            {tr(
+              "Raw honey batches and processed batch outputs with immutable provenance linkages.",
+              "कच्चे शहद के बैच और प्रसंस्कृत बैच आउटपुट, अपरिवर्तनीय स्रोत लिंकेज के साथ।"
+            )}
           </p>
         </div>
 
@@ -101,14 +106,14 @@ function BatchesContent() {
           <Button asChild variant="outline" size="sm">
             <Link href="/processing/new">
               <Layers className="h-4 w-4 text-primary" />
-              <span>Process Material</span>
+              <span>{tr("Process Material", "सामग्री प्रसंस्करण करें")}</span>
             </Link>
           </Button>
 
           <Button asChild size="sm">
             <Link href="/batches/new">
               <Plus className="h-4 w-4" />
-              <span>Create Harvest Batch</span>
+              <span>{tr("Create Harvest Batch", "कटाई बैच बनाएं")}</span>
             </Link>
           </Button>
         </div>
@@ -120,13 +125,13 @@ function BatchesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Raw Honey Batches
+                {tr("Raw Honey Batches", "कच्चा शहद बैच")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
                 {rawBatchesCount}
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                {totalRawWeightKg.toFixed(1)} kg total extracted
+                {isHindi ? `${totalRawWeightKg.toFixed(1)} किग्रा कुल निकाला गया` : `${totalRawWeightKg.toFixed(1)} kg total extracted`}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
@@ -139,13 +144,13 @@ function BatchesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Processed Batches
+                {tr("Processed Batches", "प्रसंस्कृत बैच")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
                 {processedBatchesCount}
               </h3>
               <p className="text-[11px] text-emerald-700 mt-0.5 font-medium">
-                {totalProcessedWeightKg.toFixed(1)} kg processed output
+                {isHindi ? `${totalProcessedWeightKg.toFixed(1)} किग्रा प्रसंस्कृत आउटपुट` : `${totalProcessedWeightKg.toFixed(1)} kg processed output`}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -158,13 +163,13 @@ function BatchesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Sourced Apiaries
+                {tr("Sourced Apiaries", "स्रोत मधुमक्खी फार्म")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5 font-mono">
                 {apiaries.length}
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                Active certified yards
+                {tr("Active certified yards", "सक्रिय प्रमाणित फार्म")}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
@@ -177,13 +182,13 @@ function BatchesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Traceability Chains
+                {tr("Traceability Chains", "ट्रेसेबिलिटी श्रृंखला")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-emerald-700 mt-0.5 font-mono">
-                {batches.length} Active
+                {isHindi ? `${batches.length} सक्रिय` : `${batches.length} Active`}
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                100% provenance verified
+                {tr("100% provenance verified", "100% स्रोत सत्यापित")}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -199,7 +204,10 @@ function BatchesContent() {
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search batches by batch #, apiary, honey type, or custodian..."
+            placeholder={tr(
+              "Search batches by batch #, apiary, honey type, or custodian...",
+              "बैच #, फार्म, शहद प्रकार या संरक्षक द्वारा खोजें..."
+            )}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="h-9.5 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs"
@@ -209,16 +217,16 @@ function BatchesContent() {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <Filter className="h-3.5 w-3.5" />
-            <span>Type:</span>
+            <span>{tr("Type:", "प्रकार:")}</span>
           </div>
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
             className="h-9.5 rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs cursor-pointer"
           >
-            <option value="all">All Batches</option>
-            <option value="Raw">Raw Honey</option>
-            <option value="Processed">Processed Honey</option>
+            <option value="all">{tr("All Batches", "सभी बैच")}</option>
+            <option value="Raw">{tr("Raw Honey", "कच्चा शहद")}</option>
+            <option value="Processed">{tr("Processed Honey", "प्रसंस्कृत शहद")}</option>
           </select>
         </div>
       </div>
@@ -227,13 +235,13 @@ function BatchesContent() {
       {filteredBatches.length === 0 ? (
         <EmptyState
           icon={Boxes}
-          title="No batches found"
-          description="No honey batches match your current search and type filters. Log a new harvest from an apiary."
+          title={tr("No batches found", "कोई बैच नहीं मिला")}
+          description={tr("No honey batches match your current search and type filters. Log a new harvest from an apiary.", "कोई शहद बैच आपके वर्तमान खोज और प्रकार फ़िल्टर से मेल नहीं खाता। फार्म से नई कटाई दर्ज करें।")}
           action={
             <Button asChild size="default">
               <Link href="/batches/new">
                 <Plus className="h-4 w-4" />
-                <span>Log New Harvest Batch</span>
+                <span>{tr("Log New Harvest Batch", "नया कटाई बैच दर्ज करें")}</span>
               </Link>
             </Button>
           }
@@ -243,14 +251,14 @@ function BatchesContent() {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40">
-                <TableHead className="w-[180px]">Batch Number</TableHead>
-                <TableHead>Source / Origin</TableHead>
-                <TableHead>Harvest Date</TableHead>
-                <TableHead>Honey Type</TableHead>
-                <TableHead className="text-right">Weight / Available</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="hidden md:table-cell">Custodian</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead className="w-[180px]">{tr("Batch Number", "बैच नंबर")}</TableHead>
+                <TableHead>{tr("Source / Origin", "स्रोत / मूल")}</TableHead>
+                <TableHead>{tr("Harvest Date", "कटाई दिनांक")}</TableHead>
+                <TableHead>{tr("Honey Type", "शहद प्रकार")}</TableHead>
+                <TableHead className="text-right">{tr("Weight / Available", "भार / उपलब्ध")}</TableHead>
+                <TableHead>{tr("Status", "स्थिति")}</TableHead>
+                <TableHead className="hidden md:table-cell">{tr("Custodian", "संरक्षक")}</TableHead>
+                <TableHead className="text-right">{tr("Action", "कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -348,7 +356,7 @@ function BatchesContent() {
                         className="text-primary hover:text-primary hover:bg-primary/10 font-medium"
                       >
                         <Link href={`/batches/${batch.id}`}>
-                          View Details →
+                          {tr("View Details →", "विवरण देखें →")}
                         </Link>
                       </Button>
                     </TableCell>
@@ -364,13 +372,14 @@ function BatchesContent() {
 }
 
 export default function BatchesPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Traceability", href: "#" },
-          { label: "Honey Batches", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Traceability", "ट्रेसेबिलिटी"), href: "#" },
+          { label: tr("Honey Batches", "शहद के बैच"), active: true },
         ]}
         defaultNavId="batches"
       >
@@ -379,3 +388,4 @@ export default function BatchesPage() {
     </AuthGuard>
   );
 }
+

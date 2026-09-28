@@ -23,9 +23,11 @@ import { USER_ROLES, UserRole } from "@/lib/constants";
 export interface NavItem {
   id: string;
   label: string;
+  labelHi?: string;
   href: string;
   icon: LucideIcon;
   badge?: string | number;
+  badgeHi?: string | number;
   badgeVariant?: "honey" | "secondary" | "success" | "warning";
   requiredRoles?: UserRole[];
 }
@@ -33,17 +35,20 @@ export interface NavItem {
 export interface NavGroup {
   id: string;
   label: string;
+  labelHi?: string;
   items: NavItem[];
 }
 
 export const NAVIGATION_CONFIG: NavGroup[] = [
   {
     id: "overview",
-    label: "Overview",
+    label: "Main",
+    labelHi: "मुख्य",
     items: [
       {
         id: "dashboard",
         label: "Dashboard",
+        labelHi: "डैशबोर्ड",
         href: "/dashboard",
         icon: LayoutDashboard,
       },
@@ -51,11 +56,13 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
   },
   {
     id: "traceability",
-    label: "Traceability",
+    label: "Management",
+    labelHi: "प्रबंधन",
     items: [
       {
         id: "apiary",
         label: "Hives & Apiaries",
+        labelHi: "छत्ते और मधुमक्खी फार्म",
         href: "/hives",
         icon: Wheat,
         requiredRoles: [
@@ -67,6 +74,7 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
       {
         id: "activities",
         label: "Colony Activities",
+        labelHi: "कॉलोनी गतिविधियाँ",
         href: "/activities",
         icon: Activity,
         requiredRoles: [
@@ -78,26 +86,31 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
       {
         id: "batches",
         label: "Honey Batches",
+        labelHi: "शहद के बैच",
         href: "/batches",
         icon: Boxes,
         badge: "Active",
+        badgeHi: "सक्रिय",
         badgeVariant: "honey",
       },
       {
         id: "custody",
         label: "Custody Transfers",
+        labelHi: "कस्टडी ट्रांसफर",
         href: "/custody",
         icon: ArrowLeftRight,
       },
       {
         id: "receiving",
         label: "Receiving",
+        labelHi: "आवक रसीद",
         href: "/receiving",
         icon: PackageCheck,
       },
       {
         id: "processing",
         label: "Processing & Blending",
+        labelHi: "प्रसंस्करण एवं मिश्रण",
         href: "/processing",
         icon: Layers,
         requiredRoles: [
@@ -111,10 +124,12 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
   {
     id: "quality",
     label: "Quality & Testing",
+    labelHi: "गुणवत्ता एवं परीक्षण",
     items: [
       {
         id: "laboratory",
         label: "Laboratory Testing",
+        labelHi: "प्रयोगशाला परीक्षण",
         href: "/lab",
         icon: FlaskConical,
         requiredRoles: [
@@ -127,6 +142,7 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
       {
         id: "certifications",
         label: "Certifications",
+        labelHi: "गुणवत्ता प्रमाणपत्र",
         href: "/certifications",
         icon: Award,
       },
@@ -135,22 +151,26 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
   {
     id: "product",
     label: "Product & Market",
+    labelHi: "उत्पाद एवं बाज़ार",
     items: [
       {
         id: "marketplace",
         label: "Marketplace",
+        labelHi: "बाज़ार (मार्केटप्लेस)",
         href: "/marketplace",
         icon: Store,
       },
       {
         id: "orders",
         label: "Marketplace Orders",
+        labelHi: "मार्केटप्लेस ऑर्डर",
         href: "/marketplace/orders",
         icon: ShoppingBag,
       },
       {
         id: "bottles",
         label: "Bottles & QR Verification",
+        labelHi: "बोतलें और क्यूआर सत्यापन",
         href: "/bottles",
         icon: QrCode,
       },
@@ -159,10 +179,12 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
   {
     id: "administration",
     label: "Administration",
+    labelHi: "प्रशासन एवं निगरानी",
     items: [
       {
         id: "admin-dashboard",
         label: "Admin Overview",
+        labelHi: "प्रशासन अवलोकन",
         href: "/admin",
         icon: LayoutDashboard,
         requiredRoles: [USER_ROLES.SUPER_ADMIN, USER_ROLES.ORG_ADMIN],
@@ -170,6 +192,7 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
       {
         id: "organizations",
         label: "Organisations",
+        labelHi: "संगठन",
         href: "/admin/organisations",
         icon: Building2,
         requiredRoles: [USER_ROLES.SUPER_ADMIN, USER_ROLES.ORG_ADMIN],
@@ -177,6 +200,7 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
       {
         id: "users",
         label: "Users & Roles",
+        labelHi: "उपयोगकर्ता एवं भूमिकाएं",
         href: "/admin/users",
         icon: Users,
         requiredRoles: [USER_ROLES.SUPER_ADMIN, USER_ROLES.ORG_ADMIN],
@@ -184,6 +208,7 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
       {
         id: "audit",
         label: "Audit History",
+        labelHi: "ऑडिट इतिहास",
         href: "/admin/audit",
         icon: History,
         requiredRoles: [USER_ROLES.SUPER_ADMIN, USER_ROLES.ORG_ADMIN],
@@ -191,26 +216,32 @@ export const NAVIGATION_CONFIG: NavGroup[] = [
       {
         id: "exceptions",
         label: "Exceptions",
+        labelHi: "अपवाद",
         href: "/admin/exceptions",
         icon: AlertTriangle,
         badge: 4,
+        badgeHi: 4,
         badgeVariant: "warning",
       },
       {
         id: "access-requests",
         label: "Access Requests",
+        labelHi: "एक्सेस अनुरोध",
         href: "/admin/access-requests",
         icon: KeyRound,
         badge: "1 New",
+        badgeHi: "1 नया",
         badgeVariant: "secondary",
         requiredRoles: [USER_ROLES.SUPER_ADMIN, USER_ROLES.ORG_ADMIN],
       },
       {
         id: "plausibility",
         label: "Field vs Sales Plausibility",
+        labelHi: "उत्पादन बनाम बिक्री विश्लेषण",
         href: "/admin/plausibility",
         icon: Activity,
         badge: "Review",
+        badgeHi: "समीक्षा",
         badgeVariant: "honey",
         requiredRoles: [USER_ROLES.SUPER_ADMIN, USER_ROLES.ORG_ADMIN],
       },

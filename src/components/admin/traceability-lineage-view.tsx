@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { LineageTraceStep } from "@/types/admin";
+import { useLanguage } from "@/context/language-context";
 import {
   Boxes,
   ArrowLeftRight,
@@ -22,6 +23,7 @@ interface TraceabilityLineageViewProps {
 }
 
 export function TraceabilityLineageView({ steps, className = "" }: TraceabilityLineageViewProps) {
+  const { tr, trTerm } = useLanguage();
   if (!steps || steps.length === 0) return null;
 
   const getStepIcon = (entityType: string) => {
@@ -76,10 +78,10 @@ export function TraceabilityLineageView({ steps, className = "" }: TraceabilityL
     <div className={`space-y-4 ${className}`}>
       <div className="flex items-center justify-between">
         <h4 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-          Traceability Context Lineage
+          {tr("Traceability Context Lineage", "ट्रेसेबिलिटी संदर्भ वंशावली")}
         </h4>
         <span className="text-xs font-mono text-muted-foreground">
-          {steps.length} Sequential Provenance Nodes
+          {steps.length} {tr("Sequential Provenance Nodes", "अनुक्रमिक उत्पत्ति नोड्स")}
         </span>
       </div>
 
@@ -155,7 +157,7 @@ export function TraceabilityLineageView({ steps, className = "" }: TraceabilityL
                         href={href}
                         className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-0.5"
                       >
-                        Inspect Record &rarr;
+                        <span>{tr("Inspect Record", "रिकॉर्ड देखें")} &rarr;</span>
                       </Link>
                     )}
                   </div>

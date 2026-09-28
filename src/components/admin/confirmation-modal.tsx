@@ -3,6 +3,7 @@
 import * as React from "react";
 import { AlertTriangle, Info, CheckCircle2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/context/language-context";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -24,17 +25,26 @@ export function ConfirmationModal({
   onConfirm,
   title,
   description,
-  confirmText = "Confirm Action",
-  cancelText = "Cancel",
+  confirmText,
+  cancelText,
   variant = "warning",
   requireReason = true,
-  reasonPlaceholder = "Please provide the justification or operational context...",
-  reasonLabel = "Mandatory Audit Justification / Reason",
+  reasonPlaceholder,
+  reasonLabel,
 }: ConfirmationModalProps) {
+  const { tr, trTerm } = useLanguage();
   const [reason, setReason] = React.useState("");
   const [error, setError] = React.useState("");
 
   if (!isOpen) return null;
+
+  const displayConfirmText = confirmText || tr("Confirm Action", "कार्रवाई की पुष्टि करें");
+  const displayCancelText = cancelText || tr("Cancel", "रद्द करें");
+  const displayReasonLabel = reasonLabel || tr("Mandatory Audit Justification / Reason", "अनिवार्य ऑडिट औचित्य / कारण");
+  const displayReasonPlaceholder = reasonPlaceholder || tr(
+    "Please provide the justification or operational context...",
+    "कृपया औचित्य या परिचालन संदर्भ प्रदान करें..."
+  );
 
   const handleClose = () => {
     setReason("");
@@ -45,7 +55,12 @@ export function ConfirmationModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (requireReason && !reason.trim()) {
-      setError("A reason is mandatory for immutable administrative logging.");
+      setError(
+        tr(
+          "A reason is mandatory for immutable administrative logging.",
+          "अपरिवर्तनीय प्रशासनिक लॉगिंग के लिए कारण अनिवार्य है।"
+        )
+      );
       return;
     }
     const finalReason = reason.trim();
@@ -111,7 +126,7 @@ export function ConfirmationModal({
           {requireReason && (
             <div>
               <label className="block text-[11px] font-semibold text-foreground uppercase tracking-wider mb-1.5">
-                {reasonLabel} <span className="text-destructive">*</span>
+                {displayReasonLabel} <span className="text-destructive">*</span>
               </label>
               <textarea
                 value={reason}
@@ -120,7 +135,7 @@ export function ConfirmationModal({
                   if (error) setError("");
                 }}
                 rows={3}
-                placeholder={reasonPlaceholder}
+                placeholder={displayReasonPlaceholder}
                 className={`w-full px-3 py-2 rounded-xl bg-background border text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all ${
                   error ? "border-destructive focus:ring-destructive/30" : "border-input"
                 }`}
@@ -129,7 +144,10 @@ export function ConfirmationModal({
                 <p className="text-xs text-destructive mt-1 font-medium">{error}</p>
               ) : (
                 <p className="text-[11px] text-muted-foreground mt-1">
-                  This action creates an append-only verifiable audit event.
+                  {tr(
+                    "This action creates an append-only verifiable audit event.",
+                    "यह कार्रवाई एक अपरिवर्तनीय सत्यापन योग्य ऑडिट इवेंट दर्ज करती है।"
+                  )}
                 </p>
               )}
             </div>
@@ -142,14 +160,14 @@ export function ConfirmationModal({
               size="sm"
               onClick={handleClose}
             >
-              {cancelText}
+              {displayCancelText}
             </Button>
             <Button
               type="submit"
               size="sm"
               variant={vStyles.buttonVariant}
             >
-              {confirmText}
+              {displayConfirmText}
             </Button>
           </div>
         </form>

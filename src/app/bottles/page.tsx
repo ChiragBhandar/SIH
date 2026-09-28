@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import {
   QrCode,
   Plus,
@@ -37,12 +38,15 @@ import {
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BottleStatus, QRStatus } from "@/types/bottle";
+import { getVerifyUrl } from "@/lib/constants";
+
 
 export function BottlesListContent() {
   const {
     bottles,
     getEligibleBottlingBatches,
   } = useTraceability();
+  const { tr, trStatus } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
@@ -79,7 +83,7 @@ export function BottlesListContent() {
   const handleCopyLink = (bottleId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      const url = `${window.location.origin}/verify/${bottleId}`;
+      const url = getVerifyUrl(bottleId);
       navigator.clipboard.writeText(url);
       setCopiedId(bottleId);
       setTimeout(() => setCopiedId(null), 2000);
@@ -91,29 +95,29 @@ export function BottlesListContent() {
       case "Published":
         return (
           <Badge variant="outline" className="bg-emerald-50 text-emerald-800 border-emerald-200">
-            Published
+            {tr("Published", "प्रकाशित")}
           </Badge>
         );
       case "Created":
         return (
           <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200">
-            Created
+            {tr("Created", "निर्मित")}
           </Badge>
         );
       case "Draft":
         return (
           <Badge variant="outline" className="bg-slate-100 text-slate-800 border-slate-200">
-            Draft
+            {tr("Draft", "प्रारूप")}
           </Badge>
         );
       case "Suspended":
         return (
           <Badge variant="outline" className="bg-rose-50 text-rose-800 border-rose-200">
-            Suspended
+            {tr("Suspended", "निलंबित")}
           </Badge>
         );
       default:
-        return <Badge variant="outline">{status}</Badge>;
+        return <Badge variant="outline">{trStatus(status)}</Badge>;
     }
   };
 
@@ -123,28 +127,28 @@ export function BottlesListContent() {
         return (
           <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            Active
+            {tr("Active", "सक्रिय")}
           </span>
         );
       case "Generated":
         return (
           <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700">
             <span className="h-2 w-2 rounded-full bg-amber-500" />
-            Generated
+            {tr("Generated", "उत्पन्न")}
           </span>
         );
       case "Suspended":
         return (
           <span className="inline-flex items-center gap-1.5 text-xs font-medium text-rose-700">
             <span className="h-2 w-2 rounded-full bg-rose-500" />
-            Suspended
+            {tr("Suspended", "निलंबित")}
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <span className="h-2 w-2 rounded-full bg-muted" />
-            Not Generated
+            {tr("Not Generated", "उत्पन्न नहीं")}
           </span>
         );
     }
@@ -158,14 +162,17 @@ export function BottlesListContent() {
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
               <QrCode className="h-6 w-6 text-primary" />
-              <span>Bottles & QR Verification</span>
+              <span>{tr("Bottles & QR Verification", "बोतलें व क्यूआर सत्यापन")}</span>
             </h1>
             <Badge variant="outline" className="bg-amber-50 text-amber-900 border-amber-300 text-xs">
-              Consumer Trust
+              {tr("Consumer Trust", "उपभोक्ता विश्वास")}
             </Badge>
           </div>
           <p className="text-sm text-muted-foreground mt-1">
-            Create individual product identities and publish approved consumer verification records.
+            {tr(
+              "Create individual product identities and publish approved consumer verification records.",
+              "व्यक्तिगत उत्पाद पहचान बनाएं और स्वीकृत उपभोक्ता सत्यापन रिकॉर्ड प्रकाशित करें।"
+            )}
           </p>
         </div>
 
@@ -173,7 +180,7 @@ export function BottlesListContent() {
           <Button asChild size="sm">
             <Link href="/bottles/new">
               <Plus className="h-4 w-4" />
-              <span>Create Bottles</span>
+              <span>{tr("Create Bottles", "बोतलें बनाएं")}</span>
             </Link>
           </Button>
         </div>
@@ -185,7 +192,7 @@ export function BottlesListContent() {
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Eligible Batches
+              {tr("Eligible Batches", "पात्र बैच")}
             </CardTitle>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-orange-700 border border-orange-200">
               <Layers className="h-4 w-4" />
@@ -196,7 +203,7 @@ export function BottlesListContent() {
               {eligibleBatchesCount}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Quality-approved processed batches ready for packaging
+              {tr("Quality-approved processed batches ready for packaging", "गुणवत्ता-स्वीकृत प्रसंस्कृत बैच पैकेजिंग हेतु तैयार")}
             </p>
           </CardContent>
         </Card>
@@ -205,7 +212,7 @@ export function BottlesListContent() {
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Bottles Created
+              {tr("Bottles Created", "निर्मित बोतलें")}
             </CardTitle>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
               <Package className="h-4 w-4" />
@@ -216,7 +223,7 @@ export function BottlesListContent() {
               {totalBottles}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Individual digital identities registered
+              {tr("Individual digital identities registered", "व्यक्तिगत डिजिटल पहचान पंजीकृत")}
             </p>
           </CardContent>
         </Card>
@@ -225,7 +232,7 @@ export function BottlesListContent() {
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Published
+              {tr("Published", "प्रकाशित")}
             </CardTitle>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
               <Globe className="h-4 w-4" />
@@ -236,7 +243,7 @@ export function BottlesListContent() {
               {publishedBottles}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Public verification accessible to consumers
+              {tr("Public verification accessible to consumers", "उपभोक्ताओं के लिए सार्वजनिक सत्यापन सुलभ")}
             </p>
           </CardContent>
         </Card>
@@ -245,7 +252,7 @@ export function BottlesListContent() {
         <Card className="border-border bg-card shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Verification Ready
+              {tr("Verification Ready", "सत्यापन हेतु तैयार")}
             </CardTitle>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
               <QrCode className="h-4 w-4" />
@@ -256,7 +263,7 @@ export function BottlesListContent() {
               {verificationReady}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Active QR identifiers in circulation
+              {tr("Active QR identifiers in circulation", "प्रचलन में सक्रिय क्यूआर पहचानकर्ता")}
             </p>
           </CardContent>
         </Card>
@@ -271,17 +278,26 @@ export function BottlesListContent() {
             </div>
             <div>
               <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                <span>{eligibleBatchesCount} Processed Batch{eligibleBatchesCount > 1 ? "es" : ""} Eligible for Bottle Creation</span>
+                <span>
+                  {eligibleBatchesCount}{" "}
+                  {tr(
+                    `Processed Batch${eligibleBatchesCount > 1 ? "es" : ""} Eligible for Bottle Creation`,
+                    `प्रसंस्कृत बैच बोतल निर्माण हेतु पात्र`
+                  )}
+                </span>
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Quality certification is complete for {eligibleBatches.map((b) => b.batchNumber).join(", ")}. You can now generate unique packaging runs and consumer QR codes.
+                {tr(
+                  `Quality certification is complete for ${eligibleBatches.map((b) => b.batchNumber).join(", ")}. You can now generate unique packaging runs and consumer QR codes.`,
+                  `${eligibleBatches.map((b) => b.batchNumber).join(", ")} के लिए गुणवत्ता प्रमाणीकरण पूर्ण है। अब आप पैकेजिंग और उपभोक्ता क्यूआर कोड जनरेट कर सकते हैं।`
+                )}
               </p>
             </div>
           </div>
           <Button asChild size="sm" className="shrink-0 gap-1.5 cursor-pointer">
             <Link href={`/bottles/new?batch=${eligibleBatches[0].id}`}>
               <Plus className="h-3.5 w-3.5" />
-              <span>Package {eligibleBatches[0].batchNumber}</span>
+              <span>{tr("Package", "पैकेज करें")} {eligibleBatches[0].batchNumber}</span>
             </Link>
           </Button>
         </div>
@@ -292,7 +308,7 @@ export function BottlesListContent() {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by bottle ID, product, batch or QR..."
+            placeholder={tr("Search by bottle ID, product, batch or QR...", "बोतल आईडी, उत्पाद, बैच या क्यूआर से खोजें...")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 h-9 text-xs"
@@ -307,7 +323,7 @@ export function BottlesListContent() {
             onClick={() => setStatusFilter("all")}
             className="h-8 text-xs cursor-pointer"
           >
-            All ({bottles.length})
+            {tr("All", "सभी")} ({bottles.length})
           </Button>
           <Button
             variant={statusFilter === "published" ? "secondary" : "ghost"}
@@ -315,7 +331,7 @@ export function BottlesListContent() {
             onClick={() => setStatusFilter("published")}
             className="h-8 text-xs text-emerald-700 cursor-pointer"
           >
-            Published ({publishedBottles})
+            {tr("Published", "प्रकाशित")} ({publishedBottles})
           </Button>
           <Button
             variant={statusFilter === "created" ? "secondary" : "ghost"}
@@ -323,7 +339,7 @@ export function BottlesListContent() {
             onClick={() => setStatusFilter("created")}
             className="h-8 text-xs text-amber-800 cursor-pointer"
           >
-            Created / Draft ({bottles.filter((b) => b.status === "Created" || b.status === "Draft").length})
+            {tr("Created / Draft", "निर्मित / प्रारूप")} ({bottles.filter((b) => b.status === "Created" || b.status === "Draft").length})
           </Button>
           <Button
             variant={statusFilter === "suspended" ? "secondary" : "ghost"}
@@ -331,7 +347,7 @@ export function BottlesListContent() {
             onClick={() => setStatusFilter("suspended")}
             className="h-8 text-xs text-rose-700 cursor-pointer"
           >
-            Suspended ({bottles.filter((b) => b.status === "Suspended").length})
+            {tr("Suspended", "निलंबित")} ({bottles.filter((b) => b.status === "Suspended").length})
           </Button>
         </div>
       </div>
@@ -342,15 +358,15 @@ export function BottlesListContent() {
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent bg-muted/40 text-[11px] uppercase tracking-wider">
-                <TableHead className="font-semibold text-foreground">Bottle ID</TableHead>
-                <TableHead className="font-semibold text-foreground">Product</TableHead>
-                <TableHead className="font-semibold text-foreground">Source Batch</TableHead>
-                <TableHead className="font-semibold text-foreground">Honey Variety</TableHead>
-                <TableHead className="font-semibold text-foreground">Bottle Size</TableHead>
-                <TableHead className="font-semibold text-foreground">Created Date</TableHead>
-                <TableHead className="font-semibold text-foreground">Status</TableHead>
-                <TableHead className="font-semibold text-foreground">QR Status</TableHead>
-                <TableHead className="font-semibold text-foreground text-right">Action</TableHead>
+                <TableHead className="font-semibold text-foreground">{tr("Bottle ID", "बोतल आईडी")}</TableHead>
+                <TableHead className="font-semibold text-foreground">{tr("Product", "उत्पाद")}</TableHead>
+                <TableHead className="font-semibold text-foreground">{tr("Source Batch", "स्रोत बैच")}</TableHead>
+                <TableHead className="font-semibold text-foreground">{tr("Honey Variety", "शहद किस्म")}</TableHead>
+                <TableHead className="font-semibold text-foreground">{tr("Bottle Size", "बोतल आकार")}</TableHead>
+                <TableHead className="font-semibold text-foreground">{tr("Created Date", "निर्माण तिथि")}</TableHead>
+                <TableHead className="font-semibold text-foreground">{tr("Status", "स्थिति")}</TableHead>
+                <TableHead className="font-semibold text-foreground">{tr("QR Status", "क्यूआर स्थिति")}</TableHead>
+                <TableHead className="font-semibold text-foreground text-right">{tr("Action", "कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -359,16 +375,19 @@ export function BottlesListContent() {
                   <TableCell colSpan={9} className="h-48 text-center">
                     <EmptyState
                       icon={QrCode}
-                      title="No bottles found"
+                      title={tr("No bottles found", "कोई बोतल नहीं मिली")}
                       description={
                         searchQuery
-                          ? "No packaging records match your search criteria."
-                          : "No bottles have been packaged yet. Select an approved processed batch to create bottles."
+                          ? tr("No packaging records match your search criteria.", "कोई रिकॉर्ड खोज से मेल नहीं खाता।")
+                          : tr(
+                              "No bottles have been packaged yet. Select an approved processed batch to create bottles.",
+                              "अभी तक कोई बोतल पैक नहीं की गई है। बोतल बनाने के लिए स्वीकृत प्रसंस्कृत बैच चुनें।"
+                            )
                       }
                       action={
                         eligibleBatchesCount > 0 ? (
                           <Button asChild size="sm">
-                            <Link href="/bottles/new">Create First Bottles</Link>
+                            <Link href="/bottles/new">{tr("Create First Bottles", "पहली बोतलें बनाएं")}</Link>
                           </Button>
                         ) : undefined
                       }
@@ -441,7 +460,7 @@ export function BottlesListContent() {
                         >
                           <Link href={`/bottles/${bottle.id}`}>
                             <Eye className="h-3.5 w-3.5" />
-                            <span className="sr-only sm:not-sr-only sm:ml-1">Details</span>
+                            <span className="sr-only sm:not-sr-only sm:ml-1">{tr("Details", "विवरण")}</span>
                           </Link>
                         </Button>
 
@@ -450,7 +469,7 @@ export function BottlesListContent() {
                           size="icon-xs"
                           onClick={(e) => handleCopyLink(bottle.id, e)}
                           className="text-muted-foreground hover:text-foreground"
-                          title="Copy public verification link"
+                          title={tr("Copy public verification link", "सार्वजनिक सत्यापन लिंक कॉपी करें")}
                         >
                           {copiedId === bottle.id ? (
                             <Check className="h-3.5 w-3.5 text-emerald-500" />
@@ -464,11 +483,11 @@ export function BottlesListContent() {
                           size="xs"
                           asChild
                           className="border-primary/30 text-primary hover:bg-primary/5"
-                          title="Open public consumer verification page"
+                          title={tr("Open public consumer verification page", "उपभोक्ता सत्यापन पृष्ठ खोलें")}
                         >
                           <Link href={`/verify/${bottle.id}`} target="_blank">
                             <ExternalLink className="h-3 w-3" />
-                            <span className="sr-only sm:not-sr-only sm:text-[10px]">Verify</span>
+                            <span className="sr-only sm:not-sr-only sm:text-[10px]">{tr("Verify", "सत्यापित")}</span>
                           </Link>
                         </Button>
                       </div>
@@ -485,13 +504,14 @@ export function BottlesListContent() {
 }
 
 export default function BottlesPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Product & Market", href: "/bottles" },
-          { label: "Bottles & QR Verification", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Product & Market", "उत्पाद एवं बाजार"), href: "/bottles" },
+          { label: tr("Bottles & QR Verification", "बोतलें व क्यूआर सत्यापन"), active: true },
         ]}
         defaultNavId="bottles"
       >

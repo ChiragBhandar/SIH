@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import {
   Layers,
   ArrowLeft,
@@ -45,6 +46,7 @@ const ACTIVITY_ICONS: Record<string, typeof Activity> = {
 };
 
 function HiveDetailContent() {
+  const { tr, trStatus } = useLanguage();
   const params = useParams();
   const hiveId = params?.id as string;
   const { getHive, getActivitiesByHive, isLoaded } = useTraceability();
@@ -63,7 +65,7 @@ function HiveDetailContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading hive record...
+          {tr("Loading hive record...", "छत्ता रिकॉर्ड लोड हो रहा है...")}
         </div>
       </div>
     );
@@ -74,11 +76,11 @@ function HiveDetailContent() {
       <div className="max-w-xl mx-auto py-12">
         <EmptyState
           icon={Layers}
-          title="Hive not found"
-          description={`No hive found matching ID "${hiveId}". It may have been decommissioned or relocated.`}
+          title={tr("Hive not found", "छत्ता नहीं मिला")}
+          description={tr(`No hive found matching ID "${hiveId}". It may have been decommissioned or relocated.`, `आईडी "${hiveId}" से मेल खाने वाला कोई छत्ता नहीं मिला। हो सकता है इसे हटा दिया गया हो या स्थानांतरित कर दिया गया हो।`)}
           action={
             <Button asChild size="sm">
-              <Link href="/hives">Back to Hives & Apiaries</Link>
+              <Link href="/hives">{tr("Back to Hives & Apiaries", "छत्ते और मधुमक्खी फार्म पर वापस जाएं")}</Link>
             </Button>
           }
         />
@@ -98,7 +100,7 @@ function HiveDetailContent() {
         >
           <Link href={`/hives?apiary=${hive.apiaryId}`}>
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to {hive.apiaryName}</span>
+            <span>{tr("Back to", "वापस जाएं:")} {hive.apiaryName}</span>
           </Link>
         </Button>
       </div>
@@ -121,7 +123,7 @@ function HiveDetailContent() {
                   : "neutral"
               }
             >
-              {hive.status.toUpperCase()}
+              {trStatus(hive.status)}
             </StatusBadge>
             <Badge variant="outline" className="font-mono text-xs gap-1 border-primary/30">
               <Radio className="h-3 w-3 text-primary" />
@@ -130,7 +132,7 @@ function HiveDetailContent() {
           </div>
 
           <p className="text-xs text-muted-foreground flex flex-wrap items-center gap-2">
-            <span>Apiary:</span>
+            <span>{tr("Apiary:", "मधुमक्खी फार्म:")}</span>
             <Link
               href={`/hives?apiary=${hive.apiaryId}`}
               className="font-medium text-foreground hover:underline flex items-center gap-1"
@@ -139,7 +141,7 @@ function HiveDetailContent() {
               {hive.apiaryName}
             </Link>
             <span>•</span>
-            <span>Box Code: <strong className="font-mono text-foreground">{hive.internalCode}</strong></span>
+            <span>{tr("Box Code:", "बॉक्स कोड:")} <strong className="font-mono text-foreground">{hive.internalCode}</strong></span>
           </p>
         </div>
 
@@ -147,7 +149,7 @@ function HiveDetailContent() {
           <Button asChild className="gap-1.5 text-xs h-9 cursor-pointer shadow-xs">
             <Link href={`/activities/new?hiveId=${hive.id}`}>
               <Plus className="h-4 w-4" />
-              <span>Log Activity</span>
+              <span>{tr("Log Activity", "गतिविधि दर्ज करें")}</span>
             </Link>
           </Button>
         </div>
@@ -158,15 +160,15 @@ function HiveDetailContent() {
         <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Queen Status
+              {tr("Queen Status", "रानी मधुमक्खी की स्थिति")}
             </span>
             <div className="flex items-center gap-2 pt-0.5">
               <StatusBadge status={hive.queenStatus} size="sm">
-                {hive.queenStatus}
+                {trStatus(hive.queenStatus)}
               </StatusBadge>
             </div>
             <p className="text-[11px] text-muted-foreground pt-1">
-              Inspected: {hive.lastInspectionDate}
+              {tr("Inspected:", "निरीक्षण किया गया:")} {hive.lastInspectionDate}
             </p>
           </CardContent>
         </Card>
@@ -174,13 +176,13 @@ function HiveDetailContent() {
         <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Hive Hardware Type
+              {tr("Hive Hardware Type", "छत्ता हार्डवेयर प्रकार")}
             </span>
             <h4 className="text-sm font-bold text-foreground">
               {hive.hiveType}
             </h4>
             <p className="text-[11px] text-muted-foreground pt-1">
-              Standard brood frame dimensions
+              {tr("Standard brood frame dimensions", "मानक ब्रूड फ्रेम आयाम")}
             </p>
           </CardContent>
         </Card>
@@ -188,13 +190,13 @@ function HiveDetailContent() {
         <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Yard Location
+              {tr("Yard Location", "फार्म में स्थान")}
             </span>
             <h4 className="text-sm font-bold text-foreground truncate">
               {hive.locationInApiary}
             </h4>
             <p className="text-[11px] text-muted-foreground pt-1">
-              Installed: {hive.installationDate}
+              {tr("Installed:", "स्थापित किया गया:")} {hive.installationDate}
             </p>
           </CardContent>
         </Card>
@@ -202,13 +204,13 @@ function HiveDetailContent() {
         <Card className="shadow-2xs bg-card border-border">
           <CardContent className="p-4 space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Traceability Pairing
+              {tr("Traceability Pairing", "ट्रेसेबिलिटी पेयरिंग")}
             </span>
             <h4 className="text-xs font-mono font-bold text-primary truncate">
               {hive.nfcRfidId}
             </h4>
             <p className="text-[11px] text-emerald-700 pt-1 font-medium">
-              ✓ Hardware verified & linked
+              ✓ {tr("Hardware verified & linked", "हार्डवेयर सत्यापित एवं लिंक किया गया")}
             </p>
           </CardContent>
         </Card>
@@ -219,7 +221,7 @@ function HiveDetailContent() {
         <div className="rounded-md border border-border/80 bg-muted/20 p-3.5 text-xs text-muted-foreground flex items-start gap-2.5">
           <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
           <div>
-            <strong className="text-foreground font-medium">Colony Characteristics & Notes:</strong>{" "}
+            <strong className="text-foreground font-medium">{tr("Colony Characteristics & Notes:", "कॉलोनी की विशेषताएं एवं टिप्पणियां:")}</strong>{" "}
             {hive.notes}
           </div>
         </div>
@@ -230,11 +232,11 @@ function HiveDetailContent() {
         <div className="flex items-start sm:items-center gap-2.5">
           <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-0.5 sm:mt-0" />
           <div className="text-muted-foreground">
-            <strong className="text-foreground">Colony Asset Governance:</strong> Hive asset ownership is distinct from honey material transfers. Transferring hive asset ownership records a physical asset event while preserving hive identity ({hive.identifier}) and does not generate honey batches or material custody records.
+            <strong className="text-foreground">{tr("Colony Asset Governance:", "कॉलोनी संपत्ति प्रशासन:")}</strong> {tr("Hive asset ownership is distinct from honey material transfers. Transferring hive asset ownership records a physical asset event while preserving hive identity and does not generate honey batches or material custody records.", "छत्ता संपत्ति का स्वामित्व शहद सामग्री हस्तांतरण से अलग है। छत्ता संपत्ति स्वामित्व स्थानांतरित करने से छत्ते की पहचान सुरक्षित रहते हुए एक भौतिक संपत्ति घटना दर्ज होती है और कोई शहद बैच या सामग्री कस्टडी रिकॉर्ड नहीं बनता है।")} ({hive.identifier})
           </div>
         </div>
         <Badge variant="outline" className="text-[10px] font-mono shrink-0 border-primary/30 text-primary">
-          Asset Identity Preserved
+          {tr("Asset Identity Preserved", "संपत्ति पहचान सुरक्षित")}
         </Badge>
       </div>
 
@@ -244,10 +246,10 @@ function HiveDetailContent() {
           <div>
             <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
               <Activity className="h-5 w-5 text-primary" />
-              <span>Activity Timeline</span>
+              <span>{tr("Activity Timeline", "गतिविधि समयरेखा")}</span>
             </h2>
             <p className="text-xs text-muted-foreground">
-              Chronological log of inspections, pest treatments, queen status checks, and feedings.
+              {tr("Chronological log of inspections, pest treatments, queen status checks, and feedings.", "निरीक्षणों, कीट उपचार, रानी मधुमक्खी स्थिति जांच और आहार का कालानुक्रमिक लॉग।")}
             </p>
           </div>
 
@@ -257,18 +259,18 @@ function HiveDetailContent() {
               onChange={(e) => setFilterType(e.target.value)}
               className="h-9 rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs cursor-pointer"
             >
-              <option value="all">All Activity Types</option>
-              <option value="Inspection">Inspection</option>
-              <option value="Feeding">Feeding</option>
-              <option value="Queen observation">Queen observation</option>
-              <option value="Pest treatment">Pest treatment</option>
-              <option value="Floral observation">Floral observation</option>
+              <option value="all">{tr("All Activity Types", "सभी गतिविधि प्रकार")}</option>
+              <option value="Inspection">{tr("Inspection", "निरीक्षण")}</option>
+              <option value="Feeding">{tr("Feeding", "आहार (फीडिंग)")}</option>
+              <option value="Queen observation">{tr("Queen observation", "रानी मधुमक्खी अवलोकन")}</option>
+              <option value="Pest treatment">{tr("Pest treatment", "कीट उपचार")}</option>
+              <option value="Floral observation">{tr("Floral observation", "पुष्प अवलोकन")}</option>
             </select>
 
             <Button asChild size="sm" variant="outline" className="text-xs h-9 gap-1 cursor-pointer">
               <Link href={`/activities/new?hiveId=${hive.id}`}>
                 <Plus className="h-3.5 w-3.5" />
-                <span>Log Activity</span>
+                <span>{tr("Log Activity", "गतिविधि दर्ज करें")}</span>
               </Link>
             </Button>
           </div>
@@ -278,12 +280,12 @@ function HiveDetailContent() {
         {filteredActivities.length === 0 ? (
           <EmptyState
             icon={Activity}
-            title="No activity recorded yet"
-            description="No logged events found for this filter. Record field observations during yard checks."
+            title={tr("No activity recorded yet", "अभी तक कोई गतिविधि दर्ज नहीं की गई")}
+            description={tr("No logged events found for this filter. Record field observations during yard checks.", "इस फ़िल्टर के लिए कोई दर्ज घटना नहीं मिली। निरीक्षण के दौरान टिप्पणियां दर्ज करें।")}
             action={
               <Button asChild size="sm">
                 <Link href={`/activities/new?hiveId=${hive.id}`}>
-                  Log First Activity
+                  {tr("Log First Activity", "पहली गतिविधि दर्ज करें")}
                 </Link>
               </Button>
             }
@@ -308,7 +310,7 @@ function HiveDetailContent() {
                           </div>
                           <div>
                             <CardTitle className="text-sm font-semibold text-foreground">
-                              {act.type}
+                              {tr(act.type, act.type === "Inspection" ? "निरीक्षण" : act.type === "Feeding" ? "आहार" : act.type === "Queen observation" ? "रानी अवलोकन" : act.type === "Pest treatment" ? "कीट उपचार" : act.type === "Floral observation" ? "पुष्प अवलोकन" : act.type)}
                             </CardTitle>
                             <span className="text-[11px] text-muted-foreground flex items-center gap-1">
                               <Clock className="h-3 w-3" />
@@ -328,7 +330,7 @@ function HiveDetailContent() {
                           {act.weather && (
                             <Badge variant="secondary" className="gap-1 font-normal text-[10px] py-0">
                               <CloudSun className="h-3 w-3 text-amber-500" />
-                              {act.weather}
+                              {trStatus(act.weather)}
                             </Badge>
                           )}
                           {act.temperature && (
@@ -353,7 +355,7 @@ function HiveDetailContent() {
                         <div className="flex items-start gap-1.5 text-muted-foreground bg-muted/20 p-2 rounded-md">
                           <Flower2 className="h-3.5 w-3.5 text-amber-500 shrink-0 mt-0.5" />
                           <span>
-                            <strong className="text-foreground">Floral observation:</strong>{" "}
+                            <strong className="text-foreground">{tr("Floral observation:", "पुष्प अवलोकन:")}</strong>{" "}
                             {act.floralObservation}
                           </span>
                         </div>
@@ -364,9 +366,9 @@ function HiveDetailContent() {
                       </p>
 
                       <div className="flex items-center justify-between pt-1 border-t border-border/60 text-[11px] text-muted-foreground">
-                        <span>Recorded by: <strong>{act.recordedBy}</strong></span>
+                        <span>{tr("Recorded by:", "दर्जकर्ता:")} <strong>{act.recordedBy}</strong></span>
                         <StatusBadge status="success" size="sm">
-                          Sync verified
+                          {tr("Sync verified", "सिंक सत्यापित")}
                         </StatusBadge>
                       </div>
                     </CardContent>
@@ -382,13 +384,14 @@ function HiveDetailContent() {
 }
 
 export default function HiveDetailPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Hives & Apiaries", href: "/hives" },
-          { label: "Hive Detail", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Hives & Apiaries", "छत्ते व मधुमक्खी शालाएं"), href: "/hives" },
+          { label: tr("Hive Detail", "छत्ता विवरण"), active: true },
         ]}
         defaultNavId="apiary"
       >

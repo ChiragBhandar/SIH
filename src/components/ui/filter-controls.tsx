@@ -1,7 +1,10 @@
+"use client";
+
 import * as React from "react";
 import { Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/language-context";
 
 export interface FilterOption {
   id: string;
@@ -26,6 +29,7 @@ export function FilterControls({
   children,
   ...props
 }: FilterControlsProps) {
+  const { tr, trStatus } = useLanguage();
   const isFiltered = selectedId !== "all" && Boolean(selectedId);
 
   return (
@@ -39,7 +43,7 @@ export function FilterControls({
       <div className="flex flex-wrap items-center gap-1.5">
         <div className="flex items-center gap-1.5 mr-1 text-xs font-medium text-muted-foreground">
           <Filter className="h-3.5 w-3.5" />
-          <span>Filter:</span>
+          <span>{tr("Filter:", "फ़िल्टर:")}</span>
         </div>
 
         {options.map((opt) => {
@@ -56,7 +60,7 @@ export function FilterControls({
                   : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
-              <span>{opt.label}</span>
+              <span>{trStatus(opt.label)}</span>
               {opt.count !== undefined && (
                 <span
                   className={cn(
@@ -81,7 +85,7 @@ export function FilterControls({
             className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
           >
             <X className="h-3 w-3 mr-1" />
-            Reset
+            {tr("Reset", "रीसेट")}
           </Button>
         )}
       </div>
@@ -94,3 +98,4 @@ export function FilterControls({
     </div>
   );
 }
+

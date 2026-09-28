@@ -67,7 +67,7 @@ export function FinalCTA() {
               asChild
               className="w-full sm:w-auto h-11 px-6 text-sm font-semibold border-[#E7E3DB] bg-white text-foreground hover:bg-[#FAF8F5] cursor-pointer rounded-lg shadow-2xs transition-colors"
             >
-              <Link href="/verify/HC-BTL-2026-00001" className="flex items-center justify-center gap-2">
+              <Link href="/verify" className="flex items-center justify-center gap-2">
                 <QrCode className="h-4 w-4 text-[#D97706]" />
                 <span>{t.finalCta.verifySampleBtn}</span>
               </Link>

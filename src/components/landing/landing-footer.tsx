@@ -140,7 +140,7 @@ export function LandingFooter() {
             <Link href="/login" className="hover:text-foreground transition-colors">
               {t.footer.operatorSignIn}
             </Link>
-            <Link href="/verify/HC-BTL-2026-00001" className="hover:text-foreground transition-colors">
+            <Link href="/verify" className="hover:text-foreground transition-colors">
               {t.footer.consumerPortal}
             </Link>
           </div>

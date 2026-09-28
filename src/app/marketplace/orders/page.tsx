@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import { OrderStatusBadge } from "@/components/marketplace/marketplace-status-badge";
 import {
   ShoppingBag,
@@ -32,6 +33,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 
 function MarketplaceOrdersContent() {
   const { marketplaceOrders, isLoaded } = useTraceability();
+  const { tr, trTerm } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedStatus, setSelectedStatus] = React.useState<string>("all");
@@ -61,7 +63,7 @@ function MarketplaceOrdersContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading commercial marketplace orders...
+          {tr("Loading commercial marketplace orders...", "वाणिज्यिक मार्केटप्लेस ऑर्डर लोड हो रहे हैं...")}
         </div>
       </div>
     );
@@ -75,15 +77,20 @@ function MarketplaceOrdersContent() {
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="outline" className="text-[11px] font-semibold text-primary border-primary/30 bg-primary/10 gap-1">
               <ShoppingBag className="h-3 w-3" />
-              Commercial Purchase Ledger
+              {tr("Commercial Purchase Ledger", "वाणिज्यिक खरीद बही")}
             </Badge>
             <Badge variant="secondary" className="text-[10px] font-mono">
-              Immutable Commercial Commitments
+              {tr("Immutable Commercial Commitments", "अपरिवर्तनीय वाणिज्यिक प्रतिबद्धताएं")}
             </Badge>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Marketplace Orders</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            {tr("Marketplace Orders", "मार्केटप्लेस ऑर्डर")}
+          </h1>
           <p className="text-xs text-muted-foreground mt-1 max-w-2xl">
-            Commercial purchasing commitments and supply contracts across verified traceable honey batches. Orders maintain batch reference without mutating underlying production lineage.
+            {tr(
+              "Commercial purchasing commitments and supply contracts across verified traceable honey batches. Orders maintain batch reference without mutating underlying production lineage.",
+              "सत्यापित ट्रैसेबल शहद बैचों पर वाणिज्यिक खरीद प्रतिबद्धताएं और आपूर्ति अनुबंध। ऑर्डर उत्पादन वंशावली को बदले बिना बैच संदर्भ बनाए रखते हैं।"
+            )}
           </p>
         </div>
 
@@ -91,7 +98,7 @@ function MarketplaceOrdersContent() {
           <Button asChild size="sm" className="h-9 text-xs gap-1.5 shadow-xs font-semibold">
             <Link href="/marketplace">
               <Store className="h-4 w-4" />
-              <span>Browse Marketplace</span>
+              <span>{tr("Browse Marketplace", "मार्केटप्लेस देखें")}</span>
             </Link>
           </Button>
         </div>
@@ -102,7 +109,10 @@ function MarketplaceOrdersContent() {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by order ID, batch, seller, buyer, or PO ref..."
+            placeholder={tr(
+              "Search by order ID, batch, seller, buyer, or PO ref...",
+              "ऑर्डर आईडी, बैच, विक्रेता, खरीदार या संदर्भ संख्या से खोजें..."
+            )}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-8 h-9 text-xs"
@@ -112,14 +122,18 @@ function MarketplaceOrdersContent() {
         <div className="flex flex-wrap items-center gap-2">
           <Tabs value={selectedStatus} onValueChange={setSelectedStatus} className="w-auto">
             <TabsList className="h-9 p-1">
-              <TabsTrigger value="all" className="text-xs">All Orders ({marketplaceOrders.length})</TabsTrigger>
+              <TabsTrigger value="all" className="text-xs">
+                {tr("All Orders", "सभी ऑर्डर")} ({marketplaceOrders.length})
+              </TabsTrigger>
               <TabsTrigger value="pending" className="text-xs">
-                Pending ({pendingCount})
+                {tr("Pending", "लंबित")} ({pendingCount})
               </TabsTrigger>
               <TabsTrigger value="accepted" className="text-xs">
-                Accepted ({acceptedCount})
+                {tr("Accepted", "स्वीकृत")} ({acceptedCount})
               </TabsTrigger>
-              <TabsTrigger value="fulfilled" className="text-xs">Fulfilled</TabsTrigger>
+              <TabsTrigger value="fulfilled" className="text-xs">
+                {tr("Fulfilled", "पूर्ण")}
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -129,11 +143,14 @@ function MarketplaceOrdersContent() {
       {filteredOrders.length === 0 ? (
         <EmptyState
           icon={ShoppingBag}
-          title="No marketplace orders found"
-          description="No purchase orders match your search criteria. Browse the marketplace to place an order."
+          title={tr("No marketplace orders found", "कोई मार्केटप्लेस ऑर्डर नहीं मिला")}
+          description={tr(
+            "No purchase orders match your search criteria. Browse the marketplace to place an order.",
+            "कोई खरीद ऑर्डर आपके खोज मानदंडों से मेल नहीं खाता। ऑर्डर देने के लिए मार्केटप्लेस देखें।"
+          )}
           action={
             <Button asChild size="sm">
-              <Link href="/marketplace">Browse Marketplace Listings</Link>
+              <Link href="/marketplace">{tr("Browse Marketplace Listings", "मार्केटप्लेस लिस्टिंग ब्राउज़ करें")}</Link>
             </Button>
           }
         />
@@ -142,15 +159,15 @@ function MarketplaceOrdersContent() {
           <Table>
             <TableHeader>
               <TableRow className="text-[11px] bg-muted/40">
-                <TableHead className="font-semibold">Order ID</TableHead>
-                <TableHead className="font-semibold">Listing</TableHead>
-                <TableHead className="font-semibold">Authoritative Batch</TableHead>
-                <TableHead className="font-semibold">Seller Organisation</TableHead>
-                <TableHead className="font-semibold">Buyer Organisation</TableHead>
-                <TableHead className="font-semibold text-right">Quantity</TableHead>
-                <TableHead className="font-semibold">Order Date</TableHead>
-                <TableHead className="font-semibold">Status</TableHead>
-                <TableHead className="font-semibold text-right">Action</TableHead>
+                <TableHead className="font-semibold">{tr("Order ID", "ऑर्डर आईडी")}</TableHead>
+                <TableHead className="font-semibold">{tr("Listing", "लिस्टिंग")}</TableHead>
+                <TableHead className="font-semibold">{tr("Authoritative Batch", "अधिकृत बैच")}</TableHead>
+                <TableHead className="font-semibold">{tr("Seller Organisation", "विक्रेता संगठन")}</TableHead>
+                <TableHead className="font-semibold">{tr("Buyer Organisation", "खरीदार संगठन")}</TableHead>
+                <TableHead className="font-semibold text-right">{tr("Quantity", "मात्रा")}</TableHead>
+                <TableHead className="font-semibold">{tr("Order Date", "ऑर्डर दिनांक")}</TableHead>
+                <TableHead className="font-semibold">{tr("Status", "स्थिति")}</TableHead>
+                <TableHead className="font-semibold text-right">{tr("Action", "कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -195,7 +212,7 @@ function MarketplaceOrdersContent() {
                   <TableCell className="text-right">
                     <Button asChild size="xs" variant="outline">
                       <Link href={`/marketplace/orders/${order.id}`}>
-                        <span>View Order</span>
+                        <span>{tr("View Order", "ऑर्डर देखें")}</span>
                         <ArrowRight className="h-3 w-3" />
                       </Link>
                     </Button>

@@ -43,3 +43,22 @@ export const LAB_TEST_RESULT = {
 } as const;
 
 export type LabTestResult = (typeof LAB_TEST_RESULT)[keyof typeof LAB_TEST_RESULT];
+
+/**
+ * Canonical public-facing base URL for the Honey Chain web app.
+ *
+ * Always use this when constructing externally shareable URLs (copy buttons,
+ * QR code payloads, social sharing, etc.) so they resolve to the live Vercel
+ * deployment rather than the local dev server.
+ */
+export const APP_BASE_URL = "https://sih-beetech.vercel.app";
+
+/**
+ * Build a fully-qualified production URL for a bottle verification page.
+ * e.g. getVerifyUrl("HC-BTL-2026-00001")
+ *   → "https://sih-beetech.vercel.app/verify/HC-BTL-2026-00001"
+ */
+export function getVerifyUrl(bottleId: string): string {
+  return `${APP_BASE_URL}/verify/${encodeURIComponent(bottleId)}`;
+}
+

@@ -30,7 +30,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { useLanguage } from "@/context/language-context";
+
 function CaptureActivityContent() {
+  const { tr, trStatus } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedHiveId = searchParams.get("hiveId") || "";
@@ -84,8 +87,8 @@ function CaptureActivityContent() {
 
   const validate = () => {
     const errs: Record<string, string> = {};
-    if (!selectedHiveId) errs.hive = "Please select a hive to log activity.";
-    if (!notes.trim()) errs.notes = "Inspection notes and field findings are required.";
+    if (!selectedHiveId) errs.hive = tr("Please select a hive to log activity.", "कृपया गतिविधि दर्ज करने के लिए छत्ता चुनें।");
+    if (!notes.trim()) errs.notes = tr("Inspection notes and field findings are required.", "निरीक्षण नोट्स और फील्ड निष्कर्ष आवश्यक हैं।");
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -113,7 +116,7 @@ function CaptureActivityContent() {
         router.push(`/hives/${selectedHiveId}`);
       }, 1000);
     } catch {
-      setErrors({ form: "Failed to save activity log." });
+      setErrors({ form: tr("Failed to save activity log.", "गतिविधि लॉग सहेजने में विफल।") });
       setIsSubmitting(false);
     }
   };
@@ -130,7 +133,7 @@ function CaptureActivityContent() {
         >
           <Link href={selectedHiveId ? `/hives/${selectedHiveId}` : "/activities"}>
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to {selectedHiveId ? "Hive Detail" : "Activities"}</span>
+            <span>{selectedHiveId ? tr("Back to Hive Detail", "छत्ता विवरण पर वापस") : tr("Back to Activities", "गतिविधियों पर वापस")}</span>
           </Link>
         </Button>
       </div>
@@ -140,7 +143,7 @@ function CaptureActivityContent() {
         <div className="flex items-center gap-2">
           <Wifi className="h-4 w-4 text-primary" />
           <span className="font-semibold text-foreground">
-            Field Capture Simulation Active
+            {tr("Field Capture Simulation Active", "फील्ड कैप्चर सिमुलेशन सक्रिय")}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -148,13 +151,13 @@ function CaptureActivityContent() {
             variant="outline"
             className="text-[10px] py-0 border-emerald-200 text-emerald-800 bg-emerald-50 font-mono"
           >
-            ● Offline capture ready
+            {tr("● Offline capture ready", "● ऑफ़लाइन कैप्चर तैयार")}
           </Badge>
           <Badge
             variant="secondary"
             className="text-[10px] py-0 text-muted-foreground font-mono"
           >
-            Will sync when online
+            {tr("Will sync when online", "ऑनलाइन होने पर सिंक होगा")}
           </Badge>
         </div>
       </div>
@@ -164,7 +167,11 @@ function CaptureActivityContent() {
         <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-900 animate-in fade-in-50 flex items-center gap-3">
           <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
           <div className="text-xs">
-            <span className="font-bold">Activity logged successfully.</span> Added to the hive timeline and synchronized with Honey Chain local state.
+            <span className="font-bold">{tr("Activity logged successfully.", "गतिविधि सफलतापूर्वक दर्ज की गई।")}</span>{" "}
+            {tr(
+              "Added to the hive timeline and synchronized with Honey Chain local state.",
+              "छत्ता समयरेखा में जोड़ा गया और हनी चेन स्थानीय स्थिति के साथ सिंक्रनाइज़ किया गया।"
+            )}
           </div>
         </div>
       )}
@@ -178,10 +185,13 @@ function CaptureActivityContent() {
             </div>
             <div>
               <CardTitle className="text-xl font-bold text-foreground">
-                Capture Field Activity
+                {tr("Capture Field Activity", "फील्ड गतिविधि दर्ज करें")}
               </CardTitle>
               <CardDescription className="text-xs mt-0.5">
-                Record yard inspections, pest treatments, brood assessments, and foraging bloom observations.
+                {tr(
+                  "Record yard inspections, pest treatments, brood assessments, and foraging bloom observations.",
+                  "फार्म निरीक्षण, कीट उपचार, ब्रूड मूल्यांकन और फूलों के पराग अवलोकन रिकॉर्ड करें।"
+                )}
               </CardDescription>
             </div>
           </div>
@@ -200,7 +210,7 @@ function CaptureActivityContent() {
               <div className="space-y-1">
                 <label className="font-medium text-foreground flex items-center gap-1">
                   <MapPin className="h-3 w-3 text-primary" />
-                  Apiary Location <span className="text-rose-500">*</span>
+                  {tr("Apiary Location", "मधुमक्खी फार्म स्थान")} <span className="text-rose-500">*</span>
                 </label>
                 <select
                   value={selectedApiaryId}
@@ -221,7 +231,7 @@ function CaptureActivityContent() {
               <div className="space-y-1">
                 <label className="font-medium text-foreground flex items-center gap-1">
                   <Layers className="h-3 w-3 text-primary" />
-                  Target Hive <span className="text-rose-500">*</span>
+                  {tr("Target Hive", "लक्षित छत्ता")} <span className="text-rose-500">*</span>
                 </label>
                 <select
                   value={selectedHiveId}
@@ -234,7 +244,7 @@ function CaptureActivityContent() {
                 >
                   {availableHives.map((h) => (
                     <option key={h.id} value={h.id}>
-                      {h.identifier} ({h.internalCode} • {h.status})
+                      {h.identifier} ({h.internalCode} • {trStatus(h.status)})
                     </option>
                   ))}
                 </select>
@@ -248,25 +258,25 @@ function CaptureActivityContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2 border-t border-border/60">
               <div className="space-y-1">
                 <label className="font-medium text-foreground">
-                  Activity Type <span className="text-rose-500">*</span>
+                  {tr("Activity Type", "गतिविधि का प्रकार")} <span className="text-rose-500">*</span>
                 </label>
                 <select
                   value={activityType}
                   onChange={(e) => setActivityType(e.target.value as ActivityType)}
                   className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
-                  <option value="Inspection">Routine Inspection</option>
-                  <option value="Queen observation">Queen Observation / Brood Assessment</option>
-                  <option value="Feeding">Supplemental / Booster Feeding</option>
-                  <option value="Pest treatment">Pest Treatment (Varroa / Mites)</option>
-                  <option value="Floral observation">Floral & Foraging Observation</option>
-                  <option value="Harvest Preparation">Harvest Super Preparation</option>
+                  <option value="Inspection">{tr("Routine Inspection", "नियमित निरीक्षण")}</option>
+                  <option value="Queen observation">{tr("Queen Observation / Brood Assessment", "रानी मधुमक्खी अवलोकन / ब्रूड मूल्यांकन")}</option>
+                  <option value="Feeding">{tr("Supplemental / Booster Feeding", "पूरक / बूस्टर पोषण")}</option>
+                  <option value="Pest treatment">{tr("Pest Treatment (Varroa / Mites)", "कीट उपचार (वरोआ / माइट्स)")}</option>
+                  <option value="Floral observation">{tr("Floral & Foraging Observation", "पुष्प एवं पराग अवलोकन")}</option>
+                  <option value="Harvest Preparation">{tr("Harvest Super Preparation", "शहद कटाई की तैयारी")}</option>
                 </select>
               </div>
 
               <div className="space-y-1">
                 <label className="font-medium text-foreground">
-                  Date & Time of Capture
+                  {tr("Date & Time of Capture", "कैप्चर की तिथि एवं समय")}
                 </label>
                 <input
                   type="datetime-local"
@@ -281,29 +291,29 @@ function CaptureActivityContent() {
             <div className="space-y-3 pt-2 border-t border-border/60">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
                 <CloudSun className="h-3.5 w-3.5 text-amber-500" />
-                Yard Weather & Environmental Parameters
+                {tr("Yard Weather & Environmental Parameters", "मौसम एवं पर्यावरणीय पैरामीटर")}
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
-                  <label className="font-medium text-foreground">Weather</label>
+                  <label className="font-medium text-foreground">{tr("Weather", "मौसम")}</label>
                   <select
                     value={weather}
                     onChange={(e) => setWeather(e.target.value)}
                     className="h-9 w-full rounded-md border border-input bg-background px-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   >
-                    <option value="Clear & Sunny">Clear & Sunny</option>
-                    <option value="Partly Cloudy">Partly Cloudy</option>
-                    <option value="Breezy & Sunny">Breezy & Sunny</option>
-                    <option value="Overcast">Overcast</option>
-                    <option value="Light Mountain Mist">Light Mountain Mist</option>
+                    <option value="Clear & Sunny">{tr("Clear & Sunny", "साफ एवं धूप")}</option>
+                    <option value="Partly Cloudy">{tr("Partly Cloudy", "आंशिक रूप से बादल")}</option>
+                    <option value="Breezy & Sunny">{tr("Breezy & Sunny", "हवादार एवं धूप")}</option>
+                    <option value="Overcast">{tr("Overcast", "बादल छाए हुए")}</option>
+                    <option value="Light Mountain Mist">{tr("Light Mountain Mist", "हल्का पहाड़ी कोहरा")}</option>
                   </select>
                 </div>
 
                 <div className="space-y-1">
                   <label className="font-medium text-foreground flex items-center gap-1">
                     <Thermometer className="h-3 w-3 text-rose-500" />
-                    Temperature (°C)
+                    {tr("Temperature (°C)", "तापमान (°C)")}
                   </label>
                   <input
                     type="number"
@@ -316,7 +326,7 @@ function CaptureActivityContent() {
                 <div className="space-y-1">
                   <label className="font-medium text-foreground flex items-center gap-1">
                     <Droplets className="h-3 w-3 text-sky-500" />
-                    Humidity (%)
+                    {tr("Humidity (%)", "आर्द्रता (%)")}
                   </label>
                   <input
                     type="number"
@@ -333,11 +343,11 @@ function CaptureActivityContent() {
               <div className="space-y-1">
                 <label className="font-medium text-foreground flex items-center gap-1">
                   <Flower2 className="h-3 w-3 text-amber-500" />
-                  Floral Observation
+                  {tr("Floral Observation", "पुष्प अवलोकन")}
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. White clover bloom, acacia flow, heavy pollen intake"
+                  placeholder={tr("e.g. White clover bloom, acacia flow, heavy pollen intake", "उदा. सफेद तिपतिया घास का फूल, बबूल का प्रवाह, भारी पराग सेवन")}
                   value={floralObservation}
                   onChange={(e) => setFloralObservation(e.target.value)}
                   className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -345,17 +355,17 @@ function CaptureActivityContent() {
               </div>
 
               <div className="space-y-1">
-                <label className="font-medium text-foreground">Queen Status</label>
+                <label className="font-medium text-foreground">{tr("Queen Status", "रानी मधुमक्खी स्थिति")}</label>
                 <select
                   value={queenStatus}
                   onChange={(e) => setUserQueenStatus(e.target.value as QueenStatus)}
                   className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
-                  <option value="Active & Laying">Active & Laying</option>
-                  <option value="Virgin">Virgin</option>
-                  <option value="Supersedure">Supersedure</option>
-                  <option value="Queenless">Queenless</option>
-                  <option value="Requeening Needed">Requeening Needed</option>
+                  <option value="Active & Laying">{tr("Active & Laying", "सक्रिय एवं अंडे देने वाली")}</option>
+                  <option value="Virgin">{tr("Virgin", "कुंवारी रानी")}</option>
+                  <option value="Supersedure">{tr("Supersedure", "सुपरसीड्यूर (प्रतिस्थापन)")}</option>
+                  <option value="Queenless">{tr("Queenless", "रानी विहीन")}</option>
+                  <option value="Requeening Needed">{tr("Requeening Needed", "पुनः रानी की आवश्यकता")}</option>
                 </select>
               </div>
             </div>
@@ -363,12 +373,12 @@ function CaptureActivityContent() {
             {/* Field Notes */}
             <div className="space-y-1 pt-2 border-t border-border/60">
               <label className="font-medium text-foreground">
-                Inspection Notes & Action Taken <span className="text-rose-500">*</span>
+                {tr("Inspection Notes & Action Taken", "निरीक्षण नोट्स एवं की गई कार्रवाई")} <span className="text-rose-500">*</span>
               </label>
               <textarea
                 rows={3}
                 required
-                placeholder="Detail brood pattern, honeycomb fill level, temperament, treatment applied..."
+                placeholder={tr("Detail brood pattern, honeycomb fill level, temperament, treatment applied...", "ब्रूड पैटर्न, शहद छत्ते का भराव स्तर, स्वभाव, लागू उपचार का विवरण दें...")}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 className="w-full rounded-md border border-input bg-background p-2.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -388,7 +398,7 @@ function CaptureActivityContent() {
               className="text-xs"
             >
               <Link href={selectedHiveId ? `/hives/${selectedHiveId}` : "/activities"}>
-                Cancel
+                {tr("Cancel", "रद्द करें")}
               </Link>
             </Button>
 
@@ -398,7 +408,7 @@ function CaptureActivityContent() {
               disabled={isSubmitting || isSuccess}
               className="text-xs min-w-[120px] shadow-xs cursor-pointer"
             >
-              {isSubmitting ? "Logging Activity..." : "Save Activity"}
+              {isSubmitting ? tr("Logging Activity...", "गतिविधि दर्ज की जा रही है...") : tr("Save Activity", "गतिविधि सहेजें")}
             </Button>
           </CardFooter>
         </form>
@@ -408,13 +418,14 @@ function CaptureActivityContent() {
 }
 
 export default function CaptureActivityPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Traceability", href: "#" },
-          { label: "Capture Activity", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Traceability", "ट्रेसेबिलिटी"), href: "#" },
+          { label: tr("Capture Activity", "गतिविधि दर्ज करें"), active: true },
         ]}
         defaultNavId="activities"
       >

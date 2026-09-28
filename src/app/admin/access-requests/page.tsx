@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import { AdminRoleGuard, StatusBadge, ConfirmationModal } from "@/components/admin";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +27,7 @@ import {
 
 export default function AccessRequestsListPage() {
   const { accessRequests, decideAccessRequest } = useTraceability();
+  const { tr, trStatus, trRole } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedStatus, setSelectedStatus] = React.useState<string>("all");
@@ -53,7 +55,11 @@ export default function AccessRequestsListPage() {
   }, [accessRequests, searchQuery, selectedStatus]);
 
   const handleQuickApprove = (requestId: string) => {
-    decideAccessRequest(requestId, "approved", "Standard verifiable research clearance granted.");
+    decideAccessRequest(
+      requestId,
+      "approved",
+      tr("Standard verifiable research clearance granted.", "मानक सत्यापन योग्य अनुसंधान मंजूरी प्रदान की गई।")
+    );
   };
 
   const handleOpenDeny = (requestId: string) => {
@@ -75,20 +81,25 @@ export default function AccessRequestsListPage() {
           <div>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
               <Link href="/admin" className="hover:text-primary transition-colors">
-                Administration
+                {tr("Administration", "प्रशासन")}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
-              <span className="text-foreground font-semibold">Access Requests</span>
+              <span className="text-foreground font-semibold">{tr("Access Requests", "एक्सेस अनुरोध")}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Access Requests</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+              {tr("Access Requests", "एक्सेस अनुरोध")}
+            </h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 max-w-2xl">
-              Review requests for restricted traceability information and administrative access.
+              {tr(
+                "Review requests for restricted traceability information and administrative access.",
+                "प्रतिबंधित ट्रेसेबिलिटी जानकारी और प्रशासनिक पहुंच के अनुरोधों की समीक्षा करें।"
+              )}
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <Badge variant="outline" className="px-3 py-1 font-mono text-xs font-normal">
-              Total: {accessRequests.length} Requests Logged
+              {tr("Total:", "कुल:")} {accessRequests.length} {tr("Requests Logged", "अनुरोध दर्ज")}
             </Badge>
           </div>
         </div>
@@ -100,7 +111,7 @@ export default function AccessRequestsListPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search requester, resource, or org..."
+                placeholder={tr("Search requester, resource, or org...", "अनुरोधकर्ता, संसाधन, या संगठन से खोजें...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-background border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -110,17 +121,17 @@ export default function AccessRequestsListPage() {
             <div className="flex items-center gap-2.5 w-full md:w-auto justify-end">
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Filter className="w-3.5 h-3.5" />
-                <span>Status:</span>
+                <span>{tr("Status:", "स्थिति:")}</span>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  className="bg-background border border-input rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 >
-                  <option value="all">All Statuses</option>
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="denied">Denied</option>
-                  <option value="expired">Expired</option>
+                  <option value="all">{tr("All Statuses", "सभी स्थितियां")}</option>
+                  <option value="pending">{trStatus("Pending Review")}</option>
+                  <option value="approved">{trStatus("Approved")}</option>
+                  <option value="denied">{trStatus("Denied") || tr("Denied", "अस्वीकृत")}</option>
+                  <option value="expired">{trStatus("Expired")}</option>
                 </select>
               </div>
             </div>
@@ -132,21 +143,21 @@ export default function AccessRequestsListPage() {
           <Table>
             <TableHeader className="bg-muted/50">
               <TableRow>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Request ID</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Requester</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Organisation</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Requested Resource</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Reason</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Requested At</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Status</TableHead>
-                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider text-right">Action</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Request ID", "अनुरोध आईडी")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Requester", "अनुरोधकर्ता")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Organisation", "संगठन")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Requested Resource", "अनुरोधित संसाधन")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Reason", "कारण")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Requested At", "अनुरोध समय")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{tr("Status", "स्थिति")}</TableHead>
+                <TableHead className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider text-right">{tr("Action", "कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="text-xs">
               {filteredRequests.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="py-12 text-center text-muted-foreground">
-                    No access requests found matching the filters.
+                    {tr("No access requests found matching the filters.", "फ़िल्टर से मेल खाता कोई एक्सेस अनुरोध नहीं मिला।")}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -169,7 +180,7 @@ export default function AccessRequestsListPage() {
                           {req.requester.name}
                         </span>
                         <span className="text-[11px] text-muted-foreground">
-                          {req.requester.role} • {req.requester.email}
+                          {trRole(req.requester.role)} • {req.requester.email}
                         </span>
                       </div>
                     </TableCell>
@@ -220,7 +231,7 @@ export default function AccessRequestsListPage() {
                         >
                           <Link href={`/admin/access-requests/${req.id}`}>
                             <Eye className="w-3.5 h-3.5 mr-1 text-primary" />
-                            <span>Review</span>
+                            <span>{tr("Review", "समीक्षा")}</span>
                           </Link>
                         </Button>
 
@@ -231,7 +242,7 @@ export default function AccessRequestsListPage() {
                               variant="outline"
                               onClick={() => handleQuickApprove(req.id)}
                               className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 h-7 w-7"
-                              title="Approve Request"
+                              title={tr("Approve Request", "अनुरोध स्वीकृत करें")}
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
                             </Button>
@@ -240,7 +251,7 @@ export default function AccessRequestsListPage() {
                               variant="outline"
                               onClick={() => handleOpenDeny(req.id)}
                               className="border-rose-200 text-rose-700 hover:bg-rose-50 h-7 w-7"
-                              title="Deny Request"
+                              title={tr("Deny Request", "अनुरोध अस्वीकृत करें")}
                             >
                               <XCircle className="w-3.5 h-3.5" />
                             </Button>
@@ -260,11 +271,14 @@ export default function AccessRequestsListPage() {
           isOpen={denyModalOpen}
           onClose={() => setDenyModalOpen(false)}
           onConfirm={handleConfirmDeny}
-          title={`Deny Access Request ${activeRequest?.id}?`}
-          description={`Provide the official justification for withholding access to "${activeRequest?.requestedResource}". This refusal decision will be immutably recorded in the Honey Chain audit ledger.`}
-          confirmText="Deny Request"
+          title={tr(`Deny Access Request ${activeRequest?.id}?`, `एक्सेस अनुरोध ${activeRequest?.id} अस्वीकार करें?`)}
+          description={tr(
+            `Provide the official justification for withholding access to "${activeRequest?.requestedResource}". This refusal decision will be immutably recorded in the Honey Chain audit ledger.`,
+            `"${activeRequest?.requestedResource}" तक पहुंच रोकने के लिए आधिकारिक औचित्य प्रदान करें। यह निर्णय हनी चेन ऑडिट लेजर में स्थायी रूप से दर्ज किया जाएगा।`
+          )}
+          confirmText={tr("Deny Request", "अनुरोध अस्वीकृत करें")}
           variant="danger"
-          reasonPlaceholder="Enter compliance reason for access denial..."
+          reasonPlaceholder={tr("Enter compliance reason for access denial...", "पहुंच अस्वीकृति के लिए अनुपालन कारण दर्ज करें...")}
         />
       </div>
     </AdminRoleGuard>

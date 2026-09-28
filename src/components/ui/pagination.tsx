@@ -1,7 +1,10 @@
+"use client";
+
 import * as React from "react";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/language-context";
 
 export interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
   currentPage: number;
@@ -20,6 +23,7 @@ export function Pagination({
   className,
   ...props
 }: PaginationProps) {
+  const { tr, isHindi } = useLanguage();
   const pages: (number | "ellipsis")[] = [];
 
   for (let i = 1; i <= totalPages; i++) {
@@ -37,6 +41,9 @@ export function Pagination({
     }
   }
 
+  const startIdx = Math.min((currentPage - 1) * (pageSize || 10) + 1, totalItems ?? 0);
+  const endIdx = Math.min(currentPage * (pageSize || 10), totalItems ?? 0);
+
   return (
     <div
       className={cn(
@@ -47,19 +54,22 @@ export function Pagination({
     >
       <div className="text-xs text-muted-foreground">
         {totalItems !== undefined ? (
-          <>
-            Showing{" "}
-            <span className="font-medium text-foreground">
-              {Math.min((currentPage - 1) * (pageSize || 10) + 1, totalItems)}
-            </span>{" "}
-            to{" "}
-            <span className="font-medium text-foreground">
-              {Math.min(currentPage * (pageSize || 10), totalItems)}
-            </span>{" "}
-            of <span className="font-medium text-foreground">{totalItems}</span> results
-          </>
+          isHindi ? (
+            <>
+              कुल <span className="font-medium text-foreground">{totalItems}</span> में से{" "}
+              <span className="font-medium text-foreground">{startIdx}</span> से{" "}
+              <span className="font-medium text-foreground">{endIdx}</span> परिणाम
+            </>
+          ) : (
+            <>
+              Showing{" "}
+              <span className="font-medium text-foreground">{startIdx}</span> to{" "}
+              <span className="font-medium text-foreground">{endIdx}</span> of{" "}
+              <span className="font-medium text-foreground">{totalItems}</span> results
+            </>
+          )
         ) : (
-          `Page ${currentPage} of ${totalPages}`
+          isHindi ? `पृष्ठ ${currentPage} / ${totalPages}` : `Page ${currentPage} of ${totalPages}`
         )}
       </div>
 
@@ -70,7 +80,7 @@ export function Pagination({
           className="h-8 w-8 p-0"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          aria-label="Go to previous page"
+          aria-label={tr("Go to previous page", "पिछले पृष्ठ पर जाएं")}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -108,7 +118,7 @@ export function Pagination({
           className="h-8 w-8 p-0"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          aria-label="Go to next page"
+          aria-label={tr("Go to next page", "अगले पृष्ठ पर जाएं")}
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -116,3 +126,4 @@ export function Pagination({
     </div>
   );
 }
+

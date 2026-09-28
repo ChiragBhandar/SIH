@@ -7,6 +7,7 @@ import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 import {
   QualityParameterResult,
   LabRejectionReason,
@@ -46,6 +47,7 @@ export function LabTestDetailContent() {
   const params = useParams();
   const testId = params?.id as string;
   const router = useRouter();
+  const { tr, trStatus } = useLanguage();
 
   const {
     getLabTest,
@@ -237,7 +239,7 @@ export function LabTestDetailContent() {
         >
           <Link href="/lab">
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Laboratory Testing</span>
+            <span>{tr("Back to Laboratory Testing", "प्रयोगशाला परीक्षण पर वापस जाएं")}</span>
           </Link>
         </Button>
       </div>
@@ -887,9 +889,17 @@ export function LabTestDetailContent() {
 }
 
 export default function LabTestDetailPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard>
-      <AppShell>
+      <AppShell
+        breadcrumbs={[
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Laboratory Testing", "प्रयोगशाला परीक्षण"), href: "/lab" },
+          { label: tr("Test Analysis Report", "परीक्षण विश्लेषण रिपोर्ट"), active: true },
+        ]}
+        defaultNavId="lab"
+      >
         <LabTestDetailContent />
       </AppShell>
     </AuthGuard>

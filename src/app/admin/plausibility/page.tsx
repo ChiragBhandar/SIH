@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import { AdminRoleGuard, ConfirmationModal } from "@/components/admin";
 import { PlausibilityAlert } from "@/types/admin";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,6 +22,7 @@ import {
 
 export default function FieldVsSalesPlausibilityPage() {
   const { plausibilityAlerts, updatePlausibilityStatus } = useTraceability();
+  const { tr } = useLanguage();
 
   const [selectedAlertId, setSelectedAlertId] = React.useState<string | null>(null);
   const [reviewModalOpen, setReviewModalOpen] = React.useState(false);
@@ -44,6 +46,19 @@ export default function FieldVsSalesPlausibilityPage() {
     }
   };
 
+  const translatePlausibilityStatus = (status: string) => {
+    switch (status) {
+      case "verified_balanced":
+        return tr("Verified Balanced", "सत्यापित संतुलित");
+      case "under_review":
+        return tr("Under Review", "समीक्षाधीन");
+      case "investigation_opened":
+        return tr("Investigation Opened", "जांच प्रारंभ");
+      default:
+        return status;
+    }
+  };
+
   return (
     <AdminRoleGuard>
       <div className="space-y-6 pb-12">
@@ -52,28 +67,33 @@ export default function FieldVsSalesPlausibilityPage() {
           <div>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 font-medium">
               <Link href="/admin" className="hover:text-primary transition-colors">
-                Administration
+                {tr("Administration", "प्रशासन")}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
-              <span className="text-foreground font-semibold">Plausibility</span>
+              <span className="text-foreground font-semibold">
+                {tr("Plausibility", "उत्पादन बनाम बिक्री विश्लेषण")}
+              </span>
             </div>
             <div className="flex items-center gap-2.5 mt-1">
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
-                Field vs Sales Plausibility
+                {tr("Field vs Sales Plausibility", "उत्पादन बनाम बिक्री विश्लेषण")}
               </h1>
               <Badge variant="outline" className="gap-1.5 text-xs bg-amber-50 text-amber-800 border-amber-200">
                 <Scale className="w-3.5 h-3.5" />
-                Yield & Mass Balance Sentinel
+                {tr("Yield & Mass Balance Sentinel", "उपज एवं संतुलन निगरानी")}
               </Badge>
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 max-w-2xl">
-              Review relationships between operational production records and commercial activity.
+              {tr(
+                "Review relationships between operational production records and commercial activity.",
+                "परिचालन उत्पादन रिकॉर्ड और वाणिज्यिक गतिविधि के बीच संबंधों की समीक्षा करें।"
+              )}
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <Badge variant="outline" className="px-3 py-1 font-mono text-xs font-normal">
-              Envelopes Tracked: {plausibilityAlerts.length}
+              {tr("Envelopes Tracked:", "ट्रैक किए गए बैच:")} {plausibilityAlerts.length}
             </Badge>
           </div>
         </div>
@@ -87,14 +107,20 @@ export default function FieldVsSalesPlausibilityPage() {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-200/80 text-amber-900 border border-amber-300">
-                  Plausibility alert — requires human review.
+                  {tr("Plausibility alert — requires human review.", "समीक्षा चेतावनी — मानवीय समीक्षा आवश्यक।")}
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-foreground font-semibold leading-relaxed pt-0.5">
-                Plausibility indicators flag statistical or volume variances across physical apiary yields, extraction logs, and marketplace transactions.
+                {tr(
+                  "Plausibility indicators flag statistical or volume variances across physical apiary yields, extraction logs, and marketplace transactions.",
+                  "उत्पादन-बिक्री विश्लेषण संकेतक भौतिक मधुमक्खी फार्म की उपज, निष्कर्षण लॉग और मार्केटप्लेस लेनदेन के बीच सांख्यिकीय या मात्रा विसंगतियों को चिह्नित करते हैं।"
+                )}
               </p>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                An alert is <strong className="text-foreground">NOT proof of fraud or tampering</strong>. Factors such as weather variations, seasonal blooming shifts, or delayed receiving scans can trigger temporary volume variances. Human review and documentation are mandatory before taking enforcement action.
+                {tr(
+                  "An alert is NOT proof of fraud or tampering. Factors such as weather variations, seasonal blooming shifts, or delayed receiving scans can trigger temporary volume variances. Human review and documentation are mandatory before taking enforcement action.",
+                  "अलर्ट धोखाधड़ी या छेड़छाड़ का सबूत नहीं है। मौसम परिवर्तन, मौसमी फूलों के बदलाव, या विलंबित स्कैन जैसे कारक अस्थायी विसंगतियों को ट्रिगर कर सकते हैं। कोई भी कार्रवाई करने से पहले मानवीय समीक्षा और दस्तावेज़ीकरण अनिवार्य है।"
+                )}
               </p>
             </div>
           </div>
@@ -103,7 +129,7 @@ export default function FieldVsSalesPlausibilityPage() {
         {/* Mass Balance Aggregate Cards */}
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
-            <span>Ecosystem Mass-Balance Overview (Live Aggregates)</span>
+            <span>{tr("Ecosystem Mass-Balance Overview (Live Aggregates)", "पारिस्थितिकी तंत्र संतुलन अवलोकन (लाइव कुल)")}</span>
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -112,16 +138,18 @@ export default function FieldVsSalesPlausibilityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Raw Harvest Total
+                    {tr("Raw Harvest Total", "कुल कच्ची कटाई")}
                   </span>
                   <div className="w-7 h-7 rounded-md bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                     <Boxes className="w-3.5 h-3.5" />
                   </div>
                 </div>
                 <div className="text-2xl font-bold text-foreground font-mono tracking-tight">
-                  {totalHarvestVolume.toFixed(1)} kg
+                  {totalHarvestVolume.toFixed(1)} {tr("kg", "किग्रा")}
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Recorded from registered apiaries</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  {tr("Recorded from registered apiaries", "पंजीकृत फार्मों से दर्ज")}
+                </p>
               </CardContent>
             </Card>
 
@@ -130,17 +158,17 @@ export default function FieldVsSalesPlausibilityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Purified & Blended
+                    {tr("Purified & Blended", "शुद्ध एवं मिश्रित")}
                   </span>
                   <div className="w-7 h-7 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
                     <Layers className="w-3.5 h-3.5" />
                   </div>
                 </div>
                 <div className="text-2xl font-bold text-foreground font-mono tracking-tight">
-                  {totalProcessedVolume.toFixed(1)} kg
+                  {totalProcessedVolume.toFixed(1)} {tr("kg", "किग्रा")}
                 </div>
                 <p className="text-[11px] text-muted-foreground mt-0.5">
-                  Yield Ratio: {((totalProcessedVolume / totalHarvestVolume) * 100).toFixed(1)}%
+                  {tr("Yield Ratio:", "उपज अनुपात:")} {((totalProcessedVolume / totalHarvestVolume) * 100).toFixed(1)}%
                 </p>
               </CardContent>
             </Card>
@@ -150,16 +178,18 @@ export default function FieldVsSalesPlausibilityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Wholesale Listed
+                    {tr("Wholesale Listed", "थोक सूचीबद्ध")}
                   </span>
                   <div className="w-7 h-7 rounded-md bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600">
                     <ShoppingBag className="w-3.5 h-3.5" />
                   </div>
                 </div>
                 <div className="text-2xl font-bold text-foreground font-mono tracking-tight">
-                  {totalListedVolume.toFixed(1)} kg
+                  {totalListedVolume.toFixed(1)} {tr("kg", "किग्रा")}
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Active lot offers on marketplace</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  {tr("Active lot offers on marketplace", "मार्केटप्लेस पर सक्रिय लॉट")}
+                </p>
               </CardContent>
             </Card>
 
@@ -168,16 +198,18 @@ export default function FieldVsSalesPlausibilityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Executed Sales
+                    {tr("Executed Sales", "पूर्ण की गई बिक्री")}
                   </span>
                   <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
                     <TrendingUp className="w-3.5 h-3.5" />
                   </div>
                 </div>
                 <div className="text-2xl font-bold text-foreground font-mono tracking-tight">
-                  {totalSoldVolume.toFixed(1)} kg
+                  {totalSoldVolume.toFixed(1)} {tr("kg", "किग्रा")}
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Escrow contracted purchase volume</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  {tr("Escrow contracted purchase volume", "अनुबंधित खरीद मात्रा")}
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -187,10 +219,10 @@ export default function FieldVsSalesPlausibilityPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-foreground tracking-tight">
-              Plausibility Verification Envelopes
+              {tr("Plausibility Verification Envelopes", "सत्यापन केस एवं लिफाफे")}
             </h2>
             <span className="text-xs font-mono text-muted-foreground">
-              {plausibilityAlerts.length} Monitored Production Batches
+              {plausibilityAlerts.length} {tr("Monitored Production Batches", "निगरानीधीन उत्पादन बैच")}
             </span>
           </div>
 
@@ -227,11 +259,11 @@ export default function FieldVsSalesPlausibilityPage() {
                                 : "bg-amber-50 text-amber-800 border-amber-200"
                             }`}
                           >
-                            {alert.alertMessage}
+                            {tr(alert.alertMessage, alert.alertMessage)}
                           </span>
                           {alert.requiresHumanReview && (
                             <Badge variant="outline" className="text-[10px] font-normal bg-background">
-                              Plausibility alert — requires human review
+                              {tr("Plausibility alert — requires human review", "समीक्षा चेतावनी — मानवीय समीक्षा आवश्यक")}
                             </Badge>
                           )}
                         </div>
@@ -240,7 +272,7 @@ export default function FieldVsSalesPlausibilityPage() {
 
                       <div className="flex items-center gap-2.5 shrink-0">
                         <span className="text-xs font-mono text-muted-foreground">
-                          Status: <strong className="text-foreground capitalize">{alert.status.replace("_", " ")}</strong>
+                          {tr("Status:", "स्थिति:")} <strong className="text-foreground capitalize">{translatePlausibilityStatus(alert.status)}</strong>
                         </span>
 
                         {alert.status !== "verified_balanced" && (
@@ -250,7 +282,7 @@ export default function FieldVsSalesPlausibilityPage() {
                             onClick={() => handleOpenReview(alert.id, "verified_balanced")}
                             className="h-7 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
                           >
-                            Mark Balanced
+                            {tr("Mark Balanced", "संतुलित चिह्नित करें")}
                           </Button>
                         )}
 
@@ -261,7 +293,7 @@ export default function FieldVsSalesPlausibilityPage() {
                             onClick={() => handleOpenReview(alert.id, "investigation_opened")}
                             className="h-7 text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-amber-950"
                           >
-                            Open Review Case
+                            {tr("Open Review Case", "समीक्षा केस खोलें")}
                           </Button>
                         )}
                       </div>
@@ -270,28 +302,36 @@ export default function FieldVsSalesPlausibilityPage() {
                     {/* Volume Ratio Breakdown */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-3.5 border-b border-border/60 text-xs">
                       <div className="space-y-0.5">
-                        <span className="text-muted-foreground block font-medium">Recorded Harvest</span>
+                        <span className="text-muted-foreground block font-medium">
+                          {tr("Recorded Harvest", "दर्ज कटाई")}
+                        </span>
                         <span className="text-base font-bold font-mono text-foreground">
-                          {alert.harvestVolumeKg.toFixed(1)} kg
+                          {alert.harvestVolumeKg.toFixed(1)} {tr("kg", "किग्रा")}
                         </span>
                       </div>
 
                       <div className="space-y-0.5">
-                        <span className="text-muted-foreground block font-medium">Output Processed</span>
+                        <span className="text-muted-foreground block font-medium">
+                          {tr("Output Processed", "प्रसंस्कृत आउटपुट")}
+                        </span>
                         <span className="text-base font-bold font-mono text-foreground">
-                          {alert.processedVolumeKg.toFixed(1)} kg
+                          {alert.processedVolumeKg.toFixed(1)} {tr("kg", "किग्रा")}
                         </span>
                       </div>
 
                       <div className="space-y-0.5">
-                        <span className="text-muted-foreground block font-medium">Marketplace Listed</span>
+                        <span className="text-muted-foreground block font-medium">
+                          {tr("Marketplace Listed", "मार्केटप्लेस सूचीबद्ध")}
+                        </span>
                         <span className="text-base font-bold font-mono text-foreground">
-                          {alert.listedVolumeKg.toFixed(1)} kg
+                          {alert.listedVolumeKg.toFixed(1)} {tr("kg", "किग्रा")}
                         </span>
                       </div>
 
                       <div className="space-y-0.5">
-                        <span className="text-muted-foreground block font-medium">Contracted Sales</span>
+                        <span className="text-muted-foreground block font-medium">
+                          {tr("Contracted Sales", "अनुबंधित बिक्री")}
+                        </span>
                         <span
                           className={`text-base font-bold font-mono ${
                             alert.soldVolumeKg > alert.processedVolumeKg
@@ -299,7 +339,7 @@ export default function FieldVsSalesPlausibilityPage() {
                               : "text-emerald-600"
                           }`}
                         >
-                          {alert.soldVolumeKg.toFixed(1)} kg
+                          {alert.soldVolumeKg.toFixed(1)} {tr("kg", "किग्रा")}
                         </span>
                       </div>
                     </div>
@@ -308,14 +348,14 @@ export default function FieldVsSalesPlausibilityPage() {
                     <div className="pt-3.5 space-y-2.5">
                       <div className="bg-muted/30 p-3.5 rounded-lg border border-border/60 text-xs text-foreground leading-relaxed">
                         <strong className="text-foreground block mb-1">
-                          Plausibility Analysis & Mass Balance Findings:
+                          {tr("Plausibility Analysis & Mass Balance Findings:", "संतुलन विश्लेषण एवं निष्कर्ष:")}
                         </strong>
                         {alert.explanation}
                       </div>
 
                       {alert.reviewNotes && (
                         <div className="bg-amber-50/60 border border-amber-200 p-3 rounded-lg text-xs text-muted-foreground">
-                          <strong className="text-amber-800 block mb-0.5">Auditor Review Notes:</strong>
+                          <strong className="text-amber-800 block mb-0.5">{tr("Auditor Review Notes:", "ऑडिटर समीक्षा टिप्पणी:")}</strong>
                           {alert.reviewNotes}
                         </div>
                       )}
@@ -323,7 +363,7 @@ export default function FieldVsSalesPlausibilityPage() {
                       {/* Linked Entities */}
                       <div className="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-muted-foreground font-medium">Associated Batches:</span>
+                          <span className="text-muted-foreground font-medium">{tr("Associated Batches:", "संबद्ध बैच:")}</span>
                           {alert.relatedBatches.map((b) => (
                             <Link
                               key={b.id}
@@ -338,14 +378,14 @@ export default function FieldVsSalesPlausibilityPage() {
 
                         {alert.relatedOrders.length > 0 && (
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-muted-foreground font-medium">Orders:</span>
+                            <span className="text-muted-foreground font-medium">{tr("Orders:", "ऑर्डर:")}</span>
                             {alert.relatedOrders.map((o) => (
                               <Link
                                 key={o.id}
                                 href={`/marketplace/orders/${o.id}`}
                                 className="px-2 py-0.5 rounded-md bg-muted hover:bg-muted/80 text-foreground font-mono text-[11px] inline-flex items-center gap-1 transition-colors border border-border/60"
                               >
-                                <span>{o.id} ({o.quantityKg}kg)</span>
+                                <span>{o.id} ({o.quantityKg}{tr("kg", "किग्रा")})</span>
                                 <ExternalLink className="w-3 h-3" />
                               </Link>
                             ))}
@@ -365,11 +405,17 @@ export default function FieldVsSalesPlausibilityPage() {
           isOpen={reviewModalOpen}
           onClose={() => setReviewModalOpen(false)}
           onConfirm={handleConfirmReview}
-          title={`Update Plausibility Review Status?`}
-          description="Provide justification notes for updating the mass-balance review classification. This decision will be permanently logged to the audit trail."
-          confirmText="Confirm Status Update"
+          title={tr("Update Plausibility Review Status?", "समीक्षा स्थिति अद्यतन करें?")}
+          description={tr(
+            "Provide justification notes for updating the mass-balance review classification. This decision will be permanently logged to the audit trail.",
+            "समीक्षा वर्गीकरण को अद्यतन करने के लिए औचित्य टिप्पणी प्रदान करें। यह निर्णय स्थायी रूप से ऑडिट ट्रेल में दर्ज किया जाएगा।"
+          )}
+          confirmText={tr("Confirm Status Update", "स्थिति अद्यतन की पुष्टि करें")}
           variant={targetStatus === "verified_balanced" ? "success" : "warning"}
-          reasonPlaceholder="Enter human review notes and reconciliation findings..."
+          reasonPlaceholder={tr(
+            "Enter human review notes and reconciliation findings...",
+            "मानवीय समीक्षा टिप्पणी और सुलह निष्कर्ष दर्ज करें..."
+          )}
         />
       </div>
     </AdminRoleGuard>

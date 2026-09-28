@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
+import { useLanguage } from "@/context/language-context";
 import {
   Activity,
   Plus,
@@ -45,6 +46,7 @@ const ACTIVITY_ICONS: Record<string, typeof Activity> = {
 
 function ActivitiesContent() {
   const { activities, apiaries, isLoaded } = useTraceability();
+  const { tr, trStatus } = useLanguage();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const [typeFilter, setTypeFilter] = React.useState<string>("all");
@@ -70,7 +72,7 @@ function ActivitiesContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading field activities...
+          {tr("Loading field activities...", "फ़ील्ड गतिविधियां लोड हो रही हैं...")}
         </div>
       </div>
     );
@@ -83,14 +85,17 @@ function ActivitiesContent() {
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Colony Field Activities
+              {tr("Colony Field Activities", "कॉलोनी फ़ील्ड गतिविधियां")}
             </h1>
             <Badge variant="outline" className="font-mono text-xs">
-              Operational Logs
+              {tr("Operational Logs", "परिचालन लॉग")}
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Chronological field capture log of yard inspections, queen observations, and treatments.
+            {tr(
+              "Chronological field capture log of yard inspections, queen observations, and treatments.",
+              "छत्ता निरीक्षण, रानी मधुमक्खी अवलोकन और उपचार का कालानुक्रमिक फ़ील्ड लॉग।"
+            )}
           </p>
         </div>
 
@@ -98,7 +103,7 @@ function ActivitiesContent() {
           <Button asChild size="sm">
             <Link href="/activities/new">
               <Plus className="h-4 w-4" />
-              <span>Capture Activity</span>
+              <span>{tr("Capture Activity", "गतिविधि दर्ज करें")}</span>
             </Link>
           </Button>
         </div>
@@ -110,13 +115,13 @@ function ActivitiesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Total Activities Logged
+                {tr("Total Activities Logged", "कुल दर्ज गतिविधियां")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 {activities.length}
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                Across all registered hives
+                {tr("Across all registered hives", "सभी पंजीकृत छत्तों में")}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
@@ -129,13 +134,13 @@ function ActivitiesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Routine Inspections
+                {tr("Routine Inspections", "नियमित निरीक्षण")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 {inspectionsCount}
               </h3>
               <p className="text-[11px] text-emerald-700 mt-0.5 font-medium">
-                Brood & health verified
+                {tr("Brood & health verified", "स्वास्थ्य व विकास सत्यापित")}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -148,13 +153,13 @@ function ActivitiesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Pest Treatments
+                {tr("Pest Treatments", "कीट/रोग उपचार")}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-foreground mt-0.5">
                 {treatmentsCount}
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                Organic mite control protocols
+                {tr("Organic mite control protocols", "जैविक उपचार प्रोटोकॉल")}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
@@ -167,13 +172,13 @@ function ActivitiesContent() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Sync Status
+                {tr("Sync Status", "सिंक स्थिति")}
               </p>
               <h3 className="text-lg font-bold tracking-tight text-emerald-700 mt-0.5">
-                100% Synced
+                {tr("100% Synced", "100% समन्वित")}
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                Local state ledger consistent
+                {tr("Local state ledger consistent", "खाता बही सुसंगत")}
               </p>
             </div>
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -189,7 +194,7 @@ function ActivitiesContent() {
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search activities by hive, apiary, notes, or operator..."
+            placeholder={tr("Search activities by hive, apiary, notes, or operator...", "छत्ते, मधुमक्खी शाला, नोट्स या ऑपरेटर द्वारा खोजें...")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="h-9.5 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs"
@@ -199,19 +204,19 @@ function ActivitiesContent() {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <Filter className="h-3.5 w-3.5" />
-            <span>Type:</span>
+            <span>{tr("Type:", "प्रकार:")}</span>
           </div>
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
             className="h-9.5 rounded-lg border border-input bg-background px-3 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-2xs cursor-pointer"
           >
-            <option value="all">All Types</option>
-            <option value="Inspection">Inspection</option>
-            <option value="Feeding">Feeding</option>
-            <option value="Queen observation">Queen observation</option>
-            <option value="Pest treatment">Pest treatment</option>
-            <option value="Floral observation">Floral observation</option>
+            <option value="all">{tr("All Types", "सभी प्रकार")}</option>
+            <option value="Inspection">{tr("Inspection", "निरीक्षण")}</option>
+            <option value="Feeding">{tr("Feeding", "पोषण")}</option>
+            <option value="Queen observation">{tr("Queen observation", "रानी अवलोकन")}</option>
+            <option value="Pest treatment">{tr("Pest treatment", "कीट उपचार")}</option>
+            <option value="Floral observation">{tr("Floral observation", "पुष्प अवलोकन")}</option>
           </select>
         </div>
       </div>
@@ -220,13 +225,16 @@ function ActivitiesContent() {
       {filteredActivities.length === 0 ? (
         <EmptyState
           icon={Activity}
-          title="No activities found"
-          description="No log records match your current search and type filter. Record field inspections from apiary yards."
+          title={tr("No activities found", "कोई गतिविधि नहीं मिली")}
+          description={tr(
+            "No log records match your current search and type filter. Record field inspections from apiary yards.",
+            "वर्तमान खोज से मेल खाता कोई रिकॉर्ड नहीं मिला। मधुमक्खी शाला से फ़ील्ड निरीक्षण दर्ज करें।"
+          )}
           action={
             <Button asChild size="default">
               <Link href="/activities/new">
                 <Plus className="h-4 w-4" />
-                <span>Log New Activity</span>
+                <span>{tr("Log New Activity", "नई गतिविधि दर्ज करें")}</span>
               </Link>
             </Button>
           }
@@ -236,13 +244,13 @@ function ActivitiesContent() {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40">
-                <TableHead className="w-[170px]">Date & Time</TableHead>
-                <TableHead>Activity Type</TableHead>
-                <TableHead>Hive / Apiary</TableHead>
-                <TableHead>Queen Status</TableHead>
-                <TableHead className="hidden md:table-cell">Conditions</TableHead>
-                <TableHead className="hidden lg:table-cell">Observations & Notes</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead className="w-[170px]">{tr("Date & Time", "तारीख और समय")}</TableHead>
+                <TableHead>{tr("Activity Type", "गतिविधि प्रकार")}</TableHead>
+                <TableHead>{tr("Hive / Apiary", "छत्ता / शाला")}</TableHead>
+                <TableHead>{tr("Queen Status", "रानी स्थिति")}</TableHead>
+                <TableHead className="hidden md:table-cell">{tr("Conditions", "परिस्थितियां")}</TableHead>
+                <TableHead className="hidden lg:table-cell">{tr("Observations & Notes", "टिप्पणियाँ व नोट्स")}</TableHead>
+                <TableHead className="text-right">{tr("Action", "कार्रवाई")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -273,7 +281,19 @@ function ActivitiesContent() {
                         <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-50 text-amber-700 border border-amber-200">
                           <Icon className="h-3 w-3" />
                         </span>
-                        <span>{act.type}</span>
+                        <span>
+                          {act.type === "Inspection"
+                            ? tr("Inspection", "निरीक्षण")
+                            : act.type === "Feeding"
+                            ? tr("Feeding", "पोषण")
+                            : act.type === "Queen observation"
+                            ? tr("Queen observation", "रानी अवलोकन")
+                            : act.type === "Pest treatment"
+                            ? tr("Pest treatment", "कीट उपचार")
+                            : act.type === "Floral observation"
+                            ? tr("Floral observation", "पुष्प अवलोकन")
+                            : act.type}
+                        </span>
                       </div>
                     </TableCell>
 
@@ -294,7 +314,7 @@ function ActivitiesContent() {
 
                     <TableCell>
                       <StatusBadge status={act.queenStatus} size="sm">
-                        {act.queenStatus}
+                        {trStatus(act.queenStatus)}
                       </StatusBadge>
                     </TableCell>
 
@@ -321,7 +341,7 @@ function ActivitiesContent() {
                         className="text-primary hover:text-primary hover:bg-amber-50 font-medium"
                       >
                         <Link href={`/hives/${act.hiveId}`}>
-                          View Hive →
+                          {tr("View Hive →", "छत्ता देखें →")}
                         </Link>
                       </Button>
                     </TableCell>
@@ -337,13 +357,14 @@ function ActivitiesContent() {
 }
 
 export default function ActivitiesPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Traceability", href: "#" },
-          { label: "Colony Activities", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Traceability", "ट्रेसेबिलिटी"), href: "#" },
+          { label: tr("Colony Activities", "कॉलोनी गतिविधियां"), active: true },
         ]}
         defaultNavId="activities"
       >

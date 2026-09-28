@@ -7,6 +7,7 @@ import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 import {
   ArrowLeft,
   ArrowRight,
@@ -696,13 +697,14 @@ function ReceivingDetailContent() {
 }
 
 export default function ReceivingDetailPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Receiving", href: "/receiving" },
-          { label: "Intake Review", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Receiving", "प्राप्ति"), href: "/receiving" },
+          { label: tr("Intake Review", "आवक समीक्षा"), active: true },
         ]}
         defaultNavId="receiving"
       >

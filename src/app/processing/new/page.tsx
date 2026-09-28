@@ -7,6 +7,7 @@ import { AppShell } from "@/components/shell";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useTraceability } from "@/context/traceability-context";
 import { useAuthSession } from "@/context/auth-session-context";
+import { useLanguage } from "@/context/language-context";
 import { ProcessType } from "@/types/processing";
 import {
   MOCK_PROCESSING_FACILITIES,
@@ -52,6 +53,7 @@ function CreateProcessingJobContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedBatchId = searchParams.get("batchId");
+  const { tr } = useLanguage();
 
   const { getEligibleProcessingBatches, addProcessingJob, processingJobs, batches, isLoaded } =
     useTraceability();
@@ -170,7 +172,7 @@ function CreateProcessingJobContent() {
     setErrorMessage(null);
 
     if (selectedInputs.length === 0) {
-      setErrorMessage("Please select at least one input raw honey batch.");
+      setErrorMessage(tr("Please select at least one input raw honey batch.", "कृपया कम से कम एक इनपुट कच्चा शहद बैच चुनें।"));
       return;
     }
 
@@ -178,36 +180,36 @@ function CreateProcessingJobContent() {
       const b = eligibleBatches.find((batch) => batch.batchNumber === item.batchId);
       const avail = b ? (b.remainingWeightKg !== undefined ? b.remainingWeightKg : b.weightKg) : 0;
       if (item.selectedWeight <= 0) {
-        setErrorMessage(`Input weight for batch ${item.batchId} must be greater than 0 kg.`);
+        setErrorMessage(tr(`Input weight for batch ${item.batchId} must be greater than 0 kg.`, `बैच ${item.batchId} के लिए इनपुट वजन 0 किग्रा से अधिक होना चाहिए।`));
         return;
       }
       if (item.selectedWeight > avail + 0.001) {
         setErrorMessage(
-          `Selected weight for ${item.batchId} (${item.selectedWeight} kg) exceeds available quantity (${avail} kg).`
+          tr(`Selected weight for ${item.batchId} (${item.selectedWeight} kg) exceeds available quantity (${avail} kg).`, `${item.batchId} के लिए चयनित वजन (${item.selectedWeight} किग्रा) उपलब्ध मात्रा (${avail} किग्रा) से अधिक है।`)
         );
         return;
       }
     }
 
     if (!outputQuantityKg || outputWeightNumber <= 0) {
-      setErrorMessage("Please specify a valid output quantity.");
+      setErrorMessage(tr("Please specify a valid output quantity.", "कृपया एक मान्य आउटपुट मात्रा निर्दिष्ट करें।"));
       return;
     }
 
     if (outputWeightNumber > totalInputWeightKg) {
       setErrorMessage(
-        `Output quantity (${outputWeightNumber} kg) cannot be greater than total input quantity (${totalInputWeightKg} kg).`
+        tr(`Output quantity (${outputWeightNumber} kg) cannot be greater than total input quantity (${totalInputWeightKg} kg).`, `आउटपुट मात्रा (${outputWeightNumber} किग्रा) कुल इनपुट मात्रा (${totalInputWeightKg} किग्रा) से अधिक नहीं हो सकती।`)
       );
       return;
     }
 
     if (!outputHoneyType.trim()) {
-      setErrorMessage("Please specify the output honey type.");
+      setErrorMessage(tr("Please specify the output honey type.", "कृपया आउटपुट शहद प्रकार निर्दिष्ट करें।"));
       return;
     }
 
     if (!outputContainerRef.trim()) {
-      setErrorMessage("Please specify the output container reference.");
+      setErrorMessage(tr("Please specify the output container reference.", "कृपया आउटपुट कंटेनर संदर्भ निर्दिष्ट करें।"));
       return;
     }
 
@@ -249,7 +251,7 @@ function CreateProcessingJobContent() {
       setErrorMessage(
         err instanceof Error
           ? err.message
-          : "An error occurred while creating the processing record."
+          : tr("An error occurred while creating the processing record.", "प्रसंस्करण रिकॉर्ड बनाते समय एक त्रुटि हुई।")
       );
     }
   };
@@ -258,7 +260,7 @@ function CreateProcessingJobContent() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-sm text-muted-foreground animate-pulse">
-          Loading processing form configuration...
+          {tr("Loading processing form configuration...", "प्रसंस्करण फॉर्म कॉन्फ़िगरेशन लोड हो रहा है...")}
         </div>
       </div>
     );
@@ -276,7 +278,7 @@ function CreateProcessingJobContent() {
         >
           <Link href="/processing">
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Processing & Blending</span>
+            <span>{tr("Back to Processing & Blending", "प्रसंस्करण एवं मिश्रण पर वापस")}</span>
           </Link>
         </Button>
       </div>
@@ -285,14 +287,14 @@ function CreateProcessingJobContent() {
       <div className="space-y-1">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Create Processing & Blending Record
+            {tr("Create Processing & Blending Record", "प्रसंस्करण और मिश्रण रिकॉर्ड बनाएं")}
           </h1>
           <Badge variant="outline" className="font-mono text-xs">
-            Step 6 Lineage
+            {tr("Step 6 Lineage", "चरण 6 वंशावली")}
           </Badge>
         </div>
         <p className="text-xs sm:text-sm text-muted-foreground">
-          Record a verifiable material transformation event. Original raw batches remain intact while linking forward to the new processed output batch.
+          {tr("Record a verifiable material transformation event. Original raw batches remain intact while linking forward to the new processed output batch.", "सत्यापन योग्य सामग्री परिवर्तन गतिविधि रिकॉर्ड करें। नए प्रसंस्कृत आउटपुट बैच से जुड़ते हुए मूल कच्चे बैच अक्षुण्ण रहते हैं।")}
         </p>
       </div>
 
@@ -301,7 +303,7 @@ function CreateProcessingJobContent() {
         <div className="p-3.5 rounded-lg border border-destructive/50 bg-destructive/10 text-destructive text-xs flex items-start gap-2.5">
           <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
           <div>
-            <strong className="font-semibold block">Validation Error</strong>
+            <strong className="font-semibold block">{tr("Validation Error", "सत्यापन त्रुटि")}</strong>
             <span>{errorMessage}</span>
           </div>
         </div>
@@ -320,17 +322,17 @@ function CreateProcessingJobContent() {
                 </span>
                 <div>
                   <CardTitle className="text-base font-bold text-foreground">
-                    Section A — Input Material
+                    {tr("Section A — Input Material", "खंड A — इनपुट सामग्री")}
                   </CardTitle>
                   <CardDescription className="text-xs">
-                    Select one or multiple eligible received batches and specify the quantity to allocate.
+                    {tr("Select one or multiple eligible received batches and specify the quantity to allocate.", "एक या अधिक पात्र प्राप्त बैचों का चयन करें और आवंटित करने के लिए मात्रा निर्दिष्ट करें।")}
                   </CardDescription>
                 </div>
               </div>
 
               <div className="text-right">
                 <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                  Total Input Weight
+                  {tr("Total Input Weight", "कुल इनपुट वजन")}
                 </span>
                 <span className="text-sm font-mono font-bold text-foreground">
                   {totalInputWeightKg.toFixed(1)} kg
@@ -342,7 +344,7 @@ function CreateProcessingJobContent() {
           <CardContent className="pt-4 space-y-4">
             {eligibleBatches.length === 0 ? (
               <div className="py-6 text-center text-xs text-muted-foreground bg-muted/20 rounded-lg p-4">
-                No received raw honey batches available in the active facility. Inbound honey must be accepted through Receiving before processing.
+                {tr("No received raw honey batches available in the active facility. Inbound honey must be accepted through Receiving before processing.", "सक्रिय सुविधा में कोई प्राप्त कच्चा शहद बैच उपलब्ध नहीं है। प्रसंस्करण से पहले आवक शहद को आवक रसीद के माध्यम से स्वीकार किया जाना चाहिए।")}
               </div>
             ) : (
               <div className="space-y-3">
@@ -380,10 +382,10 @@ function CreateProcessingJobContent() {
                                 </Badge>
                               </div>
                               <p className="text-[11px] text-muted-foreground">
-                                Source: <strong>{batch.currentCustodyOrgName || batch.sourceApiaryName}</strong> • Container: {batch.containerRef}
+                                {tr("Source:", "स्रोत:")} <strong>{batch.currentCustodyOrgName || batch.sourceApiaryName}</strong> • {tr("Container:", "कंटेनर:")} {batch.containerRef}
                               </p>
                               <p className="text-[10px] text-muted-foreground">
-                                Available in inventory: <strong className="text-foreground font-mono">{availableKg.toFixed(1)} kg</strong>
+                                {tr("Available in inventory:", "इन्वेंट्री में उपलब्ध:")} <strong className="text-foreground font-mono">{availableKg.toFixed(1)} kg</strong>
                               </p>
                             </label>
                           </div>
@@ -391,7 +393,7 @@ function CreateProcessingJobContent() {
                           {isSelected && selectedItem && (
                             <div className="flex items-center gap-2 self-end sm:self-center pl-7 sm:pl-0">
                               <label className="text-[11px] font-medium text-muted-foreground whitespace-nowrap">
-                                Selected Weight (kg):
+                                {tr("Selected Weight (kg):", "चयनित वजन (किग्रा):")}
                               </label>
                               <div className="relative w-32">
                                 <input
@@ -429,10 +431,10 @@ function CreateProcessingJobContent() {
               </span>
               <div>
                 <CardTitle className="text-base font-bold text-foreground">
-                  Section B — Process Details
+                  {tr("Section B — Process Details", "खंड B — प्रक्रिया विवरण")}
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  Operational parameters, equipment line, and supervisory metadata.
+                  {tr("Operational parameters, equipment line, and supervisory metadata.", "परिचालन पैरामीटर, उपकरण लाइन और पर्यवेक्षी मेटाडेटा।")}
                 </CardDescription>
               </div>
             </div>
@@ -442,25 +444,25 @@ function CreateProcessingJobContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Process Type <span className="text-destructive">*</span>
+                  {tr("Process Type", "प्रक्रिया का प्रकार")} <span className="text-destructive">*</span>
                 </label>
                 <select
                   value={processType}
                   onChange={(e) => setProcessType(e.target.value as ProcessType)}
                   className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
-                  <option value="Filtering">Filtering (Mesh & Clarification)</option>
-                  <option value="Settling">Settling (Gravity Micro-Separation)</option>
-                  <option value="Blending">Blending (Multi-origin Homogenization)</option>
-                  <option value="Heating">Heating (Controlled Low-Temp Warming)</option>
-                  <option value="Filling preparation">Filling preparation</option>
-                  <option value="Other">Other</option>
+                  <option value="Filtering">{tr("Filtering (Mesh & Clarification)", "छानना (जाल और स्पष्टीकरण)")}</option>
+                  <option value="Settling">{tr("Settling (Gravity Micro-Separation)", "निस्तारण (गुरुत्वाकर्षण सूक्ष्म-पृथक्करण)")}</option>
+                  <option value="Blending">{tr("Blending (Multi-origin Homogenization)", "मिश्रण (बहु-स्रोत समरूपीकरण)")}</option>
+                  <option value="Heating">{tr("Heating (Controlled Low-Temp Warming)", "गर्म करना (नियंत्रित कम तापमान वार्मिंग)")}</option>
+                  <option value="Filling preparation">{tr("Filling preparation", "भरने की तैयारी")}</option>
+                  <option value="Other">{tr("Other", "अन्य")}</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Process Run Reference Number
+                  {tr("Process Run Reference Number", "प्रक्रिया रन संदर्भ संख्या")}
                 </label>
                 <input
                   type="text"
@@ -473,7 +475,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Processing Facility <span className="text-destructive">*</span>
+                  {tr("Processing Facility", "प्रसंस्करण सुविधा")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -485,7 +487,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Processing Line / Station <span className="text-destructive">*</span>
+                  {tr("Processing Line / Station", "प्रसंस्करण लाइन / स्टेशन")} <span className="text-destructive">*</span>
                 </label>
                 <select
                   value={line}
@@ -502,7 +504,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Start Date & Time <span className="text-destructive">*</span>
+                  {tr("Start Date & Time", "प्रारंभ तिथि और समय")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -515,7 +517,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  End Date & Time
+                  {tr("End Date & Time", "समाप्ति तिथि और समय")}
                 </label>
                 <input
                   type="text"
@@ -528,7 +530,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5 sm:col-span-2">
                 <label className="font-semibold text-foreground">
-                  Plant Operator / Engineer <span className="text-destructive">*</span>
+                  {tr("Plant Operator / Engineer", "संयंत्र संचालक / इंजीनियर")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -540,11 +542,11 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5 sm:col-span-2">
                 <label className="font-semibold text-foreground">
-                  Process Notes & Temperature Parameters
+                  {tr("Process Notes & Temperature Parameters", "प्रक्रिया टिप्पणियाँ और तापमान पैरामीटर")}
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Specify filter micron rating, warming temperatures (<38°C), settling duration, etc."
+                  placeholder={tr("Specify filter micron rating, warming temperatures (<38°C), settling duration, etc.", "फ़िल्टर माइक्रोन रेटिंग, गर्म करने का तापमान (<38°C), स्थिर करने की अवधि आदि निर्दिष्ट करें।")}
                   value={processNotes}
                   onChange={(e) => setProcessNotes(e.target.value)}
                   className="w-full rounded-md border border-input bg-background p-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -565,10 +567,10 @@ function CreateProcessingJobContent() {
               </span>
               <div>
                 <CardTitle className="text-base font-bold text-foreground">
-                  Section C — Output Material & Yield Calculation
+                  {tr("Section C — Output Material & Yield Calculation", "खंड C — आउटपुट सामग्री और उत्पादन गणना")}
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  Define the resulting processed honey batch specifications and calculate yield efficiency.
+                  {tr("Define the resulting processed honey batch specifications and calculate yield efficiency.", "परिणामी प्रसंस्कृत शहद बैच विनिर्देशों को परिभाषित करें और दक्षता की गणना करें।")}
                 </CardDescription>
               </div>
             </div>
@@ -579,7 +581,7 @@ function CreateProcessingJobContent() {
             <div className="rounded-lg bg-muted/20 border border-border p-4 grid grid-cols-3 gap-3">
               <div className="space-y-0.5">
                 <span className="text-[10px] uppercase font-semibold text-muted-foreground">
-                  Total Input Weight
+                  {tr("Total Input Weight", "कुल इनपुट वजन")}
                 </span>
                 <p className="text-base font-mono font-bold text-foreground">
                   {totalInputWeightKg.toFixed(1)} kg
@@ -588,7 +590,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-0.5">
                 <span className="text-[10px] uppercase font-semibold text-muted-foreground">
-                  Output Weight
+                  {tr("Output Weight", "आउटपुट वजन")}
                 </span>
                 <p className={`text-base font-mono font-bold ${isOutputExceedingInput ? "text-destructive" : "text-foreground"}`}>
                   {outputWeightNumber.toFixed(1)} kg
@@ -597,7 +599,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-0.5">
                 <span className="text-[10px] uppercase font-semibold text-muted-foreground">
-                  Calculated Yield %
+                  {tr("Calculated Yield %", "परिकलित उपज %")}
                 </span>
                 <p className={`text-base font-mono font-bold ${isOutputExceedingInput ? "text-destructive" : "text-emerald-700"}`}>
                   {yieldPercentage.toFixed(2)}%
@@ -609,7 +611,7 @@ function CreateProcessingJobContent() {
               <div className="p-2.5 rounded-md bg-destructive/10 border border-destructive/40 text-destructive text-xs flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 shrink-0" />
                 <span>
-                  Validation Error: Output quantity ({outputWeightNumber} kg) cannot be greater than total input quantity ({totalInputWeightKg} kg).
+                  {tr(`Validation Error: Output quantity (${outputWeightNumber} kg) cannot be greater than total input quantity (${totalInputWeightKg} kg).`, `सत्यापन त्रुटि: आउटपुट मात्रा (${outputWeightNumber} किग्रा) कुल इनपुट मात्रा (${totalInputWeightKg} किग्रा) से अधिक नहीं हो सकती।`)}
                 </span>
               </div>
             )}
@@ -617,20 +619,20 @@ function CreateProcessingJobContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Output Honey Type / Blend <span className="text-destructive">*</span>
+                  {tr("Output Honey Type / Blend", "आउटपुट शहद प्रकार / मिश्रण")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
                   value={outputHoneyType}
                   onChange={(e) => setOutputHoneyType(e.target.value)}
-                  placeholder="e.g. Himalayan Wild Multifloral (Micro-filtered)"
+                  placeholder={tr("e.g. Himalayan Wild Multifloral (Micro-filtered)", "उदा. हिमालयी वन्य मल्टीफ्लोरल (माइक्रो-फ़िल्टर किया हुआ)")}
                   className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Output Quantity (kg) <span className="text-destructive">*</span>
+                  {tr("Output Quantity (kg)", "आउटपुट मात्रा (किग्रा)")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="number"
@@ -648,7 +650,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Output Container / Tank Reference <span className="text-destructive">*</span>
+                  {tr("Output Container / Tank Reference", "आउटपुट कंटेनर / टैंक संदर्भ")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -661,7 +663,7 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">
-                  Output Storage Location <span className="text-destructive">*</span>
+                  {tr("Output Storage Location", "आउटपुट भंडारण स्थान")} <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
@@ -673,11 +675,11 @@ function CreateProcessingJobContent() {
 
               <div className="space-y-1.5 sm:col-span-2">
                 <label className="font-semibold text-foreground">
-                  Output Quality & Filtration Notes
+                  {tr("Output Quality & Filtration Notes", "आउटपुट गुणवत्ता और निस्पंदन टिप्पणियाँ")}
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Observations on clarity, aroma retention, viscosity, and tank seal integrity..."
+                  placeholder={tr("Observations on clarity, aroma retention, viscosity, and tank seal integrity...", "स्पष्टता, सुगंध प्रतिधारण, श्यानता और टैंक सील अखंडता पर अवलोकन...")}
                   value={outputNotes}
                   onChange={(e) => setOutputNotes(e.target.value)}
                   className="w-full rounded-md border border-input bg-background p-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -696,11 +698,11 @@ function CreateProcessingJobContent() {
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-primary" />
                 <CardTitle className="text-sm font-bold text-foreground">
-                  Verifiable Material Lineage Preview
+                  {tr("Verifiable Material Lineage Preview", "सत्यापन योग्य सामग्री वंशावली पूर्वावलोकन")}
                 </CardTitle>
               </div>
               <Badge variant="outline" className="text-[10px] text-primary border-primary/40 font-mono">
-                Lineage Guaranteed
+                {tr("Lineage Guaranteed", "वंशावली गारंटीकृत")}
               </Badge>
             </div>
           </CardHeader>
@@ -712,14 +714,14 @@ function CreateProcessingJobContent() {
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
                     <Wheat className="h-3.5 w-3.5 text-primary" />
-                    Input Material (Raw Batch)
+                    {tr("Input Material (Raw Batch)", "इनपुट सामग्री (कच्चा बैच)")}
                   </span>
                   <span className="font-mono text-xs font-bold text-foreground">
-                    {totalInputWeightKg.toFixed(1)} kg total
+                    {totalInputWeightKg.toFixed(1)} {tr("kg total", "किग्रा कुल")}
                   </span>
                 </div>
                 {selectedInputs.length === 0 ? (
-                  <p className="text-xs text-muted-foreground italic">No input batch selected.</p>
+                  <p className="text-xs text-muted-foreground italic">{tr("No input batch selected.", "कोई इनपुट बैच नहीं चुना गया।")}</p>
                 ) : (
                   <div className="space-y-1 pt-1">
                     {selectedInputs.map((i) => {
@@ -749,7 +751,7 @@ function CreateProcessingJobContent() {
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
                     <Layers className="h-3.5 w-3.5" />
-                    Processing Event ({nextJobId})
+                    {tr("Processing Event", "प्रसंस्करण गतिविधि")} ({nextJobId})
                   </span>
                   <Badge variant="secondary" className="text-[10px] py-0 font-mono">
                     {processType}
@@ -759,7 +761,7 @@ function CreateProcessingJobContent() {
                   {facility.split(",")[0]} • {line}
                 </p>
                 <p className="text-[11px] text-muted-foreground font-mono">
-                  Operator: {operator}
+                  {tr("Operator:", "ऑपरेटर:")} {operator}
                 </p>
               </div>
 
@@ -773,17 +775,17 @@ function CreateProcessingJobContent() {
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
                     <Package className="h-3.5 w-3.5 text-emerald-600" />
-                    Output Material (Processed Batch)
+                    {tr("Output Material (Processed Batch)", "आउटपुट सामग्री (प्रसंस्कृत बैच)")}
                   </span>
                   <span className="font-mono text-xs font-bold text-emerald-700">
-                    {outputWeightNumber.toFixed(1)} kg ({yieldPercentage.toFixed(1)}% yield)
+                    {outputWeightNumber.toFixed(1)} kg ({yieldPercentage.toFixed(1)}% {tr("yield", "उपज")})
                   </span>
                 </div>
                 <p className="text-xs font-mono font-bold text-foreground">
                   {nextOutputBatchId}
                 </p>
                 <p className="text-[11px] text-muted-foreground">
-                  {outputHoneyType || "Processed Honey"} • Container: {outputContainerRef}
+                  {outputHoneyType || "Processed Honey"} • {tr("Container:", "कंटेनर:")} {outputContainerRef}
                 </p>
               </div>
 
@@ -791,7 +793,7 @@ function CreateProcessingJobContent() {
               <div className="rounded-md bg-emerald-50 border border-emerald-200 p-2.5 flex items-center gap-2 text-xs text-emerald-800">
                 <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
                 <span className="font-medium">
-                  Output remains linked to source batch. Original input batch records remain unchanged.
+                  {tr("Output remains linked to source batch. Original input batch records remain unchanged.", "आउटपुट स्रोत बैच से जुड़ा रहता है। मूल इनपुट बैच रिकॉर्ड अपरिवर्तित रहते हैं।")}
                 </span>
               </div>
             </div>
@@ -801,7 +803,7 @@ function CreateProcessingJobContent() {
         {/* Action Button */}
         <div className="flex items-center justify-end gap-3 pt-2">
           <Button variant="outline" asChild size="sm">
-            <Link href="/processing">Cancel</Link>
+            <Link href="/processing">{tr("Cancel", "रद्द करें")}</Link>
           </Button>
 
           <Button
@@ -810,7 +812,7 @@ function CreateProcessingJobContent() {
             disabled={isOutputExceedingInput || selectedInputs.length === 0}
             className="gap-2 shadow-xs font-semibold cursor-pointer"
           >
-            <span>Review & Create Record</span>
+            <span>{tr("Review & Create Record", "समीक्षा करें और रिकॉर्ड बनाएं")}</span>
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
@@ -824,10 +826,10 @@ function CreateProcessingJobContent() {
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-foreground flex items-center gap-2">
               <Layers className="h-4 w-4 text-primary" />
-              <span>Review & Confirm Processing Record</span>
+              <span>{tr("Review & Confirm Processing Record", "प्रसंस्करण रिकॉर्ड की समीक्षा और पुष्टि करें")}</span>
             </DialogTitle>
             <DialogDescription className="text-xs">
-              Verify all material quantities and operational parameters before committing this record to the immutable traceability timeline.
+              {tr("Verify all material quantities and operational parameters before committing this record to the immutable traceability timeline.", "अपरिवर्तनीय ट्रेसिबिलिटी टाइमलाइन में इस रिकॉर्ड को दर्ज करने से पहले सभी सामग्री मात्राओं और परिचालन मापदंडों को सत्यापित करें।")}
             </DialogDescription>
           </DialogHeader>
 
@@ -836,7 +838,7 @@ function CreateProcessingJobContent() {
             <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 flex items-start gap-2.5 text-amber-900">
               <Info className="h-4 w-4 shrink-0 mt-0.5 text-amber-700" />
               <div className="text-[11px] leading-relaxed">
-                <strong>Traceability Guarantee:</strong> Creating this processing record adds a new traceability event. Original input batch records remain unchanged.
+                <strong>{tr("Traceability Guarantee:", "ट्रेसिबिलिटी गारंटी:")}</strong> {tr("Creating this processing record adds a new traceability event. Original input batch records remain unchanged.", "यह प्रसंस्करण रिकॉर्ड बनाने से एक नई ट्रेसिबिलिटी गतिविधि जुड़ती है। मूल इनपुट बैच रिकॉर्ड अपरिवर्तित रहते हैं।")}
               </div>
             </div>
 
@@ -845,7 +847,7 @@ function CreateProcessingJobContent() {
               <div className="grid grid-cols-2 gap-2 pb-2 border-b border-border/60">
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
-                    Processing ID
+                    {tr("Processing ID", "प्रसंस्करण आईडी")}
                   </span>
                   <span className="font-mono font-bold text-foreground">
                     {nextJobId}
@@ -853,7 +855,7 @@ function CreateProcessingJobContent() {
                 </div>
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
-                    Process Type
+                    {tr("Process Type", "प्रक्रिया का प्रकार")}
                   </span>
                   <span className="font-medium text-foreground">
                     {processType}
@@ -864,7 +866,7 @@ function CreateProcessingJobContent() {
               <div className="grid grid-cols-2 gap-2 pb-2 border-b border-border/60">
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
-                    Input Batches ({selectedInputs.length})
+                    {tr(`Input Batches (${selectedInputs.length})`, `इनपुट बैच (${selectedInputs.length})`)}
                   </span>
                   <span className="font-mono text-foreground">
                     {selectedInputs.map((i) => `${i.batchId} (${i.selectedWeight} kg)`).join(", ")}
@@ -872,7 +874,7 @@ function CreateProcessingJobContent() {
                 </div>
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
-                    Total Input Weight
+                    {tr("Total Input Weight", "कुल इनपुट वजन")}
                   </span>
                   <span className="font-mono font-bold text-foreground">
                     {totalInputWeightKg.toFixed(1)} kg
@@ -883,7 +885,7 @@ function CreateProcessingJobContent() {
               <div className="grid grid-cols-2 gap-2 pb-2 border-b border-border/60">
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
-                    Output Batch ID
+                    {tr("Output Batch ID", "आउटपुट बैच आईडी")}
                   </span>
                   <span className="font-mono font-bold text-primary">
                     {nextOutputBatchId}
@@ -891,7 +893,7 @@ function CreateProcessingJobContent() {
                 </div>
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
-                    Output Quantity & Yield
+                    {tr("Output Quantity & Yield", "आउटपुट मात्रा और उपज")}
                   </span>
                   <span className="font-mono font-bold text-emerald-700">
                     {outputWeightNumber.toFixed(1)} kg ({yieldPercentage.toFixed(2)}%)
@@ -902,7 +904,7 @@ function CreateProcessingJobContent() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
-                    Facility & Line
+                    {tr("Facility & Line", "सुविधा और लाइन")}
                   </span>
                   <span className="text-foreground truncate block">
                     {facility.split(",")[0]} • {line}
@@ -910,7 +912,7 @@ function CreateProcessingJobContent() {
                 </div>
                 <div>
                   <span className="text-[10px] uppercase text-muted-foreground block">
-                    Operator
+                    {tr("Operator", "ऑपरेटर")}
                   </span>
                   <span className="text-foreground">
                     {operator}
@@ -927,7 +929,7 @@ function CreateProcessingJobContent() {
               onClick={() => setShowReviewModal(false)}
               disabled={isSubmitting}
             >
-              Back to Edit
+              {tr("Back to Edit", "संपादित करने के लिए वापस जाएं")}
             </Button>
             <Button
               size="sm"
@@ -935,7 +937,7 @@ function CreateProcessingJobContent() {
               disabled={isSubmitting}
               className="gap-1.5 shadow-xs font-semibold"
             >
-              {isSubmitting ? "Creating Record..." : "Create Processing Record"}
+              {isSubmitting ? tr("Creating Record...", "रिकॉर्ड बनाया जा रहा है...") : tr("Create Processing Record", "प्रसंस्करण रिकॉर्ड बनाएं")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -945,13 +947,14 @@ function CreateProcessingJobContent() {
 }
 
 export default function CreateProcessingPage() {
+  const { tr } = useLanguage();
   return (
     <AuthGuard requiredLevel="full">
       <AppShell
         breadcrumbs={[
-          { label: "Honey Chain", href: "/dashboard" },
-          { label: "Processing & Blending", href: "/processing" },
-          { label: "New Processing Run", active: true },
+          { label: tr("Honey Chain", "हनी चेन"), href: "/dashboard" },
+          { label: tr("Processing & Blending", "प्रसंस्करण एवं मिश्रण"), href: "/processing" },
+          { label: tr("New Processing Run", "नया प्रसंस्करण रन"), active: true },
         ]}
         defaultNavId="processing"
       >
@@ -959,7 +962,7 @@ export default function CreateProcessingPage() {
           fallback={
             <div className="flex h-64 items-center justify-center">
               <div className="text-sm text-muted-foreground animate-pulse">
-                Loading processing configuration...
+                {tr("Loading processing configuration...", "प्रसंस्करण कॉन्फ़िगरेशन लोड हो रहा है...")}
               </div>
             </div>
           }
@@ -970,3 +973,4 @@ export default function CreateProcessingPage() {
     </AuthGuard>
   );
 }
+
